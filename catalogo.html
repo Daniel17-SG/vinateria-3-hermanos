@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Vinatería Los 3 Hermanos</title>
+    <link rel="stylesheet" href="estilos/1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <header class="header-secondary">
+        <div class="logo">Vinatería Los 3 Hermanos</div>
+        <nav>
+            <a href="index.html" class="nav-button">Inicio</a> 
+            <a href="carrito.html" class="nav-button"><i class="fas fa-shopping-cart"></i> Carrito</a>
+        </nav>
+    </header>
+
+    <main class="catalogo-main">
+        <h1>Catálogo de Licores Premium</h1>
+        <p>Explora nuestras categorías: Tequila, Whisky, Brandy, Vodka y Ron.</p>
+        
+        <section class="filtro-categorias">
+            <button class="filtro-btn active" data-filter="all">Ver Todo</button>
+            <button class="filtro-btn" data-filter="tequila">Tequila</button>
+            <button class="filtro-btn" data-filter="whisky">Whisky</button>
+            <button class="filtro-btn" data-filter="brandy">Brandy</button>
+            <button class="filtro-btn" data-filter="vodka">Vodka</button>
+            <button class="filtro-btn" data-filter="ron">Ron</button>
+        </section>
+        
+        <div class="grid-productos">
+            <div class="producto" data-category="tequila">
+                 <img src="imagenes/tequila.jpg" alt="Tequila Maestro Dobel">
+                <h3>Tequila Maestro Dobel</h3>
+                <p class="desc">Añejo, 750ml</p>
+                <p class="precio">$1,250</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+            
+            <div class="producto" data-category="whisky">
+            <img src="imagenes/whiski.jpg" alt="Whisky Blue Label">
+                <h3>Whisky Blue Label</h3>
+                <p class="desc">12 años, Escocia</p>
+                <p class="precio">$4,850</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+            
+            <div class="producto" data-category="brandy">
+                <img src="imagenes/brandy.jpg" alt="Brandy de Jerez Imperial">
+                <h3>Brandy Torres 20</h3>
+                <p class="desc">Gran Reserva</p>
+                <p class="precio">$2,450</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+            
+            <div class="producto" data-category="vodka">
+                <img src="imagenes/vodka.jpg" alt="Vodka Cristal Lujo">
+                <h3>Vodka Absolut</h3>
+                <p class="desc">Destilado 5x, 1 Litro</p>
+                <p class="precio">$650</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+            
+            <div class="producto" data-category="ron">
+                <img src="imagenes/ron.png" alt="Ron Matusalem">
+                <h3>Ron Matusalem</h3>
+                <p class="desc">Caribeño, 8 años</p>
+                <p class="precio">$520</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+
+            <div class="producto" data-category="tequila">
+                <img src="imagenes/reposado.png" alt="Tequila Reposado">
+                <h3>Tequila Reposado</h3>
+                <p class="desc">750ml</p>
+                <p class="precio">$780</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+            <div class="producto" data-category="whisky">
+                 <img src="imagenes/18.jpg" alt="Whisky Buchanans 18">
+                <h3>Whisky Buchanans 18</h3>
+                <p class="desc">Clásico Americano</p>
+                <p class="precio">$950</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+            <div class="producto" data-category="brandy">
+                   <img src="imagenes/presidente.jpg" alt="Brandy Presidente">
+                <h3>Brandy XO Presidente</h3>
+                <p class="desc">Añejamiento 20 años</p>
+                <p class="precio">$5,900</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
+    </footer>
+    
+    <div id="notification-toast" class="notification-hidden">
+        <i class="fas fa-check-circle"></i> Producto agregado al carrito
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.filtro-btn');
+            const productos = document.querySelectorAll('.producto');
+            const agregarCarritoButtons = document.querySelectorAll('.agregar-carrito');
+            const notification = document.getElementById('notification-toast');
+
+            // 1. Lógica de Filtrado (la funcionalidad anterior)
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Desactivar todos los botones
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    // Activar el botón clicado
+                    button.classList.add('active');
+                    
+                    const filterValue = button.getAttribute('data-filter');
+
+                    productos.forEach(producto => {
+                        const category = producto.getAttribute('data-category');
+                        if (filterValue === 'all' || category === filterValue) {
+                            producto.style.display = 'block';
+                        } else {
+                            producto.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 2. Lógica de Notificación del Carrito (NUEVA FUNCIÓN)
+            agregarCarritoButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    
+                    // A. Mostrar la notificación flotante
+                    notification.classList.remove('notification-hidden');
+                    notification.classList.add('notification-show');
+
+                    // B. Ocultar la notificación después de 3 segundos
+                    setTimeout(() => {
+                        notification.classList.remove('notification-show');
+                        notification.classList.add('notification-hidden');
+                    }, 3000);
+
+                    // C. Cambiar temporalmente el texto del botón
+                    const originalText = button.textContent;
+                    button.textContent = "¡Agregado!";
+                    button.disabled = true;
+
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                    }, 1500); 
+
+                });
+            });
+        });
+    </script>
+</body>
+</html>
