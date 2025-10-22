@@ -3,91 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de Compras - Los 3 Hermanos</title>
-    <link rel="stylesheet" href="estilos/1.css">
+    <title>Mi Carrito - Los 3 Hermanos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="estilos/1.css">
 </head>
 <body>
     
-    <header class="header-secondary">
-        <div class="logo">Vinatería Los 3 Hermanos</div>
-        <nav>
-            <a href="index.html" class="nav-button">Inicio</a> 
-            <a href="catalogo.html" class="nav-button">Catálogo</a> 
-            <a href="login.html" class="nav-button">Login</a>
-        </nav>
-    </header>
+    <header>
+        <div class="top-promo-bar">¡ENVÍO GRATIS en pedidos mayores a $1500!</div>
+        <div class="main-header-ba">
+            <div class="logo"><a href="index.html">LOS 3 HERMANOS</a></div>
+            <div class="search-container">
+                <input type="text" placeholder="Buscar productos...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="header-icons">
+                <a href="login.html" class="icon-link"><i class="fas fa-user"></i> Cuenta</a>
+                <a href="carrito.html" class="icon-link"><i class="fas fa-shopping-cart"></i> Carrito</a>
+            </div>
+        </div>
+        </header>
 
     <main class="carrito-main">
         <h1>Tu Carrito de Compras</h1>
-        
+
         <div class="carrito-layout">
             
             <section class="carrito-productos">
                 
-                <div class="carrito-item">
-                    <img src="imagenes/tequila.jpg" alt="Tequila Añejo Plata">
+                <article class="carrito-item">
+                    <img src="imagenes/tequila.jpg" alt="Tequila Maestro Dobel" class="item-img">
                     <div class="item-details">
-                        <h3>Tequila Maestro dobel</h3>
-                        <p class="item-price">$1,250.00</p>
+                        <h3 class="item-name">Tequila Maestro Dobel Diamante</h3>
+                        <p class="item-price">$1,250.00 MXN</p>
+                        <div class="item-quantity">
+                            <label for="qty1">Cantidad:</label>
+                            <input type="number" id="qty1" value="2" min="1">
+                        </div>
                     </div>
-                    <div class="item-quantity">
-                        <button class="btn-qty">-</button>
-                        <input type="number" value="2" min="1" readonly>
-                        <button class="btn-qty">+</button>
-                    </div>
-                    <p class="item-subtotal">$2,500.00</p>
                     <button class="btn-remove"><i class="fas fa-trash-alt"></i></button>
-                </div>
-                
-                <div class="carrito-item">
-                    <img src="imagenes/whiski.jpg" alt="Whisky Single Malt">
-                    <div class="item-details">
-                        <h3>Whisky Blue Lavel</h3>
-                        <p class="item-price">$4,850.00</p>
-                    </div>
-                    <div class="item-quantity">
-                        <button class="btn-qty">-</button>
-                        <input type="number" value="1" min="1" readonly>
-                        <button class="btn-qty">+</button>
-                    </div>
-                    <p class="item-subtotal">$4,850.00</p>
-                    <button class="btn-remove"><i class="fas fa-trash-alt"></i></button>
-                </div>
+                </article>
 
-                <a href="catalogo.html" class="btn-continue-shopping"><i class="fas fa-arrow-left"></i> Seguir comprando</a>
-                
+                <article class="carrito-item">
+                    <img src="imagenes/whiski.jpg" alt="Whisky Blue Label" class="item-img">
+                    <div class="item-details">
+                        <h3 class="item-name">Whisky Blue Label Escocés</h3>
+                        <p class="item-price">$4,850.00 MXN</p>
+                        <div class="item-quantity">
+                            <label for="qty2">Cantidad:</label>
+                            <input type="number" id="qty2" value="1" min="1">
+                        </div>
+                    </div>
+                    <button class="btn-remove"><i class="fas fa-trash-alt"></i></button>
+                </article>
+
             </section>
 
-            <aside class="carrito-resumen">
-                <h2>Resumen de la Compra</h2>
+            <section class="carrito-resumen">
+                <h2>Resumen del Pedido</h2>
                 
                 <div class="resumen-detalle">
-                    <p>Subtotal (3 productos): <span>$7,350.00</span></p>
-                    <p>Costo de Envío: <span>$0.00</span></p>
-                    <p>Impuestos (IVA): <span>$1,176.00</span></p>
+                    <p>Subtotal:</p>
+                    <p>$7,350.00</p>
                 </div>
-                
-                <div class="resumen-total">
-                    <p>TOTAL A PAGAR</p>
-                    <p class="total-price">$8,526.00</p>
+                <div class="resumen-detalle">
+                    <p>Envío:</p>
+                    <p>GRATIS</p>
                 </div>
-                
-                <a href="pago.html" class="btn-checkout">PROCEDER AL PAGO <i class="fas fa-arrow-right"></i></a>
-                
-                <div class="resumen-info">
-                    <p><i class="fas fa-shield-alt"></i> Compra 100% segura.</p>
-                    <p><i class="fas fa-truck"></i> Envío gratis aplicado.</p>
+                <div class="resumen-detalle resumen-total">
+                    <h3>Total a Pagar:</h3>
+                    <h3 class="total-price">$7,350.00 MXN</h3>
                 </div>
-            </aside>
-            
+
+                <a href="#" class="btn-checkout" onclick="verificarSesion()">
+                    Proceder al Pago <i class="fas fa-arrow-right"></i>
+                </a>
+                
+                <a href="catalogo.html" class="btn-continue-shopping">
+                    Seguir Comprando
+                </a>
+
+            </section>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Los 3 Hermanos. Todos los derechos reservados.</p>
     </footer>
-</body>
 
+    <script>
+        function verificarSesion() {
+            // SIMULACIÓN: Fija esto en 'true' para simular que el usuario ya inició sesión
+            const sesionIniciada = false; 
+
+            if (!sesionIniciada) {
+                // Si la sesión NO está iniciada, mostramos la alerta de confirmación.
+                const confirmacion = confirm("✋ ¡Alto ahí! Debes iniciar sesión para proceder al pago.");
+
+                if (confirmacion) {
+                    // Si el usuario hace clic en Aceptar, lo redirigimos a la página de login.
+                    window.location.href = "login.html"; 
+                }
+                // Si el usuario hace clic en Cancelar, se queda en el carrito.
+
+            } else {
+                // Si la sesión SÍ estuviera iniciada, redirigimos a la página de pago.
+                window.location.href = "checkout.html";
+            }
+        }
+    </script>
+    </body>
 </html>
-
