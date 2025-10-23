@@ -1,0 +1,124 @@
+/* ====================================
+   AUTH.CSS: ESTILOS DE REGISTRO
+   ==================================== */
+
+/* Contenedor principal del formulario de registro */
+.register-main {
+    background-color: #F8F9FA; /* Fondo muy claro */
+    min-height: 80vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.register-container {
+    background-color: #FFFFFF; /* Fondo blanco para el recuadro */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(23, 162, 184, 0.2); /* Sombra ligera con acento Teal */
+    max-width: 500px; /* Un poco más ancho que el login si tiene más campos */
+    width: 100%;
+    text-align: center;
+}
+
+.register-container h2 {
+    font-size: 2em;
+    color: #212529; /* Color de texto oscuro */
+    margin-bottom: 10px;
+}
+
+.register-container p {
+    color: #6C757D; /* Color de texto gris */
+    margin-bottom: 25px;
+}
+
+/* Formulario de registro */
+.register-form {
+    text-align: left; /* Alinea los elementos del formulario a la izquierda */
+}
+
+.register-form label {
+    display: block; /* Cada label en su propia línea */
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333; /* Color oscuro para el texto de la label */
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    padding: 12px 15px;
+    margin-bottom: 20px; /* Espacio entre campos */
+    border: 1px solid #CED4DA; /* Borde gris claro */
+    border-radius: 6px;
+    font-size: 1em;
+    outline: none; /* Eliminar el contorno por defecto al hacer focus */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.register-form input[type="text"]:focus,
+.register-form input[type="email"]:focus,
+.register-form input[type="password"]:focus {
+    border-color: #17A2B8; /* Borde Teal al hacer focus */
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5); /* Sombra Teal */
+}
+
+/* Checkbox de términos y condiciones */
+.register-form input[type="checkbox"] {
+    accent-color: #17A2B8; /* Color del checkbox en Teal */
+    margin-right: 8px;
+    transform: scale(1.1); /* Hacer el checkbox un poco más grande */
+}
+
+/* Botón de Registrarse */
+.btn-register {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #FFFFFF; /* Texto blanco */
+    background: linear-gradient(to right, #17A2B8, #0F8295); /* Gradiente Teal */
+    margin-top: 25px; /* Espacio superior */
+    transition: background 0.3s;
+}
+
+.btn-register:hover {
+    background: linear-gradient(to right, #0F8295, #17A2B8); /* Invertir gradiente al pasar el ratón */
+}
+
+/* Enlace a Iniciar Sesión */
+.login-link {
+    margin-top: 20px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.login-link a {
+    color: #17A2B8; /* Enlace en Teal */
+    font-weight: bold;
+}
+
+/* Adaptaciones para móviles */
+@media (max-width: 600px) {
+    .register-container {
+        padding: 30px 20px;
+    }
+
+    .register-container h2 {
+        font-size: 1.6em;
+    }
+
+    .register-container p {
+        font-size: 0.9em;
+    }
+
+    .btn-register {
+        padding: 10px;
+        font-size: 1em;
+    }
+}
