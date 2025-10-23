@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | Reportes y Dashboard - Los 3 Hermanos</title>
-    <link rel="stylesheet" href="estilos/1.css"> 
+    <link rel="stylesheet" href="1.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -12,8 +12,8 @@
     <header class="admin-header">
         <div class="logo">ADMINISTRACIÓN</div>
         <nav class="admin-nav">
-            <a href="admin-reportes.html" class="admin-nav-item active"><i class="fas fa-chart-line"></i> Reportes</a>
-            <a href="admin-inventario.html" class="admin-nav-item"><i class="fas fa-boxes"></i> Inventario</a>
+            <a href="admi.html" class="admin-nav-item active"><i class="fas fa-chart-line"></i> Reportes</a>
+            <a href="inventario.html" class="admin-nav-item"><i class="fas fa-boxes"></i> Inventario</a>
             <a href="index.html" class="admin-nav-item logout-btn"><i class="fas fa-sign-out-alt"></i> Salir</a>
         </nav>
     </header>
@@ -25,54 +25,28 @@
         <section class="kpi-cards">
             
             <div class="kpi-card">
-                <i class="fas fa-dollar-sign"></i>
-                <div class="kpi-info">
-                    <p class="kpi-title">Ventas del Mes</p>
-                    <p class="kpi-value">$124,500.00</p>
-                    <p class="kpi-trend success"><i class="fas fa-arrow-up"></i> +12% vs mes anterior</p>
-                </div>
+                <i class="fas fa-money-bill-wave"></i>
+                <h2>Ventas Hoy</h2>
+                <p class="kpi-value">$25,300</p>
             </div>
-
+            
             <div class="kpi-card">
-                <i class="fas fa-boxes"></i>
-                <div class="kpi-info">
-                    <p class="kpi-title">Productos en Stock</p>
-                    <p class="kpi-value">856 unidades</p>
-                    <p class="kpi-trend neutral"><i class="fas fa-arrows-alt-h"></i> Estable</p>
-                </div>
+                <i class="fas fa-cubes"></i>
+                <h2>Stock Bajo</h2>
+                <p class="kpi-value warning">8 Productos</p>
             </div>
             
             <div class="kpi-card">
                 <i class="fas fa-users"></i>
-                <div class="kpi-info">
-                    <p class="kpi-title">Nuevos Clientes</p>
-                    <p class="kpi-value">45</p>
-                    <p class="kpi-trend warning"><i class="fas fa-arrow-down"></i> -5% vs mes anterior</p>
-                </div>
+                <h2>Usuarios Nuevos</h2>
+                <p class="kpi-value">45</p>
             </div>
-            
-            <div class="kpi-card">
-                <i class="fas fa-shipping-fast"></i>
-                <div class="kpi-info">
-                    <p class="kpi-title">Pedidos Pendientes</p>
-                    <p class="kpi-value">8</p>
-                    <p class="kpi-trend success"><i class="fas fa-check-circle"></i> Excelente manejo</p>
-                </div>
-            </div>
-            
+
         </section>
-        
-        <section class="report-details">
-            
-            <div class="chart-container sales-chart">
-                <h2>Ventas por Categoría (Últimos 6 meses)</h2>
-                <div class="placeholder-chart">
-                    <p>Gráfica de Ventas (Tequila, Whisky, Brandy...)</p>
-                </div>
-            </div>
-            
-            <div class="recent-orders">
-                <h2>Pedidos Más Recientes</h2>
+
+        <section class="admin-tabla">
+            <h2>Pedidos Recientes</h2>
+            <div class="tabla-container">
                 <table>
                     <thead>
                         <tr>
@@ -117,6 +91,5 @@
         <p>&copy; 2024 Panel Administrativo Los 3 Hermanos.</p>
     </footer>
 </body>
-
 </html>
 
