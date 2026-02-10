@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Reportes y Dashboard - Los 3 Hermanos</title>
+    <link rel="stylesheet" href="estilos/1.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+   <header class="admin-header">
+    <div class="logo">ADMINISTRACIÓN</div>
+    <nav class="admin-nav">
+        <a href="admin-reportes.html" class="admin-nav-item active"><i class="fas fa-chart-line"></i> Reportes</a>
+        <a href="inventario.html" class="admin-nav-item"><i class="fas fa-boxes"></i> Inventario</a>
+        <a href="index.html" class="admin-nav-item logout-btn"><i class="fas fa-sign-out-alt"></i> Salir</a>
+    </nav>
+</header>
+
+    <main class="admin-main">
+        <h1>Dashboard Principal y Reportes</h1>
+        <p>Vista general de las métricas clave de la vinatería.</p>
+
+        <section class="kpi-cards">
+            
+            <div class="kpi-card">
+                <i class="fas fa-dollar-sign"></i>
+                <div class="kpi-info">
+                    <p class="kpi-title">Ventas del Mes</p>
+                    <p class="kpi-value">$124,500.00</p>
+                    <p class="kpi-trend success"><i class="fas fa-arrow-up"></i> +12% vs mes anterior</p>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <i class="fas fa-boxes"></i>
+                <div class="kpi-info">
+                    <p class="kpi-title">Productos en Stock</p>
+                    <p class="kpi-value">856 unidades</p>
+                    <p class="kpi-trend neutral"><i class="fas fa-arrows-alt-h"></i> Estable</p>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <i class="fas fa-users"></i>
+                <div class="kpi-info">
+                    <p class="kpi-title">Nuevos Clientes</p>
+                    <p class="kpi-value">45</p>
+                    <p class="kpi-trend warning"><i class="fas fa-arrow-down"></i> -5% vs mes anterior</p>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <i class="fas fa-shipping-fast"></i>
+                <div class="kpi-info">
+                    <p class="kpi-title">Pedidos Pendientes</p>
+                    <p class="kpi-value">8</p>
+                    <p class="kpi-trend success"><i class="fas fa-check-circle"></i> Excelente manejo</p>
+                </div>
+            </div>
+            
+        </section>
+        
+        <section class="report-details">
+            
+            <div class="chart-container sales-chart">
+                <h2>Ventas por Categoría (Últimos 6 meses)</h2>
+                <div class="placeholder-chart">
+                    <p>Gráfica de Ventas (Tequila, Whisky, Brandy...)</p>
+                </div>
+            </div>
+            
+            <div class="recent-orders">
+                <h2>Pedidos Más Recientes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Pedido</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#00123</td>
+                            <td>Ana G.</td>
+                            <td>$5,200</td>
+                            <td class="status delivered">Entregado</td>
+                            <td><button class="btn-detail">Ver</button></td>
+                        </tr>
+                        <tr>
+                            <td>#00124</td>
+                            <td>Jorge R.</td>
+                            <td>$1,850</td>
+                            <td class="status pending">Pendiente</td>
+                            <td><button class="btn-detail">Ver</button></td>
+                        </tr>
+                        <tr>
+                            <td>#00125</td>
+                            <td>Elena M.</td>
+                            <td>$12,400</td>
+                            <td class="status shipped">Enviado</td>
+                            <td><button class="btn-detail">Ver</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Panel Administrativo Los 3 Hermanos.</p>
+    </footer>
+
+    <script src="script/admi.js"></script>
+</body>
+</html>

@@ -1,0 +1,1274 @@
+/* ====================================
+   ESTILOS GENERALES Y RESET (PALETA CLARA)
+   ==================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #FFFFFF; /* Fondo base Blanco */
+    color: #212529; /* Texto Principal (Dark Charcoal) */
+    line-height: 1.6;
+    /* === FIX STICKY FOOTER: Esto asegura que el footer siempre esté abajo === */
+    display: flex; 
+    flex-direction: column;
+    min-height: 100vh;
+    /* ====================================================================== */
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ====================================
+   ESTILOS DE LA CABECERA SECUNDARIA (Ahora clara, para Admin y páginas oscuras)
+   ==================================== */
+.header-secondary {
+    background: #FFFFFF; /* Fondo blanco */
+    color: #212529; 
+    padding: 15px 40px; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra muy sutil */
+    border-bottom: 3px solid #17A2B8; /* Acento Teal */
+}
+
+.header-secondary .logo {
+    font-size: 1.6em; 
+    font-weight: bold;
+    color: #17A2B8; /* Logo en Teal */
+    letter-spacing: 2px;
+}
+
+.header-secondary nav a {
+    background: linear-gradient(to bottom, #17A2B8, #0F8295); /* Botón Teal */
+    color: #FFFFFF; /* Texto blanco */
+    padding: 8px 15px;
+    margin: 0 6px;
+    border-radius: 18px; 
+    font-weight: bold;
+    font-size: 0.95em; 
+    transition: all 0.3s ease;
+}
+
+.header-secondary nav a:hover {
+    background: linear-gradient(to bottom, #4DD0E1, #17A2B8); /* Teal más claro en hover */
+    transform: scale(1.05); 
+}
+
+/* ====================================
+   ESTILOS DE LA PÁGINA PRINCIPAL (index.html)
+   ==================================== */
+
+/* 1. BARRA SUPERIOR DE PROMOCIÓN */
+.top-promo-bar {
+    background-color: #17A2B8; /* Fondo Teal */
+    color: #FFFFFF; 
+    text-align: center;
+    padding: 8px 0;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-bottom: 1px solid #0F8295;
+}
+
+/* 2. ENCABEZADO PRINCIPAL (Logo, Búsqueda, Iconos) */
+.main-header-ba {
+    background-color: #ffffff; 
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    border-bottom: 2px solid #eeeeee;
+}
+
+.main-header-ba .logo a {
+    font-size: 1.5em;
+    font-weight: 800;
+    color: #212529; 
+    letter-spacing: 1px;
+    border-left: 5px solid #17A2B8; /* Acento Teal */
+    padding-left: 10px;
+}
+
+.search-container {
+    display: flex;
+    flex-grow: 1; 
+    max-width: 500px;
+    margin: 0 40px;
+    border: 2px solid #CED4DA; /* Borde más claro */
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    font-size: 1em;
+    color: #333;
+    outline: none;
+}
+
+.search-container button {
+    background-color: #17A2B8; /* Botón Teal */
+    color: #FFFFFF; /* Texto blanco */
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.header-icons .icon-link {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    color: #212529;
+    font-size: 0.85em; 
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.header-icons .icon-link i {
+    font-size: 1.4em;
+    margin-bottom: 3px;
+    color: #17A2B8; /* Iconos Teal */
+}
+
+.header-icons .icon-link:hover {
+    color: #17A2B8;
+}
+
+/* 3. MENÚ DE CATEGORÍAS */
+.category-nav {
+    background-color: #212529; /* Fondo de menú oscuro (para buen contraste) */
+    border-top: 3px solid #17A2B8; /* Borde Teal */
+}
+
+.category-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-nav li a {
+    color: #f0f0f0;
+    font-weight: bold;
+    padding: 8px 15px;
+    margin: 0 5px;
+    display: block;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.category-nav li a:hover {
+    background-color: #17A2B8; /* Fondo Teal */
+    color: #FFFFFF;
+}
+
+/* 4. SECCIÓN HERO Y PRODUCTOS */
+.home-main {
+    padding: 30px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-grow: 1; /* FIX: Permite que el contenido crezca */
+}
+
+.hero-simple {
+    background-color: #f0f0f0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('imagenes/wine-background.jpg'); 
+    background-size: cover;
+    min-height: 200px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+.hero-content-simple h1 {
+    font-size: 2.5em;
+    color: #17A2B8; /* Título Teal */
+    margin-bottom: 10px;
+}
+
+.btn-hero-action {
+    display: inline-block;
+    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    color: #FFFFFF; /* Texto blanco */
+    padding: 12px 25px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: transform 0.3s;
+}
+
+.btn-hero-action:hover {
+    transform: scale(1.03);
+}
+
+/* SECCIÓN DE PRODUCTOS DESTACADOS */
+.featured-products h2 {
+    text-align: center;
+    font-size: 2em;
+    color: #17A2B8; /* Título Teal */
+    margin: 0 auto 30px auto;
+    border-bottom: 2px solid #17A2B8; /* Borde Teal */
+    padding-bottom: 5px;
+    display: block;
+    width: fit-content;
+}
+
+.product-grid-highlight {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.producto {
+    background-color: #ffffff; 
+    padding: 15px; 
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.producto:hover {
+    transform: translateY(-5px);
+    border-color: #17A2B8; /* Borde Teal */
+    box-shadow: 0 0 10px rgba(23, 162, 184, 0.3); /* Sombra Teal */
+}
+
+.producto img {
+    width: 80%; 
+    max-height: 140px; 
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.producto h3 {
+    color: #111; 
+    font-size: 1em; 
+}
+
+.producto .precio {
+    color: #17A2B8; /* Precio Teal */
+    font-size: 1.2em;
+}
+
+.agregar-carrito {
+    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    color: #FFFFFF; /* Texto blanco */
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+
+
+/* ====================================
+   ESTILOS DE LA PÁGINA CATÁLOGO (Ahora clara)
+   ==================================== */
+.catalogo-main {
+    padding: 40px;
+    text-align: center;
+    max-width: 1400px; 
+    margin: 0 auto;
+    background-color: #FFFFFF; /* Fondo Claro */
+    color: #212529;
+    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+}
+
+.catalogo-main .grid-productos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 25px; 
+}
+
+/* ====================================
+   FOOTER
+   ==================================== */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #F8F9FA; /* Texto claro */
+    font-size: 0.9em;
+    background-color: #212529; /* Fondo oscuro (Dark Charcoal) */
+    border-top: 5px solid #17A2B8; /* Acento Teal */
+}
+
+/* ====================================
+   ADAPTACIÓN MÓVIL (RESPONSIVE)
+   ==================================== */
+@media (max-width: 992px) {
+    
+    .main-header-ba {
+        flex-wrap: wrap;
+        padding: 15px 20px;
+    }
+
+    .search-container {
+        order: 3;
+        margin: 15px 0 0 0;
+        max-width: 100%;
+    }
+
+    .header-icons {
+        order: 2;
+        gap: 10px;
+    }
+    
+    .category-nav ul {
+        display: none; 
+    }
+
+    /* Catálogo y Productos */
+    .product-grid-highlight {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hero-content-simple h1 {
+        font-size: 1.8em;
+    }
+    .btn-hero-action {
+        font-size: 0.9em;
+        padding: 10px 20px;
+    }
+}
+/* ====================================
+   ESTILOS ESPECÍFICOS DEL CATÁLOGO (catalogo.html)
+   ==================================== */
+
+/* Barra de Filtros/Categorías */
+.filtro-categorias {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: #F8F9FA; /* Fondo muy claro */
+    border-radius: 6px;
+}
+
+.filtro-btn {
+    background-color: transparent;
+    color: #212529; /* Texto oscuro */
+    border: 1px solid #CED4DA; /* Borde claro */
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.filtro-btn:hover {
+    background-color: #E9ECEF; /* Gris muy claro en hover */
+    border-color: #17A2B8; /* Borde Teal */
+    color: #17A2B8; /* Texto Teal */
+}
+
+.filtro-btn.active {
+    background-color: #17A2B8; /* Fondo Teal */
+    color: #FFFFFF; /* Texto blanco */
+    border-color: #17A2B8;
+    box-shadow: 0 0 8px rgba(23, 162, 184, 0.5); /* Sombra Teal */
+}
+
+/* Descripción del producto en el catálogo claro */
+.catalogo-main .producto .desc {
+    color: #6C757D; /* Gris medio */
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+/* Adaptación móvil */
+@media (max-width: 768px) {
+    .filtro-categorias {
+        /* Permite que los botones fluyan y se envuelvan */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .filtro-btn {
+        padding: 6px 10px;
+        margin: 4px;
+        font-size: 0.9em;
+    }
+}
+/* ====================================
+   ESTILOS DE NOTIFICACIÓN FLOTANTE (TOAST)
+   ==================================== */
+
+#notification-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #212529; /* Fondo oscuro (para alto contraste en notificaciones) */
+    color: #FFFFFF;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 2000; 
+    display: flex;
+    align-items: center;
+    transition: opacity 0.5s, transform 0.5s;
+    border-left: 5px solid #17A2B8; /* Acento Teal */
+    font-weight: bold;
+}
+
+#notification-toast i {
+    color: #28A745; /* Ícono de check en color verde (éxito) */
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+/* Clases para animar la notificación */
+.notification-hidden {
+    opacity: 0;
+    transform: translateX(100%);
+    pointer-events: none; 
+}
+
+.notification-show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Ajuste rápido para el botón de agregar al carrito para el feedback visual */
+.producto .agregar-carrito {
+    transition: background-color 0.3s;
+}
+
+.producto .agregar-carrito:disabled {
+    background-color: #28A745 !important; /* Verde para indicar que se agregó */
+    border-color: #28A745 !important;
+    cursor: default;
+}
+/* ====================================
+   ESTILOS DE CARRITO DE COMPRAS (carrito.html)
+   ==================================== */
+
+.carrito-main {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #FFFFFF; /* Fondo claro para el carrito */
+    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+}
+
+.carrito-main h1 {
+    font-size: 2.2em;
+    color: #212529;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #17A2B8; /* Acento Teal */
+    padding-bottom: 5px;
+    width: fit-content;
+}
+
+.carrito-layout {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr; 
+    gap: 30px;
+}
+
+/* --- LISTA DE PRODUCTOS --- */
+.carrito-productos {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.carrito-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.carrito-item:last-child {
+    border-bottom: none;
+    margin-bottom: 20px; 
+}
+
+.carrito-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-right: 20px;
+}
+
+.item-details {
+    flex-grow: 1; 
+}
+
+.item-details h3 {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.item-quantity {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.item-quantity input {
+    width: 40px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    padding: 5px 0;
+    border-radius: 4px;
+}
+
+.btn-qty {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.item-subtotal {
+    font-weight: bold;
+    color: #111;
+    width: 100px; 
+    text-align: right;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: #DC3545; /* Rojo de peligro */
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-left: 20px;
+}
+
+.btn-continue-shopping {
+    display: inline-block;
+    color: #17A2B8; /* Teal */
+    font-weight: bold;
+    margin-top: 15px;
+    transition: color 0.2s;
+}
+.btn-continue-shopping:hover {
+    color: #0F8295;
+}
+
+/* --- RESUMEN DE COMPRA --- */
+.carrito-resumen {
+    background-color: #212529; /* Fondo oscuro (Dark Charcoal) */
+    color: #FFFFFF;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    height: fit-content;
+}
+
+.carrito-resumen h2 {
+    color: #17A2B8; /* Teal */
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.resumen-detalle p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    color: #ccc;
+}
+.resumen-detalle span {
+    font-weight: bold;
+    color: #fff;
+}
+
+.resumen-total {
+    margin: 20px 0;
+    padding: 15px 0;
+    border-top: 2px solid #17A2B8; /* Teal */
+    border-bottom: 2px solid #17A2B8; /* Teal */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.resumen-total p {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.total-price {
+    font-size: 1.8em !important;
+    color: #4DD0E1; /* Teal más claro */
+}
+
+.btn-checkout {
+    display: block;
+    width: 100%;
+    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    color: #FFFFFF;
+    text-align: center;
+    padding: 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-checkout:hover {
+    background: linear-gradient(to right, #4DD0E1, #17A2B8);
+    transform: scale(1.02);
+}
+
+.resumen-info i {
+    color: #17A2B8; /* Teal */
+    margin-right: 5px;
+}
+
+
+/* --- RESPONSIVE DEL CARRITO --- */
+@media (max-width: 768px) {
+    .carrito-layout {
+        grid-template-columns: 1fr; 
+    }
+    
+    .carrito-item {
+        flex-wrap: wrap;
+    }
+    
+    .carrito-item img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .item-details {
+        min-width: 50%;
+    }
+    
+    .item-quantity {
+        order: 3; 
+        width: 100%;
+        justify-content: flex-start;
+        margin: 10px 0 0 0;
+    }
+    
+    .item-subtotal {
+        margin-left: auto;
+        width: auto;
+        text-align: right;
+    }
+    
+    .btn-remove {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+}
+/* ====================================
+   ESTILOS DE PAGO Y CHECKOUT (pago.html)
+   ==================================== */
+
+.checkout-main {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #F8F9FA;
+    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+}
+
+.checkout-main h1 {
+    font-size: 2.2em;
+    color: #212529;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #17A2B8; /* Teal */
+    padding-bottom: 5px;
+    width: fit-content;
+}
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr; 
+    gap: 30px;
+}
+
+/* --- SECCIONES DE FORMULARIO --- */
+.checkout-section {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+    border-top: 5px solid #17A2B8; /* Detalle Teal */
+}
+
+.checkout-section h2 {
+    color: #212529;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.checkout-forms input, .checkout-forms textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.2s;
+}
+
+.checkout-forms input:focus, .checkout-forms textarea:focus {
+    border-color: #17A2B8; /* Teal */
+    outline: none;
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.3); /* Sombra Teal */
+}
+
+.form-group-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.form-group-grid input {
+    margin-bottom: 0; 
+}
+
+/* --- SECCIÓN DE PAGO ESPECÍFICA --- */
+.payment-option {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.payment-option.active {
+    border-color: #17A2B8; /* Teal */
+    background-color: #F0FCFD; /* Fondo ligeramente azulado para activo */
+}
+
+.payment-option label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    cursor: pointer;
+}
+
+.payment-option label i {
+    color: #17A2B8; /* Teal */
+    margin-right: 8px;
+}
+
+.payment-option input[type="radio"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.card-details {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* --- BOTÓN FINAL DE PAGO --- */
+.btn-final-pago {
+    display: block;
+    width: 100%;
+    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    color: #FFFFFF;
+    text-align: center;
+    padding: 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-final-pago:hover {
+    background: linear-gradient(to right, #4DD0E1, #17A2B8);
+    transform: scale(1.02);
+}
+
+.pago-resumen {
+    height: fit-content;
+}
+
+/* --- RESPONSIVE DEL CHECKOUT --- */
+@media (max-width: 900px) {
+    .checkout-layout {
+        grid-template-columns: 1fr; 
+    }
+    
+    .form-group-grid {
+        grid-template-columns: 1fr; 
+        gap: 0;
+    }
+    .form-group-grid input {
+        margin-bottom: 15px;
+    }
+}
+/* ====================================
+   ESTILO DE LOGIN PREMIUM (Ahora Claro/Teal)
+   ==================================== */
+
+.login-main-premium {
+    background-color: #F8F9FA; /* Fondo muy claro */
+    min-height: 80vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    /* No necesita flex-grow: 1 porque tiene min-height y es el centro de la página */
+}
+
+.login-container-premium {
+    background-color: #FFFFFF; /* Contenedor blanco */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(23, 162, 184, 0.2); /* Sombra de acento Teal */
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid #CED4DA; /* Borde claro */
+}
+
+.user-icon-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #17A2B8; /* Círculo Teal */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px auto;
+}
+
+.user-icon-circle i {
+    color: #FFFFFF; /* Icono blanco */
+    font-size: 3em; 
+}
+
+.login-container-premium h2 {
+    color: #212529; /* Título oscuro */
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* Estilo para los campos de entrada */
+.input-group-premium {
+    display: flex;
+    align-items: center;
+    border: 1px solid #CED4DA; /* Borde claro */
+    border-radius: 25px; 
+    padding: 5px 20px;
+    margin-bottom: 20px;
+    background-color: #F8F9FA; /* Fondo de campo muy claro */
+    transition: border-color 0.3s;
+}
+
+.input-group-premium:focus-within {
+    border-color: #17A2B8; /* Borde Teal al enfocar */
+    box-shadow: 0 0 8px rgba(23, 162, 184, 0.5);
+}
+
+.input-group-premium i {
+    color: #17A2B8; /* Iconos Teal */
+    margin-right: 15px;
+    font-size: 1.2em;
+}
+
+.input-group-premium input {
+    flex-grow: 1; 
+    border: none;
+    background: transparent;
+    padding: 10px 0;
+    font-size: 1em;
+    color: #212529; /* Texto oscuro */
+    outline: none;
+}
+
+.input-group-premium input::placeholder {
+    color: #ADB5BD; /* Placeholder gris */
+}
+
+/* Estilo para las opciones (Recordar y Olvidé) */
+.options-row-premium {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 0.9em;
+    color: #6C757D; /* Gris medio */
+}
+
+.remember-me-premium input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #17A2B8; /* Color Teal para el checkbox */
+    transform: scale(1.1);
+}
+
+.forgot-password-premium {
+    color: #17A2B8; /* Enlace Teal */
+    text-decoration: none;
+}
+
+/* Botón de Acceso */
+.btn-login-premium {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px; 
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 10px rgba(23, 162, 184, 0.4);
+}
+
+.btn-login-premium:hover {
+    background: linear-gradient(to right, #4DD0E1, #17A2B8);
+    transform: scale(1.01);
+}
+
+/* Enlace a Registro */
+.no-account-link-premium {
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: #6C757D;
+}
+
+.no-account-link-premium a {
+    color: #17A2B8; /* Teal */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* ====================================
+   ESTILOS DE ADMINISTRADOR (admin-reportes.html, admin-inventario.html)
+   ==================================== */
+
+/* --- Estilos de Navegación y Estructura Principal --- */
+.admin-header {
+    background-color: #FFFFFF; /* Fondo Blanco */
+    color: #212529;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #17A2B8; /* Acento Teal */
+}
+
+.admin-header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #17A2B8; /* Logo en Teal */
+}
+
+.admin-nav {
+    display: flex;
+    gap: 25px;
+}
+
+.admin-nav-item {
+    color: #212529;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.admin-nav-item:hover, .admin-nav-item.active {
+    background-color: #E9ECEF; /* Fondo sutil al pasar el ratón o activo */
+    color: #17A2B8; /* Texto Teal al estar activo */
+}
+
+.logout-btn {
+    background-color: #CED4DA; /* Gris claro */
+    color: #212529;
+}
+.logout-btn:hover {
+    background-color: #DC3545; /* Rojo de peligro */
+    color: #fff;
+}
+
+.admin-main {
+    background-color: #F8F9FA; /* Fondo del cuerpo principal muy claro */
+    padding: 40px;
+    color: #212529;
+    min-height: 85vh;
+    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+}
+
+.admin-main h1 {
+    color: #17A2B8; /* Teal */
+    border-bottom: 2px solid #CED4DA;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.admin-main p {
+    color: #6C757D;
+    margin-bottom: 30px;
+}
+
+/* --- Estilos de las Tarjetas KPI (Key Performance Indicators) --- */
+.kpi-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.kpi-card {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    border-left: 5px solid #17A2B8; /* Teal */
+}
+
+.kpi-card i {
+    font-size: 2.5em;
+    color: #17A2B8; /* Teal */
+    margin-right: 15px;
+}
+
+.kpi-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #212529;
+    margin-bottom: 5px;
+}
+
+.kpi-trend.success { color: #28A745; } /* Verde para positivo */
+.kpi-trend.warning { color: #FFC107; } /* Amarillo para precaución */
+.kpi-trend.neutral { color: #6C757D; } /* Gris para neutro */
+
+/* --- Estilos de Gráficas y Tablas de Reporte --- */
+.report-details {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 30px;
+}
+
+.chart-container, .recent-orders {
+    background-color: #FFFFFF;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h2, .recent-orders h2 {
+    color: #17A2B8; /* Teal */
+    font-size: 1.3em;
+    margin-bottom: 20px;
+}
+
+.placeholder-chart {
+    height: 250px;
+    background-color: #E9ECEF;
+    border: 1px dashed #CED4DA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ADB5BD;
+}
+
+/* Estilos de la tabla de pedidos */
+.recent-orders table {
+    color: #212529;
+}
+
+.recent-orders thead th {
+    background-color: #17A2B8; /* Fondo Teal */
+    color: #FFFFFF;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.recent-orders tbody tr:hover {
+    background-color: #F8F9FA;
+}
+
+/* Estilos de estado */
+.status.delivered { background-color: #28A745; color: #fff; } /* Verde */
+.status.pending { background-color: #FFC107; color: #fff; } /* Amarillo */
+.status.shipped { background-color: #3F90FF; color: #fff; } /* Azul */
+
+.btn-detail {
+    background-color: #17A2B8; /* Teal */
+    color: #FFFFFF;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Responsive para el panel de administración */
+@media (max-width: 900px) {
+    .admin-header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px 20px;
+    }
+    .admin-nav {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .admin-main {
+        padding: 20px;
+    }
+    .report-details {
+        grid-template-columns: 1fr; 
+    }
+}
+/* ====================================
+   ESTILOS DE GESTIÓN DE INVENTARIO
+   ==================================== */
+
+/* --- Barra de Controles y Búsqueda --- */
+.inventario-controles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.btn-nuevo-producto {
+    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+.search-bar {
+    background-color: #FFFFFF;
+    border: 1px solid #CED4DA; 
+    border-radius: 6px;
+    padding: 5px 10px;
+    max-width: 400px;
+}
+
+.search-bar input {
+    color: #212529;
+}
+
+.search-bar i {
+    color: #17A2B8; /* Teal */
+    margin-left: 5px;
+}
+
+.filter-select {
+    padding: 10px;
+    background-color: #FFFFFF;
+    color: #212529;
+    border: 1px solid #CED4DA;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* --- Tabla de Inventario --- */
+.inventario-tabla table {
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #212529;
+}
+
+.inventario-tabla thead th {
+    background-color: #17A2B8; /* Fondo Teal */
+    color: #FFFFFF;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.inventario-tabla tbody tr:hover {
+    background-color: #F8F9FA;
+}
+
+/* Colores para la columna de Stock */
+.stock-critical { color: #DC3545; font-weight: bold; } /* Rojo */
+.stock-warning { color: #FFC107; font-weight: bold; } /* Amarillo/Naranja */
+.stock-good { color: #28A745; font-weight: bold; } /* Verde */
+.stock-out { color: #DC3545; font-weight: bold; } /* Rojo oscuro para agotado */
+
+/* Estilos de Estado */
+.status-in { background-color: rgba(40, 167, 69, 0.2); color: #28A745; }
+.status-low { background-color: rgba(255, 193, 7, 0.2); color: #FFC107; }
+.status-out { background-color: rgba(220, 53, 69, 0.2); color: #DC3545; }
+
+/* Botones de Acción (Editar/Eliminar) */
+.btn-action {
+    background-color: #E9ECEF;
+    color: #212529;
+}
+
+.btn-action.btn-edit {
+    color: #17A2B8; /* Teal para editar */
+}
+.btn-action.btn-delete {
+    color: #DC3545; /* Rojo para eliminar */
+}
+
+.btn-action:hover {
+    background-color: #CED4DA;
+}
+
+/* Responsive para la barra de control */
+@media (max-width: 768px) {
+    .inventario-controles {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    .search-bar {
+        max-width: none;
+    }
+}
+
