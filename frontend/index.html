@@ -92,4 +92,15 @@
         <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
     </footer>
 </body>
+    // Seleccionamos el enlace al catálogo y el contenedor del loader
+const linkCatalogo = document.querySelector('#btn-catalogo');
+const loader = document.getElementById('loader-container');
+
+linkCatalogo.addEventListener('click', function(e) {
+    // Mostramos el loader
+    loader.style.display = 'flex';
+    
+    // El navegador naturalmente cambiará de página, 
+    // pero el loader se verá hasta que la nueva página cargue.
+});
 </html>
