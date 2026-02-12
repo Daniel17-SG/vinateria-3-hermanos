@@ -92,20 +92,31 @@
     <footer>
         <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
     </footer>
-    <script>
-     document.addEventListener("DOMContentLoaded", function() {
-  const btnCatalogo = document.querySelector('a[href*="catalogo"], button:contains("CATÁLOGO")'); // ajusta el selector si es <a> o <button>
+   <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Selector correcto: solo por el href (el más confiable en tu caso)
+    const btnCatalogo = document.querySelector('a[href="catalogo.html"], a.btn-hero-action');
 
-  if (btnCatalogo) {
-    btnCatalogo.addEventListener("click", function(e) {
-      // Muestra el loader
-      document.getElementById("loader").style.display = "flex";
+    if (btnCatalogo) {
+        btnCatalogo.addEventListener("click", function(e) {
+            // Mostrar el loader ANTES de que el navegador navegue
+            const loader = document.getElementById("loader");
+            if (loader) {
+                loader.style.display = "flex";
+            }
 
-      // Si es un <a> y lleva a otra página, no necesitas más (el navegador cambia página y el loader se ve hasta que cargue la nueva)
-      // Si quieres simular un delay (por si es muy rápido), puedes dejarlo así o quitar el timeout
-    });
-  }
+            // Opcional: si la página carga muy rápido y no ves el loader, puedes agregar un pequeño delay para testing
+            // e.preventDefault();
+            // setTimeout(() => {
+            //     window.location.href = "catalogo.html";
+            // }, 1200);  // 1.2 segundos de loader visible (quítalo después de probar)
+
+            // Si no usas delay, el loader se verá mientras carga catalogo.html (depende de la velocidad de internet/Vercel)
+        });
+    } else {
+        console.log("No se encontró el botón CATÁLOGO. Revisa el selector.");
+    }
 });
-    </script>
+</script>
 </body>
 </html>
