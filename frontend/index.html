@@ -93,16 +93,18 @@
         <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
     </footer>
     <script>
-      // Seleccionamos el enlace al catálogo y el contenedor del loader
-const linkCatalogo = document.querySelector('#btn-catalogo');
-const loader = document.getElementById('loader-container');
+     document.addEventListener("DOMContentLoaded", function() {
+  const btnCatalogo = document.querySelector('a[href*="catalogo"], button:contains("CATÁLOGO")'); // ajusta el selector si es <a> o <button>
 
-linkCatalogo.addEventListener('click', function(e) {
-    // Mostramos el loader
-    loader.style.display = 'flex';
-    
-    // El navegador naturalmente cambiará de página, 
-    // pero el loader se verá hasta que la nueva página cargue.
+  if (btnCatalogo) {
+    btnCatalogo.addEventListener("click", function(e) {
+      // Muestra el loader
+      document.getElementById("loader").style.display = "flex";
+
+      // Si es un <a> y lleva a otra página, no necesitas más (el navegador cambia página y el loader se ve hasta que cargue la nueva)
+      // Si quieres simular un delay (por si es muy rápido), puedes dejarlo así o quitar el timeout
+    });
+  }
 });
     </script>
 </body>
