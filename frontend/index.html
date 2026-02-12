@@ -94,27 +94,24 @@
     </footer>
    <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Selector correcto: solo por el href (el más confiable en tu caso)
     const btnCatalogo = document.querySelector('a[href="catalogo.html"], a.btn-hero-action');
 
     if (btnCatalogo) {
         btnCatalogo.addEventListener("click", function(e) {
-            // Mostrar el loader ANTES de que el navegador navegue
+            e.preventDefault();  // ← Esto es clave: detiene la navegación inmediata
+
             const loader = document.getElementById("loader");
             if (loader) {
                 loader.style.display = "flex";
             }
 
-            // Opcional: si la página carga muy rápido y no ves el loader, puedes agregar un pequeño delay para testing
-            // e.preventDefault();
-            // setTimeout(() => {
-            //     window.location.href = "catalogo.html";
-            // }, 1200);  // 1.2 segundos de loader visible (quítalo después de probar)
-
-            // Si no usas delay, el loader se verá mientras carga catalogo.html (depende de la velocidad de internet/Vercel)
+            // Fuerza que se vea al menos 1.5 segundos (para que lo veas claramente)
+            setTimeout(() => {
+                window.location.href = "catalogo.html";
+            }, 1500);  // Cambia a 800 o 500 cuando ya lo veas funcionando
         });
     } else {
-        console.log("No se encontró el botón CATÁLOGO. Revisa el selector.");
+        console.error("¡No se encontró el botón! Verifica que exista <a href=\"catalogo.html\" ...>");
     }
 });
 </script>
