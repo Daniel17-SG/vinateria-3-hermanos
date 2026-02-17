@@ -113,7 +113,12 @@ app.post('/api/orders', (req, res) => {
 // ... (código existente del app.listen) ...
 
 // 4. Iniciar el servidor
-app.listen(PORT, () => {
-    console.log(`Servidor Back-End corriendo en http://localhost:${PORT}`);
-    console.log(`Accede a tu proyecto en: http://localhost:${PORT}/index.html`);
-});
+// Modificación para Vercel: Exportar la app
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Servidor Back-End corriendo en http://localhost:${PORT}`);
+        console.log(`Accede a tu proyecto en: http://localhost:${PORT}/index.html`);
+    });
+}
+
+module.exports = app;
