@@ -1680,7 +1680,7 @@ footer {
     transform: scale(1.02);
     background: linear-gradient(to right, #4DD0E1, #17A2B8);
 
-    =======.spinner {
+    .spinner {
         width: 60px;
         height: 60px;
         border: 8px solid #f3f3f3;
