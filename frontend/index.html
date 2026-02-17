@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
+<!-- Loader / Aviso de carga -->
+<div id="loader" class="loader-overlay">
+  <div class="spinner"></div>
+  <p>Cargando catálogo...</p>
+</div>
     <div class="top-promo-bar">
         <span>¡Envío GRATIS en pedidos mayores a $1,500!</span>
     </div>
@@ -88,5 +92,28 @@
     <footer>
         <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
     </footer>
+   <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const btnCatalogo = document.querySelector('a[href="catalogo.html"], a.btn-hero-action');
+
+    if (btnCatalogo) {
+        btnCatalogo.addEventListener("click", function(e) {
+            e.preventDefault();  // ← Esto es clave: detiene la navegación inmediata
+
+            const loader = document.getElementById("loader");
+            if (loader) {
+                loader.style.display = "flex";
+            }
+
+            // Fuerza que se vea al menos 1.5 segundos (para que lo veas claramente)
+            setTimeout(() => {
+                window.location.href = "catalogo.html";
+            }, 1500);  // Cambia a 800 o 500 cuando ya lo veas funcionando
+        });
+    } else {
+        console.error("¡No se encontró el botón! Verifica que exista <a href=\"catalogo.html\" ...>");
+    }
+});
+</script>
 </body>
 </html>

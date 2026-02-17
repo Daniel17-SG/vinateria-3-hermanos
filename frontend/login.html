@@ -1,61 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - Los 3 Hermanos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Iniciar Sesión - Vinatería Los 3 Hermanos</title>
     <link rel="stylesheet" href="estilos/1.css">
-    <link rel="stylesheet" href="estilos/auth.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="login-body">
-    
-    <main class="login-main-premium">
-        <div class="login-container-premium">
-            <div class="user-icon-circle">
-                <i class="fas fa-user"></i>
-            </div>
-            
-            <h2>¡Bienvenido de Nuevo!</h2>
-            <p>Ingresa tus credenciales para acceder a tu cuenta.</p>
 
-            <form action="#" method="POST" class="login-form-premium" id="login-form">
-                
-                <div class="input-group-premium">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="Correo Electrónico" id="email-input" required> 
-                </div>
-                
-                <div class="input-group-premium">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Contraseña" id="password-input" required> 
-                </div>
-                
-                <div id="login-error-message" style="color: red; margin-bottom: 15px; font-weight: bold; display: none;"></div>
+<body class="login-page">
 
-                <div class="options-row-premium">
-                    <div class="remember-me-premium">
-                        <input type="checkbox" id="remember">
-                        <label for="remember">Recordarme</label>
-                    </div>
-                    <a href="#" class="forgot-password-premium">¿Olvidaste tu contraseña?</a>
-                </div>
-                
-                <button type="submit" class="btn-login-premium">
-                    Iniciar Sesión
-                </button>
-            </form>
-            
-            <p class="no-account-link-premium">
-                ¿No tienes una cuenta? <a href="registro.html">Crear Cuenta</a>
-            </p>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Bienvenido</h2>
+            <p>Ingresa a tu cuenta</p>
         </div>
-    </main>
 
-    <footer>
-        <p>&copy; 2024 Los 3 Hermanos. Todos los derechos reservados.</p>
-    </footer>
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+            </div>
 
-    <script src="script/login.js"></script> 
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="********" required>
+            </div>
+
+            <button type="submit" class="btn-login">Ingresar</button>
+
+            <p class="error-message" id="error-message" style="display: none; color: red; margin-top: 10px;"></p>
+        </form>
+
+        <div class="login-footer">
+            <p>¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+            <p><a href="index.html">Volver al Inicio</a></p>
+        </div>
+    </div>
+
+    <script src="script/login.js"></script>
 </body>
+
 </html>

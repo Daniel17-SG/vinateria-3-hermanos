@@ -9,11 +9,13 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #FFFFFF; /* Fondo base Blanco */
-    color: #212529; /* Texto Principal (Dark Charcoal) */
+    background-color: #FFFFFF;
+    /* Fondo base Blanco */
+    color: #212529;
+    /* Texto Principal (Dark Charcoal) */
     line-height: 1.6;
     /* === FIX STICKY FOOTER: Esto asegura que el footer siempre esté abajo === */
-    display: flex; 
+    display: flex;
     flex-direction: column;
     min-height: 100vh;
     /* ====================================================================== */
@@ -28,40 +30,47 @@ a {
    ESTILOS DE LA CABECERA SECUNDARIA (Ahora clara, para Admin y páginas oscuras)
    ==================================== */
 .header-secondary {
-    background: #FFFFFF; /* Fondo blanco */
-    color: #212529; 
-    padding: 15px 40px; 
+    background: #FFFFFF;
+    /* Fondo blanco */
+    color: #212529;
+    padding: 15px 40px;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra muy sutil */
-    border-bottom: 3px solid #17A2B8; /* Acento Teal */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra muy sutil */
+    border-bottom: 3px solid #17A2B8;
+    /* Acento Teal */
 }
 
 .header-secondary .logo {
-    font-size: 1.6em; 
+    font-size: 1.6em;
     font-weight: bold;
-    color: #17A2B8; /* Logo en Teal */
+    color: #17A2B8;
+    /* Logo en Teal */
     letter-spacing: 2px;
 }
 
 .header-secondary nav a {
-    background: linear-gradient(to bottom, #17A2B8, #0F8295); /* Botón Teal */
-    color: #FFFFFF; /* Texto blanco */
+    background: linear-gradient(to bottom, #17A2B8, #0F8295);
+    /* Botón Teal */
+    color: #FFFFFF;
+    /* Texto blanco */
     padding: 8px 15px;
     margin: 0 6px;
-    border-radius: 18px; 
+    border-radius: 18px;
     font-weight: bold;
-    font-size: 0.95em; 
+    font-size: 0.95em;
     transition: all 0.3s ease;
 }
 
 .header-secondary nav a:hover {
-    background: linear-gradient(to bottom, #4DD0E1, #17A2B8); /* Teal más claro en hover */
-    transform: scale(1.05); 
+    background: linear-gradient(to bottom, #4DD0E1, #17A2B8);
+    /* Teal más claro en hover */
+    transform: scale(1.05);
 }
 
 /* ====================================
@@ -70,8 +79,9 @@ a {
 
 /* 1. BARRA SUPERIOR DE PROMOCIÓN */
 .top-promo-bar {
-    background-color: #17A2B8; /* Fondo Teal */
-    color: #FFFFFF; 
+    background-color: #17A2B8;
+    /* Fondo Teal */
+    color: #FFFFFF;
     text-align: center;
     padding: 8px 0;
     font-size: 0.9em;
@@ -81,10 +91,10 @@ a {
 
 /* 2. ENCABEZADO PRINCIPAL (Logo, Búsqueda, Iconos) */
 .main-header-ba {
-    background-color: #ffffff; 
+    background-color: #ffffff;
     padding: 20px 40px;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #eeeeee;
 }
@@ -92,18 +102,20 @@ a {
 .main-header-ba .logo a {
     font-size: 1.5em;
     font-weight: 800;
-    color: #212529; 
+    color: #212529;
     letter-spacing: 1px;
-    border-left: 5px solid #17A2B8; /* Acento Teal */
+    border-left: 5px solid #17A2B8;
+    /* Acento Teal */
     padding-left: 10px;
 }
 
 .search-container {
     display: flex;
-    flex-grow: 1; 
+    flex-grow: 1;
     max-width: 500px;
     margin: 0 40px;
-    border: 2px solid #CED4DA; /* Borde más claro */
+    border: 2px solid #CED4DA;
+    /* Borde más claro */
     border-radius: 4px;
     overflow: hidden;
 }
@@ -118,8 +130,10 @@ a {
 }
 
 .search-container button {
-    background-color: #17A2B8; /* Botón Teal */
-    color: #FFFFFF; /* Texto blanco */
+    background-color: #17A2B8;
+    /* Botón Teal */
+    color: #FFFFFF;
+    /* Texto blanco */
     padding: 10px 15px;
     border: none;
     cursor: pointer;
@@ -128,10 +142,10 @@ a {
 
 .header-icons .icon-link {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     color: #212529;
-    font-size: 0.85em; 
+    font-size: 0.85em;
     font-weight: 600;
     transition: color 0.2s;
 }
@@ -139,7 +153,8 @@ a {
 .header-icons .icon-link i {
     font-size: 1.4em;
     margin-bottom: 3px;
-    color: #17A2B8; /* Iconos Teal */
+    color: #17A2B8;
+    /* Iconos Teal */
 }
 
 .header-icons .icon-link:hover {
@@ -148,8 +163,10 @@ a {
 
 /* 3. MENÚ DE CATEGORÍAS */
 .category-nav {
-    background-color: #212529; /* Fondo de menú oscuro (para buen contraste) */
-    border-top: 3px solid #17A2B8; /* Borde Teal */
+    background-color: #212529;
+    /* Fondo de menú oscuro (para buen contraste) */
+    border-top: 3px solid #17A2B8;
+    /* Borde Teal */
 }
 
 .category-nav ul {
@@ -172,7 +189,8 @@ a {
 }
 
 .category-nav li a:hover {
-    background-color: #17A2B8; /* Fondo Teal */
+    background-color: #17A2B8;
+    /* Fondo Teal */
     color: #FFFFFF;
 }
 
@@ -181,12 +199,13 @@ a {
     padding: 30px 40px;
     max-width: 1400px;
     margin: 0 auto;
-    flex-grow: 1; /* FIX: Permite que el contenido crezca */
+    flex-grow: 1;
+    /* FIX: Permite que el contenido crezca */
 }
 
 .hero-simple {
     background-color: #f0f0f0;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('imagenes/wine-background.jpg'); 
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('imagenes/wine-background.jpg');
     background-size: cover;
     min-height: 200px;
     border-radius: 8px;
@@ -201,14 +220,17 @@ a {
 
 .hero-content-simple h1 {
     font-size: 2.5em;
-    color: #17A2B8; /* Título Teal */
+    color: #17A2B8;
+    /* Título Teal */
     margin-bottom: 10px;
 }
 
 .btn-hero-action {
     display: inline-block;
-    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
-    color: #FFFFFF; /* Texto blanco */
+    background: linear-gradient(to right, #17A2B8, #0F8295);
+    /* Botón Teal */
+    color: #FFFFFF;
+    /* Texto blanco */
     padding: 12px 25px;
     border-radius: 4px;
     font-weight: bold;
@@ -224,9 +246,11 @@ a {
 .featured-products h2 {
     text-align: center;
     font-size: 2em;
-    color: #17A2B8; /* Título Teal */
+    color: #17A2B8;
+    /* Título Teal */
     margin: 0 auto 30px auto;
-    border-bottom: 2px solid #17A2B8; /* Borde Teal */
+    border-bottom: 2px solid #17A2B8;
+    /* Borde Teal */
     padding-bottom: 5px;
     display: block;
     width: fit-content;
@@ -240,8 +264,8 @@ a {
 }
 
 .producto {
-    background-color: #ffffff; 
-    padding: 15px; 
+    background-color: #ffffff;
+    padding: 15px;
     border-radius: 8px;
     text-align: center;
     border: 1px solid #ccc;
@@ -251,30 +275,35 @@ a {
 
 .producto:hover {
     transform: translateY(-5px);
-    border-color: #17A2B8; /* Borde Teal */
-    box-shadow: 0 0 10px rgba(23, 162, 184, 0.3); /* Sombra Teal */
+    border-color: #17A2B8;
+    /* Borde Teal */
+    box-shadow: 0 0 10px rgba(23, 162, 184, 0.3);
+    /* Sombra Teal */
 }
 
 .producto img {
-    width: 80%; 
-    max-height: 140px; 
+    width: 80%;
+    max-height: 140px;
     object-fit: contain;
     margin-bottom: 10px;
 }
 
 .producto h3 {
-    color: #111; 
-    font-size: 1em; 
+    color: #111;
+    font-size: 1em;
 }
 
 .producto .precio {
-    color: #17A2B8; /* Precio Teal */
+    color: #17A2B8;
+    /* Precio Teal */
     font-size: 1.2em;
 }
 
 .agregar-carrito {
-    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
-    color: #FFFFFF; /* Texto blanco */
+    background: linear-gradient(to right, #17A2B8, #0F8295);
+    /* Botón Teal */
+    color: #FFFFFF;
+    /* Texto blanco */
     border: none;
     padding: 8px 15px;
     border-radius: 4px;
@@ -290,17 +319,19 @@ a {
 .catalogo-main {
     padding: 40px;
     text-align: center;
-    max-width: 1400px; 
+    max-width: 1400px;
     margin: 0 auto;
-    background-color: #FFFFFF; /* Fondo Claro */
+    background-color: #FFFFFF;
+    /* Fondo Claro */
     color: #212529;
-    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+    flex-grow: 1;
+    /* FIX: Permite que el contenido crezca y empuje el footer */
 }
 
 .catalogo-main .grid-productos {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 25px; 
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
 }
 
 /* ====================================
@@ -309,17 +340,20 @@ a {
 footer {
     text-align: center;
     padding: 20px;
-    color: #F8F9FA; /* Texto claro */
+    color: #F8F9FA;
+    /* Texto claro */
     font-size: 0.9em;
-    background-color: #212529; /* Fondo oscuro (Dark Charcoal) */
-    border-top: 5px solid #17A2B8; /* Acento Teal */
+    background-color: #212529;
+    /* Fondo oscuro (Dark Charcoal) */
+    border-top: 5px solid #17A2B8;
+    /* Acento Teal */
 }
 
 /* ====================================
    ADAPTACIÓN MÓVIL (RESPONSIVE)
    ==================================== */
 @media (max-width: 992px) {
-    
+
     .main-header-ba {
         flex-wrap: wrap;
         padding: 15px 20px;
@@ -335,24 +369,26 @@ footer {
         order: 2;
         gap: 10px;
     }
-    
+
     .category-nav ul {
-        display: none; 
+        display: none;
     }
 
     /* Catálogo y Productos */
     .product-grid-highlight {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .hero-content-simple h1 {
         font-size: 1.8em;
     }
+
     .btn-hero-action {
         font-size: 0.9em;
         padding: 10px 20px;
     }
 }
+
 /* ====================================
    ESTILOS ESPECÍFICOS DEL CATÁLOGO (catalogo.html)
    ==================================== */
@@ -362,14 +398,17 @@ footer {
     text-align: center;
     margin-bottom: 30px;
     padding: 10px;
-    background-color: #F8F9FA; /* Fondo muy claro */
+    background-color: #F8F9FA;
+    /* Fondo muy claro */
     border-radius: 6px;
 }
 
 .filtro-btn {
     background-color: transparent;
-    color: #212529; /* Texto oscuro */
-    border: 1px solid #CED4DA; /* Borde claro */
+    color: #212529;
+    /* Texto oscuro */
+    border: 1px solid #CED4DA;
+    /* Borde claro */
     padding: 8px 15px;
     margin: 5px;
     border-radius: 20px;
@@ -379,21 +418,28 @@ footer {
 }
 
 .filtro-btn:hover {
-    background-color: #E9ECEF; /* Gris muy claro en hover */
-    border-color: #17A2B8; /* Borde Teal */
-    color: #17A2B8; /* Texto Teal */
+    background-color: #E9ECEF;
+    /* Gris muy claro en hover */
+    border-color: #17A2B8;
+    /* Borde Teal */
+    color: #17A2B8;
+    /* Texto Teal */
 }
 
 .filtro-btn.active {
-    background-color: #17A2B8; /* Fondo Teal */
-    color: #FFFFFF; /* Texto blanco */
+    background-color: #17A2B8;
+    /* Fondo Teal */
+    color: #FFFFFF;
+    /* Texto blanco */
     border-color: #17A2B8;
-    box-shadow: 0 0 8px rgba(23, 162, 184, 0.5); /* Sombra Teal */
+    box-shadow: 0 0 8px rgba(23, 162, 184, 0.5);
+    /* Sombra Teal */
 }
 
 /* Descripción del producto en el catálogo claro */
 .catalogo-main .producto .desc {
-    color: #6C757D; /* Gris medio */
+    color: #6C757D;
+    /* Gris medio */
     font-size: 0.9em;
     margin-bottom: 5px;
 }
@@ -406,13 +452,14 @@ footer {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     .filtro-btn {
         padding: 6px 10px;
         margin: 4px;
         font-size: 0.9em;
     }
 }
+
 /* ====================================
    ESTILOS DE NOTIFICACIÓN FLOTANTE (TOAST)
    ==================================== */
@@ -421,21 +468,24 @@ footer {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    background-color: #212529; /* Fondo oscuro (para alto contraste en notificaciones) */
+    background-color: #212529;
+    /* Fondo oscuro (para alto contraste en notificaciones) */
     color: #FFFFFF;
     padding: 15px 25px;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    z-index: 2000; 
+    z-index: 2000;
     display: flex;
     align-items: center;
     transition: opacity 0.5s, transform 0.5s;
-    border-left: 5px solid #17A2B8; /* Acento Teal */
+    border-left: 5px solid #17A2B8;
+    /* Acento Teal */
     font-weight: bold;
 }
 
 #notification-toast i {
-    color: #28A745; /* Ícono de check en color verde (éxito) */
+    color: #28A745;
+    /* Ícono de check en color verde (éxito) */
     margin-right: 10px;
     font-size: 1.2em;
 }
@@ -444,7 +494,7 @@ footer {
 .notification-hidden {
     opacity: 0;
     transform: translateX(100%);
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 .notification-show {
@@ -458,10 +508,12 @@ footer {
 }
 
 .producto .agregar-carrito:disabled {
-    background-color: #28A745 !important; /* Verde para indicar que se agregó */
+    background-color: #28A745 !important;
+    /* Verde para indicar que se agregó */
     border-color: #28A745 !important;
     cursor: default;
 }
+
 /* ====================================
    ESTILOS DE CARRITO DE COMPRAS (carrito.html)
    ==================================== */
@@ -470,22 +522,25 @@ footer {
     padding: 40px;
     max-width: 1200px;
     margin: 0 auto;
-    background-color: #FFFFFF; /* Fondo claro para el carrito */
-    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+    background-color: #FFFFFF;
+    /* Fondo claro para el carrito */
+    flex-grow: 1;
+    /* FIX: Permite que el contenido crezca y empuje el footer */
 }
 
 .carrito-main h1 {
     font-size: 2.2em;
     color: #212529;
     margin-bottom: 30px;
-    border-bottom: 2px solid #17A2B8; /* Acento Teal */
+    border-bottom: 2px solid #17A2B8;
+    /* Acento Teal */
     padding-bottom: 5px;
     width: fit-content;
 }
 
 .carrito-layout {
     display: grid;
-    grid-template-columns: 2.5fr 1fr; 
+    grid-template-columns: 2.5fr 1fr;
     gap: 30px;
 }
 
@@ -506,7 +561,7 @@ footer {
 
 .carrito-item:last-child {
     border-bottom: none;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
 .carrito-item img {
@@ -517,7 +572,7 @@ footer {
 }
 
 .item-details {
-    flex-grow: 1; 
+    flex-grow: 1;
 }
 
 .item-details h3 {
@@ -559,14 +614,15 @@ footer {
 .item-subtotal {
     font-weight: bold;
     color: #111;
-    width: 100px; 
+    width: 100px;
     text-align: right;
 }
 
 .btn-remove {
     background: none;
     border: none;
-    color: #DC3545; /* Rojo de peligro */
+    color: #DC3545;
+    /* Rojo de peligro */
     cursor: pointer;
     font-size: 1.1em;
     margin-left: 20px;
@@ -574,18 +630,21 @@ footer {
 
 .btn-continue-shopping {
     display: inline-block;
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     font-weight: bold;
     margin-top: 15px;
     transition: color 0.2s;
 }
+
 .btn-continue-shopping:hover {
     color: #0F8295;
 }
 
 /* --- RESUMEN DE COMPRA --- */
 .carrito-resumen {
-    background-color: #212529; /* Fondo oscuro (Dark Charcoal) */
+    background-color: #212529;
+    /* Fondo oscuro (Dark Charcoal) */
     color: #FFFFFF;
     padding: 25px;
     border-radius: 8px;
@@ -594,7 +653,8 @@ footer {
 }
 
 .carrito-resumen h2 {
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     margin-bottom: 20px;
     border-bottom: 1px solid #333;
     padding-bottom: 10px;
@@ -607,6 +667,7 @@ footer {
     font-size: 0.95em;
     color: #ccc;
 }
+
 .resumen-detalle span {
     font-weight: bold;
     color: #fff;
@@ -615,8 +676,10 @@ footer {
 .resumen-total {
     margin: 20px 0;
     padding: 15px 0;
-    border-top: 2px solid #17A2B8; /* Teal */
-    border-bottom: 2px solid #17A2B8; /* Teal */
+    border-top: 2px solid #17A2B8;
+    /* Teal */
+    border-bottom: 2px solid #17A2B8;
+    /* Teal */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -629,13 +692,15 @@ footer {
 
 .total-price {
     font-size: 1.8em !important;
-    color: #4DD0E1; /* Teal más claro */
+    color: #4DD0E1;
+    /* Teal más claro */
 }
 
 .btn-checkout {
     display: block;
     width: 100%;
-    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    background: linear-gradient(to right, #17A2B8, #0F8295);
+    /* Botón Teal */
     color: #FFFFFF;
     text-align: center;
     padding: 15px;
@@ -645,13 +710,15 @@ footer {
     margin-bottom: 20px;
     transition: background 0.3s, transform 0.2s;
 }
+
 .btn-checkout:hover {
     background: linear-gradient(to right, #4DD0E1, #17A2B8);
     transform: scale(1.02);
 }
 
 .resumen-info i {
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     margin-right: 5px;
 }
 
@@ -659,13 +726,13 @@ footer {
 /* --- RESPONSIVE DEL CARRITO --- */
 @media (max-width: 768px) {
     .carrito-layout {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
-    
+
     .carrito-item {
         flex-wrap: wrap;
     }
-    
+
     .carrito-item img {
         width: 60px;
         height: 60px;
@@ -674,26 +741,27 @@ footer {
     .item-details {
         min-width: 50%;
     }
-    
+
     .item-quantity {
-        order: 3; 
+        order: 3;
         width: 100%;
         justify-content: flex-start;
         margin: 10px 0 0 0;
     }
-    
+
     .item-subtotal {
         margin-left: auto;
         width: auto;
         text-align: right;
     }
-    
+
     .btn-remove {
         position: absolute;
         right: 20px;
         top: 20px;
     }
 }
+
 /* ====================================
    ESTILOS DE PAGO Y CHECKOUT (pago.html)
    ==================================== */
@@ -703,21 +771,23 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     background-color: #F8F9FA;
-    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+    flex-grow: 1;
+    /* FIX: Permite que el contenido crezca y empuje el footer */
 }
 
 .checkout-main h1 {
     font-size: 2.2em;
     color: #212529;
     margin-bottom: 30px;
-    border-bottom: 2px solid #17A2B8; /* Teal */
+    border-bottom: 2px solid #17A2B8;
+    /* Teal */
     padding-bottom: 5px;
     width: fit-content;
 }
 
 .checkout-layout {
     display: grid;
-    grid-template-columns: 1.5fr 1fr; 
+    grid-template-columns: 1.5fr 1fr;
     gap: 30px;
 }
 
@@ -728,7 +798,8 @@ footer {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 25px;
-    border-top: 5px solid #17A2B8; /* Detalle Teal */
+    border-top: 5px solid #17A2B8;
+    /* Detalle Teal */
 }
 
 .checkout-section h2 {
@@ -737,7 +808,8 @@ footer {
     margin-bottom: 20px;
 }
 
-.checkout-forms input, .checkout-forms textarea {
+.checkout-forms input,
+.checkout-forms textarea {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
@@ -747,10 +819,13 @@ footer {
     transition: border-color 0.2s;
 }
 
-.checkout-forms input:focus, .checkout-forms textarea:focus {
-    border-color: #17A2B8; /* Teal */
+.checkout-forms input:focus,
+.checkout-forms textarea:focus {
+    border-color: #17A2B8;
+    /* Teal */
     outline: none;
-    box-shadow: 0 0 5px rgba(23, 162, 184, 0.3); /* Sombra Teal */
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.3);
+    /* Sombra Teal */
 }
 
 .form-group-grid {
@@ -758,8 +833,9 @@ footer {
     grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
+
 .form-group-grid input {
-    margin-bottom: 0; 
+    margin-bottom: 0;
 }
 
 /* --- SECCIÓN DE PAGO ESPECÍFICA --- */
@@ -773,8 +849,10 @@ footer {
 }
 
 .payment-option.active {
-    border-color: #17A2B8; /* Teal */
-    background-color: #F0FCFD; /* Fondo ligeramente azulado para activo */
+    border-color: #17A2B8;
+    /* Teal */
+    background-color: #F0FCFD;
+    /* Fondo ligeramente azulado para activo */
 }
 
 .payment-option label {
@@ -785,7 +863,8 @@ footer {
 }
 
 .payment-option label i {
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     margin-right: 8px;
 }
 
@@ -796,15 +875,106 @@ footer {
 
 .card-details {
     margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
+
+    /* ====================================
+   ESTILOS DE LOGIN Y REGISTRO
+   ==================================== */
+    .login-page {
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .login-container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .login-header h2 {
+        color: #17A2B8;
+        margin-bottom: 10px;
+    }
+
+    .login-header p {
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .login-form .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .login-form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .login-form label i {
+        color: #17A2B8;
+        margin-right: 5px;
+    }
+
+    .login-form input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    .login-form input:focus {
+        border-color: #17A2B8;
+        outline: none;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(to right, #17A2B8, #0F8295);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .btn-login:hover {
+        transform: scale(1.02);
+    }
+
+    .login-footer {
+        margin-top: 20px;
+        font-size: 0.9em;
+    }
+
+    .login-footer a {
+        color: #17A2B8;
+        font-weight: bold;
+    }
+
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
 }
 
 /* --- BOTÓN FINAL DE PAGO --- */
 .btn-final-pago {
     display: block;
     width: 100%;
-    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    background: linear-gradient(to right, #17A2B8, #0F8295);
+    /* Botón Teal */
     color: #FFFFFF;
     text-align: center;
     padding: 18px;
@@ -816,6 +986,7 @@ footer {
     margin-top: 10px;
     transition: background 0.3s, transform 0.2s;
 }
+
 .btn-final-pago:hover {
     background: linear-gradient(to right, #4DD0E1, #17A2B8);
     transform: scale(1.02);
@@ -828,24 +999,27 @@ footer {
 /* --- RESPONSIVE DEL CHECKOUT --- */
 @media (max-width: 900px) {
     .checkout-layout {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
-    
+
     .form-group-grid {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
         gap: 0;
     }
+
     .form-group-grid input {
         margin-bottom: 15px;
     }
 }
+
 /* ====================================
    ESTILO DE LOGIN PREMIUM (Ahora Claro/Teal)
    ==================================== */
 
 .login-main-premium {
-    background-color: #F8F9FA; /* Fondo muy claro */
-    min-height: 80vh; 
+    background-color: #F8F9FA;
+    /* Fondo muy claro */
+    min-height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -854,20 +1028,24 @@ footer {
 }
 
 .login-container-premium {
-    background-color: #FFFFFF; /* Contenedor blanco */
+    background-color: #FFFFFF;
+    /* Contenedor blanco */
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 0 25px rgba(23, 162, 184, 0.2); /* Sombra de acento Teal */
+    box-shadow: 0 0 25px rgba(23, 162, 184, 0.2);
+    /* Sombra de acento Teal */
     width: 100%;
     max-width: 400px;
     text-align: center;
-    border: 1px solid #CED4DA; /* Borde claro */
+    border: 1px solid #CED4DA;
+    /* Borde claro */
 }
 
 .user-icon-circle {
     width: 80px;
     height: 80px;
-    background-color: #17A2B8; /* Círculo Teal */
+    background-color: #17A2B8;
+    /* Círculo Teal */
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -876,12 +1054,14 @@ footer {
 }
 
 .user-icon-circle i {
-    color: #FFFFFF; /* Icono blanco */
-    font-size: 3em; 
+    color: #FFFFFF;
+    /* Icono blanco */
+    font-size: 3em;
 }
 
 .login-container-premium h2 {
-    color: #212529; /* Título oscuro */
+    color: #212529;
+    /* Título oscuro */
     font-size: 1.8em;
     margin-bottom: 25px;
     letter-spacing: 1px;
@@ -891,37 +1071,43 @@ footer {
 .input-group-premium {
     display: flex;
     align-items: center;
-    border: 1px solid #CED4DA; /* Borde claro */
-    border-radius: 25px; 
+    border: 1px solid #CED4DA;
+    /* Borde claro */
+    border-radius: 25px;
     padding: 5px 20px;
     margin-bottom: 20px;
-    background-color: #F8F9FA; /* Fondo de campo muy claro */
+    background-color: #F8F9FA;
+    /* Fondo de campo muy claro */
     transition: border-color 0.3s;
 }
 
 .input-group-premium:focus-within {
-    border-color: #17A2B8; /* Borde Teal al enfocar */
+    border-color: #17A2B8;
+    /* Borde Teal al enfocar */
     box-shadow: 0 0 8px rgba(23, 162, 184, 0.5);
 }
 
 .input-group-premium i {
-    color: #17A2B8; /* Iconos Teal */
+    color: #17A2B8;
+    /* Iconos Teal */
     margin-right: 15px;
     font-size: 1.2em;
 }
 
 .input-group-premium input {
-    flex-grow: 1; 
+    flex-grow: 1;
     border: none;
     background: transparent;
     padding: 10px 0;
     font-size: 1em;
-    color: #212529; /* Texto oscuro */
+    color: #212529;
+    /* Texto oscuro */
     outline: none;
 }
 
 .input-group-premium input::placeholder {
-    color: #ADB5BD; /* Placeholder gris */
+    color: #ADB5BD;
+    /* Placeholder gris */
 }
 
 /* Estilo para las opciones (Recordar y Olvidé) */
@@ -931,17 +1117,20 @@ footer {
     align-items: center;
     margin-bottom: 30px;
     font-size: 0.9em;
-    color: #6C757D; /* Gris medio */
+    color: #6C757D;
+    /* Gris medio */
 }
 
 .remember-me-premium input[type="checkbox"] {
     margin-right: 8px;
-    accent-color: #17A2B8; /* Color Teal para el checkbox */
+    accent-color: #17A2B8;
+    /* Color Teal para el checkbox */
     transform: scale(1.1);
 }
 
 .forgot-password-premium {
-    color: #17A2B8; /* Enlace Teal */
+    color: #17A2B8;
+    /* Enlace Teal */
     text-decoration: none;
 }
 
@@ -949,10 +1138,11 @@ footer {
 .btn-login-premium {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    background: linear-gradient(to right, #17A2B8, #0F8295);
+    /* Botón Teal */
     color: #FFFFFF;
     border: none;
-    border-radius: 25px; 
+    border-radius: 25px;
     cursor: pointer;
     font-weight: bold;
     font-size: 1.1em;
@@ -974,7 +1164,8 @@ footer {
 }
 
 .no-account-link-premium a {
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     text-decoration: none;
     font-weight: bold;
 }
@@ -985,19 +1176,22 @@ footer {
 
 /* --- Estilos de Navegación y Estructura Principal --- */
 .admin-header {
-    background-color: #FFFFFF; /* Fondo Blanco */
+    background-color: #FFFFFF;
+    /* Fondo Blanco */
     color: #212529;
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 3px solid #17A2B8; /* Acento Teal */
+    border-bottom: 3px solid #17A2B8;
+    /* Acento Teal */
 }
 
 .admin-header .logo {
     font-size: 1.5em;
     font-weight: bold;
-    color: #17A2B8; /* Logo en Teal */
+    color: #17A2B8;
+    /* Logo en Teal */
 }
 
 .admin-nav {
@@ -1014,34 +1208,44 @@ footer {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.admin-nav-item:hover, .admin-nav-item.active {
-    background-color: #E9ECEF; /* Fondo sutil al pasar el ratón o activo */
-    color: #17A2B8; /* Texto Teal al estar activo */
+.admin-nav-item:hover,
+.admin-nav-item.active {
+    background-color: #E9ECEF;
+    /* Fondo sutil al pasar el ratón o activo */
+    color: #17A2B8;
+    /* Texto Teal al estar activo */
 }
 
 .logout-btn {
-    background-color: #CED4DA; /* Gris claro */
+    background-color: #CED4DA;
+    /* Gris claro */
     color: #212529;
 }
+
 .logout-btn:hover {
-    background-color: #DC3545; /* Rojo de peligro */
+    background-color: #DC3545;
+    /* Rojo de peligro */
     color: #fff;
 }
 
 .admin-main {
-    background-color: #F8F9FA; /* Fondo del cuerpo principal muy claro */
+    background-color: #F8F9FA;
+    /* Fondo del cuerpo principal muy claro */
     padding: 40px;
     color: #212529;
     min-height: 85vh;
-    flex-grow: 1; /* FIX: Permite que el contenido crezca y empuje el footer */
+    flex-grow: 1;
+    /* FIX: Permite que el contenido crezca y empuje el footer */
 }
 
 .admin-main h1 {
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     border-bottom: 2px solid #CED4DA;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
+
 .admin-main p {
     color: #6C757D;
     margin-bottom: 30px;
@@ -1062,12 +1266,14 @@ footer {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
-    border-left: 5px solid #17A2B8; /* Teal */
+    border-left: 5px solid #17A2B8;
+    /* Teal */
 }
 
 .kpi-card i {
     font-size: 2.5em;
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     margin-right: 15px;
 }
 
@@ -1078,26 +1284,41 @@ footer {
     margin-bottom: 5px;
 }
 
-.kpi-trend.success { color: #28A745; } /* Verde para positivo */
-.kpi-trend.warning { color: #FFC107; } /* Amarillo para precaución */
-.kpi-trend.neutral { color: #6C757D; } /* Gris para neutro */
+.kpi-trend.success {
+    color: #28A745;
+}
+
+/* Verde para positivo */
+.kpi-trend.warning {
+    color: #FFC107;
+}
+
+/* Amarillo para precaución */
+.kpi-trend.neutral {
+    color: #6C757D;
+}
+
+/* Gris para neutro */
 
 /* --- Estilos de Gráficas y Tablas de Reporte --- */
 .report-details {
     display: grid;
-    grid-template-columns: 2fr 1fr; 
+    grid-template-columns: 2fr 1fr;
     gap: 30px;
 }
 
-.chart-container, .recent-orders {
+.chart-container,
+.recent-orders {
     background-color: #FFFFFF;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.chart-container h2, .recent-orders h2 {
-    color: #17A2B8; /* Teal */
+.chart-container h2,
+.recent-orders h2 {
+    color: #17A2B8;
+    /* Teal */
     font-size: 1.3em;
     margin-bottom: 20px;
 }
@@ -1118,7 +1339,8 @@ footer {
 }
 
 .recent-orders thead th {
-    background-color: #17A2B8; /* Fondo Teal */
+    background-color: #17A2B8;
+    /* Fondo Teal */
     color: #FFFFFF;
     font-weight: bold;
     text-transform: uppercase;
@@ -1130,12 +1352,28 @@ footer {
 }
 
 /* Estilos de estado */
-.status.delivered { background-color: #28A745; color: #fff; } /* Verde */
-.status.pending { background-color: #FFC107; color: #fff; } /* Amarillo */
-.status.shipped { background-color: #3F90FF; color: #fff; } /* Azul */
+.status.delivered {
+    background-color: #28A745;
+    color: #fff;
+}
+
+/* Verde */
+.status.pending {
+    background-color: #FFC107;
+    color: #fff;
+}
+
+/* Amarillo */
+.status.shipped {
+    background-color: #3F90FF;
+    color: #fff;
+}
+
+/* Azul */
 
 .btn-detail {
-    background-color: #17A2B8; /* Teal */
+    background-color: #17A2B8;
+    /* Teal */
     color: #FFFFFF;
     border: none;
     padding: 6px 10px;
@@ -1151,18 +1389,22 @@ footer {
         gap: 10px;
         padding: 15px 20px;
     }
+
     .admin-nav {
         gap: 15px;
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .admin-main {
         padding: 20px;
     }
+
     .report-details {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
 }
+
 /* ====================================
    ESTILOS DE GESTIÓN DE INVENTARIO
    ==================================== */
@@ -1177,7 +1419,8 @@ footer {
 }
 
 .btn-nuevo-producto {
-    background: linear-gradient(to right, #17A2B8, #0F8295); /* Botón Teal */
+    background: linear-gradient(to right, #17A2B8, #0F8295);
+    /* Botón Teal */
     color: #FFFFFF;
     border: none;
     padding: 10px 15px;
@@ -1189,7 +1432,7 @@ footer {
 
 .search-bar {
     background-color: #FFFFFF;
-    border: 1px solid #CED4DA; 
+    border: 1px solid #CED4DA;
     border-radius: 6px;
     padding: 5px 10px;
     max-width: 400px;
@@ -1200,7 +1443,8 @@ footer {
 }
 
 .search-bar i {
-    color: #17A2B8; /* Teal */
+    color: #17A2B8;
+    /* Teal */
     margin-left: 5px;
 }
 
@@ -1221,7 +1465,8 @@ footer {
 }
 
 .inventario-tabla thead th {
-    background-color: #17A2B8; /* Fondo Teal */
+    background-color: #17A2B8;
+    /* Fondo Teal */
     color: #FFFFFF;
     font-weight: bold;
     text-transform: uppercase;
@@ -1233,15 +1478,46 @@ footer {
 }
 
 /* Colores para la columna de Stock */
-.stock-critical { color: #DC3545; font-weight: bold; } /* Rojo */
-.stock-warning { color: #FFC107; font-weight: bold; } /* Amarillo/Naranja */
-.stock-good { color: #28A745; font-weight: bold; } /* Verde */
-.stock-out { color: #DC3545; font-weight: bold; } /* Rojo oscuro para agotado */
+.stock-critical {
+    color: #DC3545;
+    font-weight: bold;
+}
+
+/* Rojo */
+.stock-warning {
+    color: #FFC107;
+    font-weight: bold;
+}
+
+/* Amarillo/Naranja */
+.stock-good {
+    color: #28A745;
+    font-weight: bold;
+}
+
+/* Verde */
+.stock-out {
+    color: #DC3545;
+    font-weight: bold;
+}
+
+/* Rojo oscuro para agotado */
 
 /* Estilos de Estado */
-.status-in { background-color: rgba(40, 167, 69, 0.2); color: #28A745; }
-.status-low { background-color: rgba(255, 193, 7, 0.2); color: #FFC107; }
-.status-out { background-color: rgba(220, 53, 69, 0.2); color: #DC3545; }
+.status-in {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28A745;
+}
+
+.status-low {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #FFC107;
+}
+
+.status-out {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #DC3545;
+}
 
 /* Botones de Acción (Editar/Eliminar) */
 .btn-action {
@@ -1250,10 +1526,13 @@ footer {
 }
 
 .btn-action.btn-edit {
-    color: #17A2B8; /* Teal para editar */
+    color: #17A2B8;
+    /* Teal para editar */
 }
+
 .btn-action.btn-delete {
-    color: #DC3545; /* Rojo para eliminar */
+    color: #DC3545;
+    /* Rojo para eliminar */
 }
 
 .btn-action:hover {
@@ -1267,27 +1546,52 @@ footer {
         align-items: stretch;
         gap: 15px;
     }
+
     .search-bar {
         max-width: none;
     }
 }
 
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    /* fondo semi-transparente */
+    display: none;
+    /* oculto por defecto */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    color: white;
+    font-size: 1.3rem;
+}
+
+<<<<<<< HEAD
 
 /* ====================================
    ESTILOS DEL MODAL (VENTANA EMERGENTE)
    ==================================== */
 .modal {
-    display: none; /* Oculto por defecto */
-    position: fixed; 
-    z-index: 2000; /* Por encima de todo */
+    display: none;
+    /* Oculto por defecto */
+    position: fixed;
+    z-index: 2000;
+    /* Por encima de todo */
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgba(0,0,0,0.5); /* Fondo negro semi-transparente */
-    justify-content: center; /* Centrar horizontalmente (cuando display: flex) */
-    align-items: center; /* Centrar verticalmente (cuando display: flex) */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo negro semi-transparente */
+    justify-content: center;
+    /* Centrar horizontalmente (cuando display: flex) */
+    align-items: center;
+    /* Centrar verticalmente (cuando display: flex) */
 }
 
 .modal-content {
@@ -1295,16 +1599,24 @@ footer {
     padding: 30px;
     border: 1px solid #888;
     width: 90%;
-    max-width: 500px; /* Ancho máximo */
+    max-width: 500px;
+    /* Ancho máximo */
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
     animation: slideDown 0.3s ease-out;
 }
 
 @keyframes slideDown {
-    from { transform: translateY(-50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .close-button {
@@ -1368,4 +1680,26 @@ footer {
 .btn-modal-save:hover {
     transform: scale(1.02);
     background: linear-gradient(to right, #4DD0E1, #17A2B8);
+
+    =======.spinner {
+        width: 60px;
+        height: 60px;
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        /* color azul bonito, cámbialo al de tu marca */
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 15px;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
 }
