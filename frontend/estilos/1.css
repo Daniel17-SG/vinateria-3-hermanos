@@ -1272,3 +1272,100 @@ footer {
     }
 }
 
+
+/* ====================================
+   ESTILOS DEL MODAL (VENTANA EMERGENTE)
+   ==================================== */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed; 
+    z-index: 2000; /* Por encima de todo */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5); /* Fondo negro semi-transparente */
+    justify-content: center; /* Centrar horizontalmente (cuando display: flex) */
+    align-items: center; /* Centrar verticalmente (cuando display: flex) */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px; /* Ancho máximo */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos del Formulario dentro del Modal */
+#product-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#product-form label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+#product-form input,
+#product-form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+#product-form input:focus,
+#product-form select:focus {
+    border-color: #17A2B8;
+    outline: none;
+}
+
+.btn-modal-save {
+    margin-top: 20px;
+    padding: 12px;
+    background: linear-gradient(to right, #17A2B8, #0F8295);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-modal-save:hover {
+    transform: scale(1.02);
+    background: linear-gradient(to right, #4DD0E1, #17A2B8);
+}

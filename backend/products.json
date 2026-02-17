@@ -1,0 +1,58 @@
+[
+    {
+        "id": "TQL001",
+        "name": "Tequila Don Julio 70",
+        "category": "Tequila",
+        "stock": 45,
+        "price": 1550,
+        "status": "En Stock"
+    },
+    {
+        "id": "WSK005",
+        "name": "Whisky Buchanans 18",
+        "category": "Whisky",
+        "stock": 10,
+        "price": 1950,
+        "status": "Stock Bajo"
+    },
+    {
+        "id": "BND003",
+        "name": "Brandy Torres 20",
+        "category": "Brandy",
+        "stock": 125,
+        "price": 2450,
+        "status": "Abundante"
+    },
+    {
+        "id": "VDK007",
+        "name": "Vodka Absolut",
+        "category": "Vodka",
+        "stock": 20,
+        "price": 650,
+        "status": "En Stock"
+    },
+    {
+        "id": "RON009",
+        "name": "Ron Matusalem 15",
+        "category": "Ron",
+        "stock": 15,
+        "price": 520,
+        "status": "En Stock"
+    },
+    {
+        "id": "PRD751804",
+        "name": "chivas 12",
+        "category": "Whisky",
+        "stock": 123,
+        "price": 675,
+        "status": "Abundante"
+    },
+    {
+        "id": "PRD871984",
+        "name": "azul",
+        "category": "Tequila",
+        "stock": 210,
+        "price": 230,
+        "status": "Abundante"
+    }
+]

@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout y Pago - Los 3 Hermanos</title>
     <link rel="stylesheet" href="estilos/1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
-    
+
     <header class="header-secondary">
         <div class="logo">Vinatería Los 3 Hermanos</div>
         <nav>
-            <a href="index.html" class="nav-button">Inicio</a> 
-            <a href="catalogo.html" class="nav-button">Catálogo</a> 
+            <a href="index.html" class="nav-button">Inicio</a>
+            <a href="catalogo.html" class="nav-button">Catálogo</a>
         </nav>
     </header>
 
     <main class="checkout-main">
         <h1>Finalizar Compra</h1>
-        
+
         <div class="checkout-layout">
-            
+
             <section class="checkout-forms">
-                
+
                 <div class="checkout-section">
                     <h2>1. Dirección de Envío</h2>
                     <form class="form-envio">
@@ -48,11 +51,11 @@
 
                 <div class="checkout-section payment-section">
                     <h2>2. Método de Pago</h2>
-                    
+
                     <div class="payment-option active">
                         <input type="radio" id="pago_tarjeta" name="metodo_pago" value="tarjeta" checked>
                         <label for="pago_tarjeta"><i class="fas fa-credit-card"></i> Pagar con Tarjeta</label>
-                        
+
                         <div class="card-details">
                             <input type="text" placeholder="Número de Tarjeta" required>
                             <div class="form-group-grid">
@@ -66,6 +69,7 @@
                     <div class="payment-option">
                         <input type="radio" id="pago_paypal" name="metodo_pago" value="paypal">
                         <label for="pago_paypal"><i class="fab fa-paypal"></i> PayPal</label>
+                        <div id="paypal-button-container" style="display: none; margin-top: 15px;"></div>
                     </div>
 
                     <div class="payment-option">
@@ -74,37 +78,42 @@
                     </div>
 
                 </div>
-                
+
             </section>
 
             <aside class="carrito-resumen pago-resumen">
                 <h2>Resumen de Pedido</h2>
-                
+
                 <div class="resumen-detalle">
                     <p>Subtotal (3 productos): <span>$7,350.00</span></p>
                     <p>Costo de Envío: <span>$0.00</span></p>
                     <p>Impuestos (IVA): <span>$1,176.00</span></p>
                 </div>
-                
+
                 <div class="resumen-total">
                     <p>TOTAL FINAL</p>
                     <p class="total-price">$8,526.00</p>
                 </div>
-                
+
                 <button type="submit" class="btn-final-pago">CONFIRMAR Y PAGAR $8,526.00</button>
-                
+
                 <div class="resumen-info">
                     <p><i class="fas fa-lock"></i> Pago Seguro Garantizado.</p>
                     <p><i class="fas fa-box"></i> Envío rápido a toda la República.</p>
                 </div>
             </aside>
-            
+
         </div>
     </main>
 
     <footer>
         <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
     </footer>
-    
+
+    <!-- PayPal SDK -->
+    <!-- NOTA: Reemplaza client-id=test con tu propio Client ID de Sandbox cuando esté configurado correctamente -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=MXN"></script>
+    <script src="script/pago.js"></script>
 </body>
+
 </html>

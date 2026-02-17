@@ -49,76 +49,14 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="cuerpo-tabla-inventario">
-                    <tr data-status="critical">
-                        <td>TQL001</td>
-                        <td>Tequila Maestro Dobel</td>
-                        <td>Tequila</td>
-                        <td class="stock-critical">5</td>
-                        <td>$1,250.00</td>
-                        <td class="status-low">Bajo Stock</td>
-                        <td>
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                    <tr data-status="good">
-                        <td>WHK015</td>
-                        <td>Whisky Blue Label</td>
-                        <td>Whisky</td>
-                        <td class="stock-good">85</td>
-                        <td>$4,850.00</td>
-                        <td class="status-in">En Stock</td>
-                        <td>
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                    <tr data-status="out">
-                        <td>BND003</td>
-                        <td>Brandy Torres 20</td>
-                        <td>Brandy</td>
-                        <td class="stock-out">0</td>
-                        <td>$2,450.00</td>
-                        <td class="status-out">Agotado</td>
-                        <td>
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>VDK007</td>
-                        <td>Vodka Absolut</td>
-                        <td>Vodka</td>
-                        <td class="stock-warning">15</td>
-                        <td>$650.00</td>
-                        <td class="status-in">En Stock</td>
-                        <td>
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
+                <tbody id="inventory-table-body">
+                    </tbody>
             </table>
         </section>
 
     </main>
     
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Stock</th>
-            <th>Precio</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody id="tabla-productos">
-        </tbody>
-</table>
+
 <div id="product-modal" class="modal">
     <div class="modal-content">
         <span class="close-button">&times;</span>
@@ -154,6 +92,6 @@
         <p>&copy; 2024 Panel Administrativo Los 3 Hermanos.</p>
     </footer>
     <script src="script/inventario.js"></script>
-    <script src="script/api_inventario.js"></script>
+    
 </body>
 </html>

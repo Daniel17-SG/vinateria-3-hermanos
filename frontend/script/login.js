@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Agregar el listener para el envío del formulario
     form.addEventListener('submit', async (event) => {
-        event.preventDefault(); 
-        
+        event.preventDefault();
+
         errorMessage.style.display = 'none';
 
         const email = emailInput.value;
@@ -30,8 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 4. Manejo de la respuesta
             if (data.success) {
+                // Guardar sesión en LocalStorage
+                localStorage.setItem('user', JSON.stringify({ email: email, role: data.redirect.includes('admi') ? 'admin' : 'user' }));
+
                 // Redirecciona a la página que indique el servidor (admi.html o index.html)
-                window.location.href = data.redirect; 
+                window.location.href = data.redirect;
             } else {
                 // Muestra el mensaje de error del servidor
                 errorMessage.textContent = data.message;

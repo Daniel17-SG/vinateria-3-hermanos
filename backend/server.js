@@ -4,16 +4,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 // Importar las funciones de la base de datos simulada
-const db = require('./db'); 
+const db = require('./db');
 
 const app = express();
 const PORT = 3000; // Puerto donde correrá el servidor
 
 // 2. Configuración de Middlewares
 // Permite que Express lea datos JSON enviados en peticiones POST
-app.use(bodyParser.json()); 
-// Sirve archivos estáticos (HTML, CSS, JS del Front-End) desde la carpeta superior
-app.use(express.static('../')); 
+app.use(bodyParser.json());
+const path = require('path');
+// Sirve archivos estáticos (HTML, CSS, JS del Front-End) desde la carpeta frontend
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // 3. RUTAS API (Endpoints)
 
@@ -41,8 +42,8 @@ app.post('/register', (req, res) => {
     const newUser = db.registerUser(name, email, password);
 
     if (newUser) {
-        return res.json({ 
-            success: true, 
+        return res.json({
+            success: true,
             message: '¡Registro exitoso! Ya puedes iniciar sesión.',
             redirect: 'login.html' // Redirige al usuario a la página de login
         });
@@ -64,7 +65,7 @@ app.get('/api/inventory', (req, res) => {
 app.post('/api/inventory', (req, res) => {
     const newProduct = req.body;
     const addedProduct = db.addProduct(newProduct);
-    
+
     if (addedProduct) {
         return res.json({ success: true, product: addedProduct, message: 'Producto añadido con éxito.' });
     } else {
@@ -94,6 +95,18 @@ app.delete('/api/inventory/:id', (req, res) => {
         return res.json({ success: true, message: 'Producto eliminado con éxito.' });
     } else {
         return res.status(404).json({ success: false, message: 'Producto no encontrado.' });
+    }
+});
+
+// 3.7. CREAR PEDIDO (POST /api/orders)
+app.post('/api/orders', (req, res) => {
+    const orderData = req.body;
+    const result = db.createOrder(orderData);
+
+    if (result.success) {
+        return res.json({ success: true, order: result.order, message: 'Pedido creado exitosamente.' });
+    } else {
+        return res.status(400).json({ success: false, message: result.message });
     }
 });
 
