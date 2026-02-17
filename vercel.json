@@ -1,31 +1,16 @@
 {
-    "version": 2,
-    "builds": [
+    "rewrites": [
         {
-            "src": "backend/server.js",
-            "use": "@vercel/node"
+            "source": "/api/:path*",
+            "destination": "/api"
         },
         {
-            "src": "frontend/**",
-            "use": "@vercel/static"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/backend/server.js"
+            "source": "/login",
+            "destination": "/api"
         },
         {
-            "src": "/login",
-            "dest": "/backend/server.js"
-        },
-        {
-            "src": "/register",
-            "dest": "/backend/server.js"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/frontend/$1"
+            "source": "/register",
+            "destination": "/api"
         }
     ]
 }
