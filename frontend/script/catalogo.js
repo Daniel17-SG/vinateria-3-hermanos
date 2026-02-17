@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridProductos = document.querySelector('.grid-productos');
     const buttons = document.querySelectorAll('.filtro-btn');
     const notification = document.getElementById('notification-toast');
+    const badge = document.getElementById('cart-badge');
 
     // Productos locales (sin depender de backend)
     const PRODUCTS = [
@@ -24,11 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------- FUNCIONES DEL CARRITO (localStorage) ----------
 
     function getCart() {
+        if (window.cartUtils && typeof window.cartUtils.getCart === 'function') {
+            return window.cartUtils.getCart();
+        }
         return JSON.parse(localStorage.getItem('carrito')) || [];
     }
 
     function saveCart(cart) {
+        if (window.cartUtils && typeof window.cartUtils.saveCart === 'function') {
+            return window.cartUtils.saveCart(cart);
+        }
         localStorage.setItem('carrito', JSON.stringify(cart));
+        updateBadge();
+    }
+
+    function updateBadge() {
+        const cart = getCart();
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        if (badge) {
+            badge.textContent = total;
+            badge.style.display = total > 0 ? 'inline-flex' : 'none';
+        }
     }
 
     function addToCart(product) {
@@ -114,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Renderizar todos los productos al inicio
     renderProducts(PRODUCTS);
+    updateBadge();
 
     // ---------- FILTRADO ----------
 

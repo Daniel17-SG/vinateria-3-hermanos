@@ -161,6 +161,27 @@ a {
     color: #17A2B8;
 }
 
+/* Badge del carrito (número) */
+.cart-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: #e63946; /* rojo vibrante */
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.75rem;
+    border-radius: 999px;
+    margin-left: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.cart-badge[style*="display: none"] {
+    display: none !important;
+}
+
 /* 3. MENÚ DE CATEGORÍAS */
 .category-nav {
     background-color: #212529;

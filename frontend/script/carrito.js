@@ -9,12 +9,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---------- FUNCIONES DE LOCALSTORAGE ----------
 
+    // Use shared cart utilities if available (cart-badge.js)
     function getCart() {
+        if (window.cartUtils && typeof window.cartUtils.getCart === 'function') {
+            return window.cartUtils.getCart();
+        }
         return JSON.parse(localStorage.getItem('carrito')) || [];
     }
 
     function saveCart(cart) {
+        if (window.cartUtils && typeof window.cartUtils.saveCart === 'function') {
+            return window.cartUtils.saveCart(cart);
+        }
         localStorage.setItem('carrito', JSON.stringify(cart));
+        updateBadge();
+    }
+
+    function updateBadge() {
+        const cart = getCart();
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const badge = document.getElementById('cart-badge');
+        if (badge) {
+            badge.textContent = total;
+            badge.style.display = total > 0 ? 'inline-flex' : 'none';
+        }
     }
 
     // ---------- FORMATEO DE MONEDA ----------

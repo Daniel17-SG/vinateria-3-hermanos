@@ -32,7 +32,8 @@
         <div class="header-icons">
             <a href="login.html" class="icon-link"><i class="fas fa-user-circle"></i> Login</a>
 
-            <a href="carrito.html" class="icon-link"><i class="fas fa-shopping-cart"></i> Carrito</a>
+            <a href="carrito.html" class="icon-link cart-link"><i class="fas fa-shopping-cart"></i> Carrito <span
+                    class="cart-badge" id="cart-badge">0</span></a>
 
 
         </div>
@@ -169,12 +170,35 @@
 
             const notification = document.getElementById('notification-toast');
 
+            // Prefer shared cart utilities when available
             function getCart() {
+                if (window.cartUtils && typeof window.cartUtils.getCart === 'function') {
+                    return window.cartUtils.getCart();
+                }
                 return JSON.parse(localStorage.getItem('carrito')) || [];
             }
+
             function saveCart(cart) {
+                if (window.cartUtils && typeof window.cartUtils.saveCart === 'function') {
+                    return window.cartUtils.saveCart(cart);
+                }
                 localStorage.setItem('carrito', JSON.stringify(cart));
+                updateBadge();
             }
+
+            function updateBadge() {
+                if (window.cartUtils && typeof window.cartUtils.updateBadge === 'function') {
+                    return window.cartUtils.updateBadge();
+                }
+                const cart = getCart();
+                const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const badge = document.getElementById('cart-badge');
+                if (badge) {
+                    badge.textContent = total;
+                    badge.style.display = total > 0 ? 'inline-flex' : 'none';
+                }
+            }
+            updateBadge(); // Actualizar al cargar la página
 
             const buttons = document.querySelectorAll('.agregar-carrito');
             buttons.forEach((button, index) => {
@@ -240,6 +264,8 @@
             });
         }
     </script>
+
+    <script src="script/cart-badge.js"></script>
 
     <!-- Google Maps API - Cambia TU_API_KEY_AQUI por tu clave real -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&callback=initMap">
