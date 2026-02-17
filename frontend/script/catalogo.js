@@ -1,88 +1,139 @@
-document.addEventListener('DOMContentLoaded', async () => {
+// catalogo.js - Catálogo con productos locales y carrito con localStorage
+
+document.addEventListener('DOMContentLoaded', () => {
     const gridProductos = document.querySelector('.grid-productos');
     const buttons = document.querySelectorAll('.filtro-btn');
     const notification = document.getElementById('notification-toast');
 
-    // Función para renderizar productos
+    // Productos locales (sin depender de backend)
+    const PRODUCTS = [
+        { id: 1, name: 'Tequila Maestro Dobel Diamante', category: 'Tequila', price: 1250, status: 'Disponible', img: 'imagenes/tequila.jpg' },
+        { id: 2, name: 'Tequila Don Julio 70', category: 'Tequila', price: 980, status: 'Disponible', img: 'imagenes/tequila.jpg' },
+        { id: 3, name: 'Tequila José Cuervo Reserva', category: 'Tequila', price: 750, status: 'Disponible', img: 'imagenes/tequila.jpg' },
+        { id: 4, name: 'Whisky Buchanans 18', category: 'Whisky', price: 1950, status: 'Disponible', img: 'imagenes/18.jpg' },
+        { id: 5, name: 'Whisky Blue Label Escocés', category: 'Whisky', price: 4850, status: 'Disponible', img: 'imagenes/whiski.jpg' },
+        { id: 6, name: 'Whisky Jack Daniels', category: 'Whisky', price: 620, status: 'Disponible', img: 'imagenes/whiski.jpg' },
+        { id: 7, name: 'Brandy Torres 10', category: 'Brandy', price: 450, status: 'Disponible', img: 'imagenes/brandy.jpg' },
+        { id: 8, name: 'Brandy Don Pedro', category: 'Brandy', price: 280, status: 'Disponible', img: 'imagenes/brandy.jpg' },
+        { id: 9, name: 'Vodka Absolut Original', category: 'Vodka', price: 650, status: 'Disponible', img: 'imagenes/vodka.jpg' },
+        { id: 10, name: 'Vodka Grey Goose', category: 'Vodka', price: 890, status: 'Disponible', img: 'imagenes/vodka.jpg' },
+        { id: 11, name: 'Ron Matusalem Gran Reserva', category: 'Ron', price: 520, status: 'Disponible', img: 'imagenes/ron.png' },
+        { id: 12, name: 'Ron Bacardí Añejo', category: 'Ron', price: 380, status: 'Disponible', img: 'imagenes/ron.png' }
+    ];
+
+    // ---------- FUNCIONES DEL CARRITO (localStorage) ----------
+
+    function getCart() {
+        return JSON.parse(localStorage.getItem('carrito')) || [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem('carrito', JSON.stringify(cart));
+    }
+
+    function addToCart(product) {
+        const cart = getCart();
+        const existing = cart.find(item => item.id === product.id);
+
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                img: product.img,
+                quantity: 1
+            });
+        }
+
+        saveCart(cart);
+    }
+
+    // ---------- RENDERIZADO DE PRODUCTOS ----------
+
     const renderProducts = (products) => {
-        gridProductos.innerHTML = ''; // Limpiar grilla
+        gridProductos.innerHTML = '';
 
         if (products.length === 0) {
-            gridProductos.innerHTML = '<p>No hay productos disponibles en este momento.</p>';
+            gridProductos.innerHTML = '<p>No hay productos disponibles en esta categoría.</p>';
             return;
         }
 
         products.forEach(product => {
-            // Mapear categoría a imagen (simple, para demo)
-            let imgSrc = 'imagenes/vino.jpg'; // Default
-            const cat = product.category.toLowerCase();
-            if (cat.includes('tequila')) imgSrc = 'imagenes/tequila.jpg';
-            else if (cat.includes('whisky')) imgSrc = 'imagenes/whiski.jpg';
-            else if (cat.includes('brandy')) imgSrc = 'imagenes/brandy.jpg';
-            else if (cat.includes('vodka')) imgSrc = 'imagenes/vodka.jpg';
-            else if (cat.includes('ron')) imgSrc = 'imagenes/ron.png';
-
-            // Crear elemento
             const productCard = document.createElement('div');
             productCard.classList.add('producto');
-            productCard.setAttribute('data-category', cat); // Para filtrado
+            productCard.setAttribute('data-category', product.category.toLowerCase());
 
             productCard.innerHTML = `
-                <img src="${imgSrc}" alt="${product.name}">
+                <img src="${product.img}" alt="${product.name}">
                 <h3>${product.name}</h3>
                 <p class="desc">${product.category} - ${product.status}</p>
-                <p class="precio">$${product.price}</p>
+                <p class="precio">$${product.price.toLocaleString('es-MX')}</p>
                 <button class="agregar-carrito" data-id="${product.id}">Agregar al Carrito</button>
             `;
 
             gridProductos.appendChild(productCard);
         });
 
-        // Re-asignar listeners a botones de "Agregar al Carrito"
         attachCartListeners();
     };
 
-    // Función para conectar listeners de carrito
+    // ---------- LISTENERS DE CARRITO ----------
+
     const attachCartListeners = () => {
         const agregarCarritoButtons = document.querySelectorAll('.agregar-carrito');
         agregarCarritoButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Notificación visual
-                notification.classList.remove('notification-hidden');
-                notification.classList.add('notification-show');
+                const productId = parseInt(button.getAttribute('data-id'));
+                const product = PRODUCTS.find(p => p.id === productId);
 
-                setTimeout(() => {
-                    notification.classList.remove('notification-show');
-                    notification.classList.add('notification-hidden');
-                }, 3000);
+                if (product) {
+                    addToCart(product);
 
-                const originalText = button.textContent;
-                button.textContent = "¡Agregado!";
-                button.disabled = true;
+                    // Notificación visual
+                    if (notification) {
+                        notification.classList.remove('notification-hidden');
+                        notification.classList.add('notification-show');
+                        setTimeout(() => {
+                            notification.classList.remove('notification-show');
+                            notification.classList.add('notification-hidden');
+                        }, 3000);
+                    }
 
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.disabled = false;
-                }, 1500);
+                    button.textContent = "¡Agregado!";
+                    button.disabled = true;
+                    setTimeout(() => {
+                        button.textContent = "Agregar al Carrito";
+                        button.disabled = false;
+                    }, 1500);
+                }
             });
         });
     };
 
-    // Cargar productos desde API
-    try {
-        const response = await fetch('/api/inventory');
-        const products = await response.json();
+    // Renderizar todos los productos al inicio
+    renderProducts(PRODUCTS);
 
-        // Guardar todos los productos para filtrar localmente
-        window.allProducts = products;
+    // ---------- FILTRADO ----------
 
-        renderProducts(products);
-    } catch (error) {
-        console.error('Error al cargar catálogo:', error);
-        gridProductos.innerHTML = '<p>Error al cargar el catálogo.</p>';
+    // Leer el parámetro de categoría de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('categoria');
+
+    if (categoryParam) {
+        const filtered = PRODUCTS.filter(p => p.category.toLowerCase().includes(categoryParam.toLowerCase()));
+        renderProducts(filtered);
+
+        // Marcar el botón activo
+        buttons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === categoryParam.toLowerCase()) {
+                btn.classList.add('active');
+            }
+        });
     }
 
-    // Lógica de Filtrado
     buttons.forEach(button => {
         button.addEventListener('click', () => {
             buttons.forEach(btn => btn.classList.remove('active'));
@@ -90,16 +141,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const filterValue = button.getAttribute('data-filter').toLowerCase();
 
-            if (!window.allProducts) return;
-
-            let filtered;
             if (filterValue === 'all') {
-                filtered = window.allProducts;
+                renderProducts(PRODUCTS);
             } else {
-                filtered = window.allProducts.filter(p => p.category.toLowerCase().includes(filterValue));
+                const filtered = PRODUCTS.filter(p => p.category.toLowerCase().includes(filterValue));
+                renderProducts(filtered);
             }
-
-            renderProducts(filtered);
         });
     });
 });

@@ -1,57 +1,124 @@
+// carrito.js - Carrito dinámico con localStorage
+// Maneja: renderizado, cantidades, eliminación, totales y persistencia
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Referencias a elementos del DOM
     const cartItemsContainer = document.getElementById('cart-items-container');
     const subtotalElement = document.getElementById('cart-subtotal');
     const totalElement = document.getElementById('cart-total');
+    const cartCountBadge = document.getElementById('cart-count');
 
-    // Función para actualizar el total
-    function updateCartTotal() {
-        let total = 0;
-        const cartItems = document.querySelectorAll('.carrito-item');
+    // ---------- FUNCIONES DE LOCALSTORAGE ----------
 
-        cartItems.forEach(item => {
-            const price = parseFloat(item.getAttribute('data-price'));
-            const quantityInput = item.querySelector('.qty-input');
-            const quantity = parseInt(quantityInput.value);
-
-            if (!isNaN(price) && !isNaN(quantity)) {
-                total += price * quantity;
-            }
-        });
-
-        // Formatear moneda
-        const formattedTotal = '$' + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-
-        // Actualizar DOM
-        subtotalElement.textContent = formattedTotal;
-        totalElement.textContent = formattedTotal + ' MXN';
+    function getCart() {
+        return JSON.parse(localStorage.getItem('carrito')) || [];
     }
 
-    // Event Delegation para manejar clicks (eliminar) y cambios (cantidad)
+    function saveCart(cart) {
+        localStorage.setItem('carrito', JSON.stringify(cart));
+    }
+
+    // ---------- FORMATEO DE MONEDA ----------
+
+    function formatMoney(amount) {
+        return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
+    // ---------- RENDERIZADO DEL CARRITO ----------
+
+    function renderCart() {
+        const cart = getCart();
+        cartItemsContainer.innerHTML = '';
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="carrito-vacio">
+                    <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+                    <h3>Tu carrito está vacío</h3>
+                    <p>Agrega productos desde nuestro <a href="catalogo.html">catálogo</a></p>
+                </div>
+            `;
+            updateTotals(0);
+            return;
+        }
+
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+
+            const article = document.createElement('article');
+            article.classList.add('carrito-item');
+            article.setAttribute('data-index', index);
+
+            article.innerHTML = `
+                <img src="${item.img}" alt="${item.name}" class="item-img">
+                <div class="item-details">
+                    <h3 class="item-name">${item.name}</h3>
+                    <p class="item-price">${formatMoney(item.price)} MXN</p>
+                    <div class="item-quantity">
+                        <button class="qty-btn qty-minus" data-index="${index}">−</button>
+                        <span class="qty-display">${item.quantity}</span>
+                        <button class="qty-btn qty-plus" data-index="${index}">+</button>
+                    </div>
+                    <p class="item-subtotal">Subtotal: ${formatMoney(itemTotal)}</p>
+                </div>
+                <button class="btn-remove" data-index="${index}" title="Eliminar">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            `;
+
+            cartItemsContainer.appendChild(article);
+        });
+
+        updateTotals(total);
+    }
+
+    // ---------- ACTUALIZAR TOTALES ----------
+
+    function updateTotals(total) {
+        const formatted = formatMoney(total);
+        if (subtotalElement) subtotalElement.textContent = formatted;
+        if (totalElement) totalElement.textContent = formatted + ' MXN';
+    }
+
+    // ---------- EVENT DELEGATION ----------
+
     cartItemsContainer.addEventListener('click', (event) => {
-        // Manejar botón de eliminar
-        if (event.target.closest('.btn-remove')) {
-            const item = event.target.closest('.carrito-item');
-            if (confirm('¿Estás seguro de eliminar este producto del carrito?')) {
-                item.remove();
-                updateCartTotal();
+        const target = event.target;
+        const cart = getCart();
+
+        // Eliminar producto
+        if (target.closest('.btn-remove')) {
+            const index = parseInt(target.closest('.btn-remove').getAttribute('data-index'));
+            if (confirm('¿Eliminar este producto del carrito?')) {
+                cart.splice(index, 1);
+                saveCart(cart);
+                renderCart();
+            }
+        }
+
+        // Aumentar cantidad
+        if (target.closest('.qty-plus')) {
+            const index = parseInt(target.closest('.qty-plus').getAttribute('data-index'));
+            cart[index].quantity += 1;
+            saveCart(cart);
+            renderCart();
+        }
+
+        // Disminuir cantidad
+        if (target.closest('.qty-minus')) {
+            const index = parseInt(target.closest('.qty-minus').getAttribute('data-index'));
+            if (cart[index].quantity > 1) {
+                cart[index].quantity -= 1;
+                saveCart(cart);
+                renderCart();
             }
         }
     });
 
-    cartItemsContainer.addEventListener('input', (event) => {
-        // Manejar cambio en input de cantidad
-        if (event.target.classList.contains('qty-input')) {
-            const input = event.target;
-            if (input.value < 1) {
-                input.value = 1; // Mínimo 1
-            }
-            updateCartTotal();
-        }
-    });
-
-    // Calcular total inicial
-    updateCartTotal();
+    // ---------- RENDER INICIAL ----------
+    renderCart();
 });
 
 // Función global para verificar sesión desde el botón de pago
@@ -59,14 +126,11 @@ function verificarSesion() {
     const user = localStorage.getItem('user');
 
     if (!user) {
-        // Si NO hay usuario guardado, pedimos iniciar sesión
         const confirmacion = confirm("✋ ¡Alto ahí! Debes iniciar sesión para proceder al pago.");
-
         if (confirmacion) {
             window.location.href = "login.html";
         }
     } else {
-        // Si SÍ hay usuario, procedemos
         window.location.href = "pago.html";
     }
 }

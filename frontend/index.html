@@ -92,6 +92,15 @@
 
     </main>
 
+    <!-- UBICACIÓN -->
+    <section class="map-section" id="ubicacion">
+        <div class="map-container">
+            <h2><i class="fas fa-map-marker-alt"></i> Nuestra Ubicación</h2>
+            <p>Visítanos en nuestra sucursal. ¡Te esperamos!</p>
+            <div id="google-map"></div>
+        </div>
+    </section>
+
     <!-- QUIÉNES SOMOS -->
     <section class="about-section" id="nosotros">
         <div class="about-container">
@@ -131,28 +140,109 @@
             <a href="https://instagram.com/3hermanosV" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
         </p>
     </footer>
+
+    <!-- Notificación toast para agregar al carrito -->
+    <div id="notification-toast" class="notification-hidden">
+        <i class="fas fa-check-circle"></i> Producto agregado al carrito
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // ---------- LOADER para catálogo ----------
             const btnCatalogo = document.querySelector('a[href="catalogo.html"], a.btn-hero-action');
-
             if (btnCatalogo) {
                 btnCatalogo.addEventListener("click", function (e) {
-                    e.preventDefault();  // ← Esto es clave: detiene la navegación inmediata
-
+                    e.preventDefault();
                     const loader = document.getElementById("loader");
-                    if (loader) {
-                        loader.style.display = "flex";
+                    if (loader) loader.style.display = "flex";
+                    setTimeout(() => { window.location.href = "catalogo.html"; }, 1500);
+                });
+            }
+
+            // ---------- CARRITO desde Homepage ----------
+            const HOMEPAGE_PRODUCTS = [
+                { id: 1, name: 'Tequila Maestro Dobel', price: 1250, img: 'imagenes/tequila.jpg' },
+                { id: 4, name: 'Whisky Buchanans 18', price: 1950, img: 'imagenes/18.jpg' },
+                { id: 9, name: 'Vodka Absolut', price: 650, img: 'imagenes/vodka.jpg' },
+                { id: 11, name: 'Ron Matusalem', price: 520, img: 'imagenes/ron.png' }
+            ];
+
+            const notification = document.getElementById('notification-toast');
+
+            function getCart() {
+                return JSON.parse(localStorage.getItem('carrito')) || [];
+            }
+            function saveCart(cart) {
+                localStorage.setItem('carrito', JSON.stringify(cart));
+            }
+
+            const buttons = document.querySelectorAll('.agregar-carrito');
+            buttons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    const product = HOMEPAGE_PRODUCTS[index];
+                    if (!product) return;
+
+                    const cart = getCart();
+                    const existing = cart.find(item => item.id === product.id);
+
+                    if (existing) {
+                        existing.quantity += 1;
+                    } else {
+                        cart.push({ ...product, quantity: 1 });
+                    }
+                    saveCart(cart);
+
+                    // Notificación visual
+                    if (notification) {
+                        notification.classList.remove('notification-hidden');
+                        notification.classList.add('notification-show');
+                        setTimeout(() => {
+                            notification.classList.remove('notification-show');
+                            notification.classList.add('notification-hidden');
+                        }, 3000);
                     }
 
-                    // Fuerza que se vea al menos 1.5 segundos (para que lo veas claramente)
+                    button.textContent = "¡Agregado!";
+                    button.disabled = true;
                     setTimeout(() => {
-                        window.location.href = "catalogo.html";
-                    }, 1500);  // Cambia a 800 o 500 cuando ya lo veas funcionando
+                        button.textContent = "Agregar al Carrito";
+                        button.disabled = false;
+                    }, 1500);
                 });
-            } else {
-                console.error("¡No se encontró el botón! Verifica que exista <a href=\"catalogo.html\" ...>");
-            }
+            });
         });
+
+        // ---------- GOOGLE MAPS ----------
+        // ⚠️ CAMBIA ESTA API KEY POR LA TUYA:
+        const GOOGLE_MAPS_API_KEY = 'TU_API_KEY_AQUI';
+
+        function initMap() {
+            // Coordenadas de ejemplo (Ciudad de México)
+            const businessLocation = { lat: 19.4326, lng: -99.1332 };
+
+            const map = new google.maps.Map(document.getElementById('google-map'), {
+                zoom: 15,
+                center: businessLocation,
+                styles: [
+                    { elementType: "geometry", stylers: [{ color: "#1d2c4d" }] },
+                    { elementType: "labels.text.fill", stylers: [{ color: "#8ec3b9" }] },
+                    { elementType: "labels.text.stroke", stylers: [{ color: "#1a3646" }] },
+                    { featureType: "water", elementType: "geometry.fill", stylers: [{ color: "#0e1626" }] },
+                    { featureType: "road", elementType: "geometry", stylers: [{ color: "#304a7d" }] }
+                ]
+            });
+
+            new google.maps.Marker({
+                position: businessLocation,
+                map: map,
+                title: 'Vinatería Los 3 Hermanos',
+                animation: google.maps.Animation.DROP
+            });
+        }
+    </script>
+
+    <!-- Google Maps API - Cambia TU_API_KEY_AQUI por tu clave real -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&callback=initMap">
     </script>
 </body>
 
