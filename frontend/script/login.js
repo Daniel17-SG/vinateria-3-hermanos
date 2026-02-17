@@ -2,10 +2,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Obtener los elementos del DOM (Inputs y Formulario)
-    const form = document.getElementById('login-form');
-    const emailInput = document.getElementById('email-input');
-    const passwordInput = document.getElementById('password-input');
-    const errorMessage = document.getElementById('login-error-message');
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMessage = document.getElementById('error-message');
 
     if (!form) return; // Salir si el formulario no se encuentra
 
