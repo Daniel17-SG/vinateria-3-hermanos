@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vinatería Los 3 Hermanos - Inicio</title>
-    <link rel="stylesheet" href="estilos/1.css"> 
+    <link rel="stylesheet" href="estilos/1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
-<!-- Loader / Aviso de carga -->
-<div id="loader" class="loader-overlay">
-  <div class="spinner"></div>
-  <p>Cargando catálogo...</p>
-</div>
+    <!-- Loader / Aviso de carga -->
+    <div id="loader" class="loader-overlay">
+        <div class="spinner"></div>
+        <p>Cargando catálogo...</p>
+    </div>
     <div class="top-promo-bar">
         <span>¡Envío GRATIS en pedidos mayores a $1,500!</span>
     </div>
@@ -21,18 +23,18 @@
         <div class="logo">
             <a href="index.html">VINATERÍA LOS 3 HERMANOS</a>
         </div>
-        
+
         <div class="search-container">
             <input type="search" placeholder="Buscar en Catálogo...">
             <button><i class="fas fa-search"></i></button>
         </div>
-        
+
         <div class="header-icons">
             <a href="login.html" class="icon-link"><i class="fas fa-user-circle"></i> Login</a>
-            
+
             <a href="carrito.html" class="icon-link"><i class="fas fa-shopping-cart"></i> Carrito</a>
 
-            
+
         </div>
     </header>
 
@@ -48,11 +50,12 @@
     </nav>
 
     <main class="home-main">
-        
+
         <section class="hero-simple">
             <div class="hero-content-simple">
                 <h1>Bienvenidos a Vinatería Los 3 Hermanos</h1>
-                <p>Tradición familiar desde hace tres generaciones. Ofrecemos los mejores vinos y licores premium seleccionados especialmente para ti.</p>
+                <p>Tradición familiar desde hace tres generaciones. Ofrecemos los mejores vinos y licores premium
+                    seleccionados especialmente para ti.</p>
                 <a href="catalogo.html" class="btn-hero-action">CATÁLOGO </a>
             </div>
         </section>
@@ -68,7 +71,7 @@
                 </div>
                 <div class="producto">
                     <img src="imagenes/18.jpg" alt="Whisky Buchanans 18">
-                <h3>Whisky Buchanans 18</h3>
+                    <h3>Whisky Buchanans 18</h3>
                     <p class="precio">$1,950</p>
                     <button class="agregar-carrito">Agregar al Carrito</button>
                 </div>
@@ -80,40 +83,77 @@
                 </div>
                 <div class="producto">
                     <img src="imagenes/ron.png" alt="Ron Matusalem">
-                <h3>Ron Matusalem</h3>
+                    <h3>Ron Matusalem</h3>
                     <p class="precio">$520</p>
                     <button class="agregar-carrito">Agregar al Carrito</button>
                 </div>
             </div>
         </section>
-        
+
     </main>
+
+    <!-- QUIÉNES SOMOS -->
+    <section class="about-section" id="nosotros">
+        <div class="about-container">
+            <div class="about-text">
+                <h2><i class="fas fa-wine-bottle"></i> ¿Quiénes Somos?</h2>
+                <p>
+                    <strong>Vinatería Los 3 Hermanos</strong> es un negocio familiar con más de tres generaciones
+                    de experiencia en la selección y distribución de los mejores vinos y licores premium.
+                    Nos apasiona ofrecer productos de la más alta calidad a precios accesibles, acompañados
+                    de un servicio personalizado que nos distingue.
+                </p>
+                <p>
+                    Desde tequilas artesanales hasta whiskys importados, en nuestra vinatería encontrarás
+                    todo lo que necesitas para celebrar los momentos especiales de la vida.
+                </p>
+            </div>
+            <div class="contact-info">
+                <h3><i class="fas fa-phone-alt"></i> Contáctanos</h3>
+                <p class="contact-phone"><i class="fas fa-mobile-alt"></i> <a href="tel:567892162">567 892 162</a></p>
+                <div class="social-links">
+                    <a href="https://facebook.com/3hermanosV" target="_blank" class="social-btn facebook">
+                        <i class="fab fa-facebook-f"></i> /3hermanosV
+                    </a>
+                    <a href="https://instagram.com/3hermanosV" target="_blank" class="social-btn instagram">
+                        <i class="fab fa-instagram"></i> @3hermanosV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <footer>
         <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
+        <p class="footer-social">
+            <a href="tel:567892162"><i class="fas fa-phone"></i> 567 892 162</a> |
+            <a href="https://facebook.com/3hermanosV" target="_blank"><i class="fab fa-facebook"></i> Facebook</a> |
+            <a href="https://instagram.com/3hermanosV" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+        </p>
     </footer>
-   <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const btnCatalogo = document.querySelector('a[href="catalogo.html"], a.btn-hero-action');
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const btnCatalogo = document.querySelector('a[href="catalogo.html"], a.btn-hero-action');
 
-    if (btnCatalogo) {
-        btnCatalogo.addEventListener("click", function(e) {
-            e.preventDefault();  // ← Esto es clave: detiene la navegación inmediata
+            if (btnCatalogo) {
+                btnCatalogo.addEventListener("click", function (e) {
+                    e.preventDefault();  // ← Esto es clave: detiene la navegación inmediata
 
-            const loader = document.getElementById("loader");
-            if (loader) {
-                loader.style.display = "flex";
+                    const loader = document.getElementById("loader");
+                    if (loader) {
+                        loader.style.display = "flex";
+                    }
+
+                    // Fuerza que se vea al menos 1.5 segundos (para que lo veas claramente)
+                    setTimeout(() => {
+                        window.location.href = "catalogo.html";
+                    }, 1500);  // Cambia a 800 o 500 cuando ya lo veas funcionando
+                });
+            } else {
+                console.error("¡No se encontró el botón! Verifica que exista <a href=\"catalogo.html\" ...>");
             }
-
-            // Fuerza que se vea al menos 1.5 segundos (para que lo veas claramente)
-            setTimeout(() => {
-                window.location.href = "catalogo.html";
-            }, 1500);  // Cambia a 800 o 500 cuando ya lo veas funcionando
         });
-    } else {
-        console.error("¡No se encontró el botón! Verifica que exista <a href=\"catalogo.html\" ...>");
-    }
-});
-</script>
+    </script>
 </body>
+
 </html>

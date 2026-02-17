@@ -1875,3 +1875,146 @@ footer {
         font-size: 1.6rem;
     }
 }
+
+/* ====================================
+   SECCIÓN QUIÉNES SOMOS
+   ==================================== */
+
+.about-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 60px 20px;
+    color: #fff;
+}
+
+.about-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.about-text h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #4DD0E1;
+}
+
+.about-text h2 i {
+    margin-right: 10px;
+}
+
+.about-text p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.contact-info h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: #4DD0E1;
+}
+
+.contact-info h3 i {
+    margin-right: 8px;
+}
+
+.contact-phone {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.contact-phone a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.contact-phone a:hover {
+    color: #4DD0E1;
+}
+
+.contact-phone i {
+    color: #4DD0E1;
+    margin-right: 8px;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.social-btn.facebook {
+    background: linear-gradient(135deg, #1877F2, #0d5bbf);
+}
+
+.social-btn.instagram {
+    background: linear-gradient(135deg, #E4405F, #C13584, #833AB4);
+}
+
+.social-btn i {
+    font-size: 1.2rem;
+}
+
+/* Footer actualizado */
+.footer-social {
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+.footer-social a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-social a:hover {
+    color: #4DD0E1;
+}
+
+.footer-social i {
+    margin-right: 4px;
+}
+
+/* Responsive About */
+@media (max-width: 768px) {
+    .about-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .about-text h2 {
+        font-size: 1.5rem;
+    }
+}

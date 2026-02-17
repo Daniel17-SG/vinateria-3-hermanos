@@ -1,48 +1,47 @@
-// login.js (Crea este archivo en tu carpeta de scripts)
+// login.js - Autenticación simulada (cliente-side)
+// Funciona sin backend, ideal para despliegue estático en Vercel
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Obtener los elementos del DOM (Inputs y Formulario)
     const form = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const errorMessage = document.getElementById('error-message');
 
-    if (!form) return; // Salir si el formulario no se encuentra
+    if (!form) return;
 
-    // 2. Agregar el listener para el envío del formulario
-    form.addEventListener('submit', async (event) => {
+    // Credenciales simuladas
+    const USERS = [
+        { email: 'admin@3hermanos.com', password: 'admin123', role: 'admin', name: 'Admin' },
+        { email: 'daniel@gmail.com', password: '1234', role: 'admin', name: 'Daniel' },
+        { email: 'cliente@gmail.com', password: '1234', role: 'user', name: 'Cliente' }
+    ];
+
+    form.addEventListener('submit', (event) => {
         event.preventDefault();
-
         errorMessage.style.display = 'none';
 
-        const email = emailInput.value;
+        const email = emailInput.value.trim().toLowerCase();
         const password = passwordInput.value;
 
-        try {
-            // 3. Llamada al API del Back-End (ruta /login)
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
+        // Buscar usuario
+        const user = USERS.find(u => u.email === email && u.password === password);
 
-            const data = await response.json();
+        if (user) {
+            // Guardar sesión en LocalStorage
+            localStorage.setItem('user', JSON.stringify({
+                email: user.email,
+                role: user.role,
+                name: user.name
+            }));
 
-            // 4. Manejo de la respuesta
-            if (data.success) {
-                // Guardar sesión en LocalStorage
-                localStorage.setItem('user', JSON.stringify({ email: email, role: data.redirect.includes('admi') ? 'admin' : 'user' }));
-
-                // Redirecciona a la página que indique el servidor (admi.html o index.html)
-                window.location.href = data.redirect;
+            // Redirigir según el rol
+            if (user.role === 'admin') {
+                window.location.href = 'admi.html';
             } else {
-                // Muestra el mensaje de error del servidor
-                errorMessage.textContent = data.message;
-                errorMessage.style.display = 'block';
+                window.location.href = 'index.html';
             }
-        } catch (error) {
-            console.error('Error de conexión:', error);
-            errorMessage.textContent = 'Error al conectar con el servidor. ¿Está corriendo?';
+        } else {
+            errorMessage.textContent = 'Correo o contraseña incorrectos.';
             errorMessage.style.display = 'block';
         }
     });
