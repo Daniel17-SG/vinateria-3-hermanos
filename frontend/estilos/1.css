@@ -1679,17 +1679,17 @@ footer {
 .btn-modal-save:hover {
     transform: scale(1.02);
     background: linear-gradient(to right, #4DD0E1, #17A2B8);
+}
 
-    .spinner {
-        width: 60px;
-        height: 60px;
-        border: 8px solid #f3f3f3;
-        border-top: 8px solid #3498db;
-        /* color azul bonito, cámbialo al de tu marca */
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 15px;
-    }
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    /* color azul bonito, cámbialo al de tu marca */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
 }
 
 @keyframes spin {
