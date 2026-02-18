@@ -7,18 +7,22 @@
     box-sizing: border-box;
 }
 
+/* Smooth scrolling for in-page anchors */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #FFFFFF;
-    /* Fondo base Blanco */
-    color: #212529;
-    /* Texto Principal (Dark Charcoal) */
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(86,61,124,0.18), transparent 10%),
+                linear-gradient(180deg, #0f1027 0%, #1f1334 40%, #201433 100%);
+    color: #E6EEF6;
     line-height: 1.6;
-    /* === FIX STICKY FOOTER: Esto asegura que el footer siempre esté abajo === */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* ====================================================================== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -91,33 +95,32 @@ a {
 
 /* 2. ENCABEZADO PRINCIPAL (Logo, Búsqueda, Iconos) */
 .main-header-ba {
-    background-color: #ffffff;
-    padding: 20px 40px;
+    background: linear-gradient(180deg, rgba(23,162,184,0.06), rgba(255,255,255,0.02));
+    padding: 14px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #eeeeee;
+    border-bottom: 3px solid rgba(23,162,184,0.18);
+    backdrop-filter: blur(4px);
 }
 
 .main-header-ba .logo a {
-    font-size: 1.5em;
+    font-size: 1.6em;
     font-weight: 800;
-    color: #212529;
+    color: #17A2B8; /* Teal logo to match screenshot */
     letter-spacing: 1px;
-    border-left: 5px solid #17A2B8;
-    /* Acento Teal */
     padding-left: 10px;
 }
 
 .search-container {
     display: flex;
     flex-grow: 1;
-    max-width: 500px;
+    max-width: 520px;
     margin: 0 40px;
-    border: 2px solid #CED4DA;
-    /* Borde más claro */
-    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
     overflow: hidden;
+    background: rgba(255,255,255,0.02);
 }
 
 .search-container input {
@@ -141,20 +144,36 @@ a {
 }
 
 .header-icons .icon-link {
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
     align-items: center;
-    color: #212529;
-    font-size: 0.85em;
-    font-weight: 600;
-    transition: color 0.2s;
+    gap: 10px;
+    color: #012025;
+    font-size: 0.95em;
+    font-weight: 700;
+    transition: transform 0.12s, box-shadow 0.12s;
+    padding: 8px 14px;
+    border-radius: 24px;
+    background: linear-gradient(90deg,#17A2B8,#4dd0e1);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(23,162,184,0.12);
 }
 
 .header-icons .icon-link i {
-    font-size: 1.4em;
-    margin-bottom: 3px;
-    color: #17A2B8;
-    /* Iconos Teal */
+    font-size: 1.2em;
+    margin-right: 8px;
+    color: #fff;
+}
+
+/* Slight hover/pop for header buttons */
+.header-icons .icon-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(23,162,184,0.16);
+}
+
+/* Make second header icon (cart) slightly different spacing */
+.header-icons .cart-link {
+    display: inline-flex;
+    align-items: center;
 }
 
 .header-icons .icon-link:hover {
@@ -184,10 +203,9 @@ a {
 
 /* 3. MENÚ DE CATEGORÍAS */
 .category-nav {
-    background-color: #212529;
-    /* Fondo de menú oscuro (para buen contraste) */
-    border-top: 3px solid #17A2B8;
-    /* Borde Teal */
+    background: rgba(10,12,20,0.35);
+    backdrop-filter: blur(6px);
+    border-top: 3px solid rgba(77,208,225,0.08);
 }
 
 .category-nav ul {
@@ -200,7 +218,7 @@ a {
 }
 
 .category-nav li a {
-    color: #f0f0f0;
+    color: #dbeef6;
     font-weight: bold;
     padding: 8px 15px;
     margin: 0 5px;
@@ -225,38 +243,35 @@ a {
 }
 
 .hero-simple {
-    background-color: #f0f0f0;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('imagenes/wine-background.jpg');
-    background-size: cover;
-    min-height: 200px;
-    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    min-height: 220px;
+    border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     margin-bottom: 40px;
-    padding: 20px;
-    border: 1px solid #ddd;
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
 }
 
 .hero-content-simple h1 {
-    font-size: 2.5em;
-    color: #17A2B8;
-    /* Título Teal */
+    font-size: 2.4em;
+    color: #e6fbff;
     margin-bottom: 10px;
 }
 
 .btn-hero-action {
     display: inline-block;
-    background: linear-gradient(to right, #17A2B8, #0F8295);
-    /* Botón Teal */
-    color: #FFFFFF;
-    /* Texto blanco */
-    padding: 12px 25px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 1.1em;
-    transition: transform 0.3s;
+    background: linear-gradient(90deg, #17A2B8 0%, #4dd0e1 100%);
+    color: #012025;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1em;
+    transition: transform 0.18s, box-shadow 0.18s;
+    box-shadow: 0 8px 18px rgba(23,162,184,0.12);
 }
 
 .btn-hero-action:hover {
@@ -285,28 +300,26 @@ a {
 }
 
 .producto {
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding: 18px;
+    border-radius: 12px;
     text-align: center;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 12px 30px rgba(2,6,23,0.55);
+    transition: transform 0.16s, box-shadow 0.16s;
 }
 
 .producto:hover {
-    transform: translateY(-5px);
-    border-color: #17A2B8;
-    /* Borde Teal */
-    box-shadow: 0 0 10px rgba(23, 162, 184, 0.3);
-    /* Sombra Teal */
+    transform: translateY(-6px);
+    border-color: rgba(77,208,225,0.14);
+    box-shadow: 0 18px 40px rgba(2,6,23,0.66);
 }
 
 .producto img {
-    width: 80%;
+    width: 78%;
     max-height: 140px;
     object-fit: contain;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
 }
 
 .producto h3 {
@@ -321,16 +334,15 @@ a {
 }
 
 .agregar-carrito {
-    background: linear-gradient(to right, #17A2B8, #0F8295);
-    /* Botón Teal */
-    color: #FFFFFF;
-    /* Texto blanco */
+    background: linear-gradient(90deg, #17A2B8, #4dd0e1);
+    color: #012025;
     border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
+    padding: 10px 14px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 800;
     width: 100%;
+    box-shadow: 0 10px 20px rgba(23,162,184,0.08);
 }
 
 
@@ -338,15 +350,12 @@ a {
    ESTILOS DE LA PÁGINA CATÁLOGO (Ahora clara)
    ==================================== */
 .catalogo-main {
-    padding: 40px;
+    padding: 40px 36px;
     text-align: center;
-    max-width: 1400px;
+    max-width: 1300px;
     margin: 0 auto;
-    background-color: #FFFFFF;
-    /* Fondo Claro */
-    color: #212529;
+    color: #e6eef6;
     flex-grow: 1;
-    /* FIX: Permite que el contenido crezca y empuje el footer */
 }
 
 .catalogo-main .grid-productos {
@@ -360,14 +369,11 @@ a {
    ==================================== */
 footer {
     text-align: center;
-    padding: 20px;
-    color: #F8F9FA;
-    /* Texto claro */
+    padding: 22px 12px;
+    color: #a9cbd6;
     font-size: 0.9em;
-    background-color: #212529;
-    /* Fondo oscuro (Dark Charcoal) */
-    border-top: 5px solid #17A2B8;
-    /* Acento Teal */
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2));
+    border-top: 4px solid rgba(77,208,225,0.06);
 }
 
 /* ====================================
@@ -418,43 +424,37 @@ footer {
 .filtro-categorias {
     text-align: center;
     margin-bottom: 30px;
-    padding: 10px;
-    background-color: #F8F9FA;
-    /* Fondo muy claro */
-    border-radius: 6px;
+    padding: 14px 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    /* Dark translucent panel to match site */
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 12px;
 }
 
 .filtro-btn {
     background-color: transparent;
-    color: #212529;
-    /* Texto oscuro */
-    border: 1px solid #CED4DA;
-    /* Borde claro */
+    color: #e6eef6;
+    /* Texto claro */
+    border: 1px solid rgba(255,255,255,0.06);
     padding: 8px 15px;
-    margin: 5px;
-    border-radius: 20px;
+    margin: 6px;
+    border-radius: 22px;
     cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s;
+    font-weight: 700;
+    transition: all 0.18s ease;
 }
 
 .filtro-btn:hover {
-    background-color: #E9ECEF;
-    /* Gris muy claro en hover */
-    border-color: #17A2B8;
-    /* Borde Teal */
-    color: #17A2B8;
-    /* Texto Teal */
+    background: rgba(77,208,225,0.06);
+    border-color: rgba(77,208,225,0.14);
+    color: #bff7fb;
 }
 
 .filtro-btn.active {
-    background-color: #17A2B8;
-    /* Fondo Teal */
-    color: #FFFFFF;
-    /* Texto blanco */
-    border-color: #17A2B8;
-    box-shadow: 0 0 8px rgba(23, 162, 184, 0.5);
-    /* Sombra Teal */
+    background: linear-gradient(90deg, #17A2B8, #4dd0e1);
+    color: #012025;
+    border-color: rgba(77,208,225,0.22);
+    box-shadow: 0 10px 24px rgba(23,162,184,0.12);
 }
 
 /* Descripción del producto en el catálogo claro */
@@ -510,6 +510,132 @@ footer {
     margin-right: 10px;
     font-size: 1.2em;
 }
+
+/* ==============================
+   THEME: Legendary Dark (overrides)
+   Inspired by the provided mockup: dark wood texture, strong vignette,
+   large hero, card panels with subtle inner borders, accent orange + teal
+   ============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@400;700;800&display=swap');
+
+:root{
+    --bg-dark-1: #0b0b0c;
+    --bg-dark-2: #111017;
+    --panel: rgba(14,16,20,0.6);
+    --accent: #e76f21; /* warm orange */
+    --accent2: #17A2B8; /* teal */
+    --muted: #b8c2c8;
+}
+
+html,body{
+    height:100%;
+}
+
+body{
+    background-color: var(--bg-dark-1);
+    background-image: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.02), transparent 2%),
+                      radial-gradient(circle at 85% 80%, rgba(255,255,255,0.01), transparent 8%);
+    color: #dfe7eb;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+/* subtle texture overlay (CSS-only) */
+body::before{
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.5));
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Header narrow nav like mockup */
+.main-header-ba{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 12px 40px;
+    position: relative;
+    z-index: 20;
+}
+
+.main-header-ba .logo a{
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent2);
+    letter-spacing: 1px;
+}
+
+/* Move category nav to a slim band with separators */
+.category-nav{
+    background: transparent;
+    border-top: none;
+    padding: 10px 0 18px;
+}
+.category-nav ul{display:flex;justify-content:center;gap:20px;align-items:center}
+.category-nav li a{
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight:700;
+    font-size:0.9rem;
+    padding:6px 10px;
+    border-bottom:2px solid transparent;
+}
+.category-nav li a:hover{color:#fff;border-bottom-color:var(--accent2)}
+
+/* Hero: large showcase with left image and text on right (approximation) */
+.hero-simple{
+    background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45));
+    min-height:360px;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    padding:40px;
+    margin-bottom:28px;
+}
+.hero-simple .hero-content-simple{
+    width:100%;text-align:center;
+}
+.hero-simple h1{font-family:'Playfair Display',serif;font-size:3rem;color:#f6f7f8;margin-bottom:8px}
+.hero-simple p{color:var(--muted);max-width:900px;margin:0 auto 18px}
+.btn-hero-action{background:var(--accent);color:#fff;padding:12px 26px;border-radius:26px;font-weight:700}
+
+/* Products area: smaller cards with dark panels and thin borders */
+.product-grid-highlight{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+.producto{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);padding:18px;border-radius:6px;box-shadow:0 12px 28px rgba(0,0,0,0.7);}
+.producto h3{font-family:'Playfair Display',serif;color:#fff;margin:8px 0}
+.producto .precio{color:var(--accent);font-weight:800}
+.producto img{background:#0e0e0e;padding:6px;border-radius:4px}
+.agregar-carrito{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 10px;border-radius:22px}
+.agregar-carrito:hover{background:rgba(231,111,33,0.08);border-color:var(--accent)}
+
+/* Filters area: darker panel, slim */
+.filtro-categorias{background:transparent;border-radius:4px;padding:8px 12px;margin:18px auto 28px;display:inline-block}
+.filtro-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 14px;border-radius:20px}
+.filtro-btn.active{background:var(--accent2);color:#012025;border-color:rgba(77,208,225,0.12)}
+
+/* Panels for sections like about / contact
+   show as inset dark boxes */
+.about-container, .carrito-resumen, .carrito-productos {
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    border:1px solid rgba(255,255,255,0.03);
+    padding:18px;border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+footer{background:transparent;border-top:1px solid rgba(255,255,255,0.04);padding:28px 12px;color:var(--muted)}
+
+/* small tweaks for cart badge to match mockup colors */
+.cart-badge{background:var(--accent);color:#fff;min-width:22px;height:22px;font-size:0.8rem}
+
+/* responsive adjustments */
+@media (max-width:900px){
+    .hero-simple{flex-direction:column;padding:22px}
+    .hero-simple h1{font-size:2rem}
+}
+
+/* final touch: subtle separators similar to mockup lines */
+.separator-line{height:2px;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);margin:22px 0}
+
 
 /* Clases para animar la notificación */
 .notification-hidden {
