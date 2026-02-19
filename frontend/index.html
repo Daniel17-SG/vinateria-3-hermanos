@@ -26,31 +26,32 @@
         </div>
 
         <div class="search-container">
-            <input type="search" placeholder="Buscar en Catálogo...">
+            <input type="search" placeholder="Buscar por producto, categoría, marca y más">
             <button><i class="fas fa-search"></i></button>
         </div>
 
         <div class="header-icons">
-            <a href="login.html" class="icon-link"><i class="fas fa-user-circle"></i> Login</a>
-
-            <a href="carrito.html" class="icon-link cart-link"><i class="fas fa-shopping-cart"></i> Carrito <span
+            <a href="login.html" class="icon-link"><i class="fas fa-user-circle"></i></a>
+            <a href="carrito.html" class="icon-link cart-link"><i class="fas fa-shopping-cart"></i><span
                     class="cart-badge" id="cart-badge">0</span></a>
-
-
+            <button id="nav-toggle" class="nav-toggle"><i class="fas fa-bars"></i></button>
         </div>
     </header>
 
     <nav class="category-nav">
         <ul>
-            <li><a href="catalogo.html?categoria=tequila">Tequila</a></li>
-            <li><a href="catalogo.html?categoria=whisky">Whisky</a></li>
-            <li><a href="catalogo.html?categoria=brandy">Brandy</a></li>
-            <li><a href="catalogo.html?categoria=vodka">Vodka</a></li>
-            <li><a href="catalogo.html?categoria=ron">Ron</a></li>
-            <li><a href="catalogo.html">Ver Todo</a></li>
-            <li><a href="#ubicacion">Ubicación</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-            <li><a href="#nosotros">Quiénes Somos</a></li>
+            <li><a href="catalogo.html?categoria=ofertas" class="nav-button">Ofertas <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=vinos" class="nav-button">Vinos <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=destilados" class="nav-button">Destilados <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=acompañamientos" class="nav-button">Acompañamientos <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=productos%20de%20lucro" class="nav-button">Productos de Lucro <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=marcas" class="nav-button">Marcas <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="ayuda.html" class="nav-button">Ayuda <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=eventos" class="nav-button">Eventos <i class="fas fa-chevron-down"></i></a></li>
+            <!-- retain internal anchors -->
+            <li><a href="#ubicacion" class="nav-button">Ubicación</a></li>
+            <li><a href="#nosotros" class="nav-button">Quiénes Somos</a></li>
+            <li><a href="#contacto" class="nav-button">Contacto</a></li>
         </ul>
     </nav>
 
@@ -172,6 +173,14 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // hamburger toggle for nav
+            const navToggle = document.getElementById('nav-toggle');
+            const categoryNav = document.querySelector('.category-nav');
+            if (navToggle && categoryNav) {
+                navToggle.addEventListener('click', () => {
+                    categoryNav.classList.toggle('open');
+                });
+            }
             // ---------- LOADER para catálogo ----------
             const btnCatalogo = document.querySelector('a[href="catalogo.html"], a.btn-hero-action');
             if (btnCatalogo) {
@@ -290,6 +299,23 @@
 
     <script src="script/cart-badge.js"></script>
     <script src="script/contact.js"></script>
+
+    <script>
+        // observe products on homepage to fade them in
+        document.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelectorAll('.producto');
+            if (items.length === 0) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            items.forEach(el => observer.observe(el));
+        });
+    </script>
 
     <!-- Google Maps API - Cambia TU_API_KEY_AQUI por tu clave real -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&callback=initMap">

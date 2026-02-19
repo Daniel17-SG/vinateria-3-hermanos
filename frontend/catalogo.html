@@ -14,6 +14,7 @@
 
     <header class="header-secondary">
         <div class="logo">Vinatería Los 3 Hermanos</div>
+        <button id="nav-toggle" class="nav-toggle"><i class="fas fa-bars"></i></button>
         <nav>
             <a href="index.html" class="nav-button">Inicio</a>
             <a href="carrito.html" class="nav-button cart-link"><i class="fas fa-shopping-cart"></i> Carrito <span
@@ -49,6 +50,17 @@
 
     <script src="script/cart-badge.js"></script>
     <script src="script/catalogo.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const nav = document.querySelector('header.header-secondary nav');
+            if (navToggle && nav) {
+                navToggle.addEventListener('click', () => {
+                    nav.classList.toggle('open');
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

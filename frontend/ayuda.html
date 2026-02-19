@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda - Vinatería Los 3 Hermanos</title>
+    <link rel="stylesheet" href="estilos/1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="estilos/legendary.css">
+</head>
+<body>
+    <!-- reuse header from index -->
+    <header class="main-header-ba">
+        <div class="logo">
+            <a href="index.html">VINATERÍA LOS 3 HERMANOS</a>
+        </div>
+        <div class="search-container">
+            <input type="search" placeholder="Buscar por producto, categoría, marca y más">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-icons">
+            <a href="login.html" class="icon-link"><i class="fas fa-user-circle"></i></a>
+            <a href="carrito.html" class="icon-link cart-link"><i class="fas fa-shopping-cart"></i><span
+                    class="cart-badge" id="cart-badge">0</span></a>
+        </div>
+    </header>
+    <nav class="category-nav">
+        <ul>
+            <li><a href="catalogo.html?categoria=ofertas" class="nav-button">Ofertas <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=vinos" class="nav-button">Vinos <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=destilados" class="nav-button">Destilados <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=acompañamientos" class="nav-button">Acompañamientos <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=productos%20de%20lucro" class="nav-button">Productos de Lucro <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=marcas" class="nav-button">Marcas <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="ayuda.html" class="nav-button">Ayuda <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=eventos" class="nav-button">Eventos <i class="fas fa-chevron-down"></i></a></li>
+            <!-- retain internal anchors -->
+            <li><a href="#ubicacion" class="nav-button">Ubicación</a></li>
+            <li><a href="#nosotros" class="nav-button">Quiénes Somos</a></li>
+            <li><a href="#contacto" class="nav-button">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <main class="help-main" style="padding:40px; max-width:900px; margin:0 auto;">
+        <h1>¿Necesitas ayuda?</h1>
+        <p>Rellena el siguiente formulario y nuestro equipo te contactará lo antes posible.</p>
+        <form id="help-form" class="contact-form">
+            <div class="form-row">
+                <label for="help-name">Nombre</label>
+                <input type="text" id="help-name" name="name" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-row">
+                <label for="help-email">Correo electrónico</label>
+                <input type="email" id="help-email" name="email" placeholder="ejemplo@correo.com" required>
+            </div>
+            <div class="form-row">
+                <label for="help-subject">Asunto</label>
+                <input type="text" id="help-subject" name="subject" placeholder="¿Sobre qué tienes dudas?" required>
+            </div>
+            <div class="form-row">
+                <label for="help-message">Mensaje</label>
+                <textarea id="help-message" name="message" rows="6" placeholder="Describe tu problema o consulta" required></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-contact-send">Enviar</button>
+                <button type="button" id="help-clear" class="btn-contact-clear">Limpiar</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Vinatería Los 3 Hermanos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const helpForm = document.getElementById('help-form');
+        const helpClear = document.getElementById('help-clear');
+        if (helpClear) {
+            helpClear.addEventListener('click', () => {
+                helpForm.reset();
+            });
+        }
+
+        if (helpForm) {
+            helpForm.addEventListener('submit', e => {
+                e.preventDefault();
+                alert('Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.');
+                helpForm.reset();
+            });
+        }
+    </script>
+</body>
+</html>
