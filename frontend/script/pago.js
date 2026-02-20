@@ -2,6 +2,13 @@
 // Checkout & Payment — Validation + Dynamic Summary
 // ====================================
 document.addEventListener('DOMContentLoaded', () => {
+    // ---------- 0. Session Check ----------
+    const user = localStorage.getItem('user');
+    if (!user) {
+        alert("✋ ¡Espera! Para tu seguridad, debes iniciar sesión antes de realizar el pago.");
+        window.location.href = "login.html";
+        return;
+    }
 
     // ---------- Elements ----------
     const paymentOptions = document.querySelectorAll('input[name="metodo_pago"]');

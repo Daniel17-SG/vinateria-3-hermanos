@@ -144,10 +144,8 @@ function verificarSesion() {
     const user = localStorage.getItem('user');
 
     if (!user) {
-        const confirmacion = confirm("✋ ¡Alto ahí! Debes iniciar sesión para proceder al pago.");
-        if (confirmacion) {
-            window.location.href = "login.html";
-        }
+        alert("✋ ¡Espera! Para tu seguridad, debes iniciar sesión antes de realizar el pago.");
+        window.location.href = "login.html";
     } else {
         window.location.href = "pago.html";
     }
