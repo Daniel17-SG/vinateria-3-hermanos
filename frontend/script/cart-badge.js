@@ -88,12 +88,26 @@
         }
     }
 
+    function verificarSesion(redirectToPago = false) {
+        const user = localStorage.getItem('user');
+        if (!user) {
+            alert("✋ ¡Espera! Para tu seguridad, debes iniciar sesión antes de continuar.");
+            window.location.href = "login.html";
+            return false;
+        }
+        if (redirectToPago) {
+            window.location.href = "pago.html";
+        }
+        return true;
+    }
+
     // Expose utilities
     window.cartUtils = {
         getCart,
         saveCart,
         updateBadge,
-        getTotalQuantity
+        getTotalQuantity,
+        verificarSesion
     };
 
     // Auto run after DOM ready

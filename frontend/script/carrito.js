@@ -141,12 +141,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Función global para verificar sesión desde el botón de pago
 function verificarSesion() {
-    const user = localStorage.getItem('user');
-
-    if (!user) {
-        alert("✋ ¡Espera! Para tu seguridad, debes iniciar sesión antes de realizar el pago.");
-        window.location.href = "login.html";
+    if (window.cartUtils && typeof window.cartUtils.verificarSesion === 'function') {
+        window.cartUtils.verificarSesion(true); // true means redirect to pago.html if logged in
     } else {
-        window.location.href = "pago.html";
+        // Fallback if utility not loaded
+        const user = localStorage.getItem('user');
+        if (!user) {
+            alert("✋ ¡Espera! Para tu seguridad, debes iniciar sesión antes de realizar el pago.");
+            window.location.href = "login.html";
+        } else {
+            window.location.href = "pago.html";
+        }
     }
 }

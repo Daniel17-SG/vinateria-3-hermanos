@@ -602,21 +602,31 @@ footer {
    ADAPTACIÓN MÓVIL (RESPONSIVE)
    ==================================== */
 @media (max-width: 992px) {
-
     .main-header-ba {
         flex-wrap: wrap;
-        padding: 15px 20px;
+        padding: 10px 20px;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .logo {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 5px;
     }
 
     .search-container {
         order: 3;
-        margin: 15px 0 0 0;
+        margin: 0;
         max-width: 100%;
+        width: 100%;
     }
 
     .header-icons {
         order: 2;
-        gap: 10px;
+        gap: 15px;
+        justify-content: center;
+        width: 100%;
     }
 
     .category-nav ul {
@@ -624,8 +634,10 @@ footer {
     }
 
     /* Catálogo y Productos */
-    .product-grid-highlight {
+    .product-grid-highlight,
+    .grid-productos {
         grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
     }
 
     .hero-content-simple h1 {
@@ -635,6 +647,23 @@ footer {
     .btn-hero-action {
         font-size: 0.9em;
         padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .product-grid-highlight,
+    .grid-productos {
+        grid-template-columns: 1fr;
+    }
+
+    .header-icons .icon-link span {
+        display: none;
+        /* Hide text in icons for very small screens */
+    }
+
+    .main-header-ba .logo a {
+        font-size: 1.2em;
     }
 }
 
@@ -1556,20 +1585,54 @@ footer {
     font-weight: 700;
 }
 
-/* Admin breadcrumb on light bg */
-.admin-main .breadcrumb,
-.checkout-main .breadcrumb,
-.carrito-main .breadcrumb {
-    background: rgba(23, 162, 184, 0.06);
-    border-bottom: 1px solid rgba(23, 162, 184, 0.1);
-    padding: 12px 0;
-    margin-bottom: 20px;
-}
+@media (max-width: 768px) {
 
-.admin-main .breadcrumb .current,
-.checkout-main .breadcrumb .current,
-.carrito-main .breadcrumb .current {
-    color: #212529;
+    .carrito-layout,
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .carrito-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .carrito-item img {
+        margin: 0 auto;
+    }
+
+    .item-quantity {
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    .item-subtotal {
+        text-align: center;
+        width: 100%;
+    }
+
+    .btn-remove {
+        position: relative;
+        margin: 10px 0 0 0;
+        right: auto;
+        top: auto;
+    }
+
+    .carrito-resumen,
+    .pago-resumen {
+        margin-top: 20px;
+    }
+
+    .form-group-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-main .breadcrumb .current,
+    .checkout-main .breadcrumb .current,
+    .carrito-main .breadcrumb .current {
+        color: #212529;
+    }
 }
 
 /* ====================================
