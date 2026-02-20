@@ -25,6 +25,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Global main container to push footer down */
+main {
+    flex: 1 0 auto;
+}
+
 a {
     text-decoration: none;
     color: inherit;
@@ -1092,10 +1097,13 @@ body::before {
 }
 
 footer {
-    background: transparent;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-    padding: 28px 12px;
-    color: var(--muted)
+    background: #0f1027;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px 20px;
+    color: #b8c2c8;
+    text-align: center;
+    width: 100%;
+    margin-top: auto;
 }
 
 /* small tweaks for cart badge to match mockup colors */

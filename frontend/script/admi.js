@@ -92,6 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const panel = document.getElementById('kpi-detail-panel');
     const titleEl = document.getElementById('detail-title');
     const tableContainer = document.getElementById('detail-table-container');
+    const extraActions = document.getElementById('extra-actions');
+    const addClientFormBox = document.getElementById('add-client-form');
+    const clientForm = document.getElementById('new-client-form');
+    const btnCancelClient = document.getElementById('btn-cancel-client');
 
     let currentChart = null;
     let activeKpi = null;
@@ -121,6 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('active-card');
         activeKpi = kpi;
 
+        // Reset forms
+        addClientFormBox.style.display = 'none';
+
         // Show panel
         const data = KPI_DATA[kpi];
         if (!data) return;
@@ -128,6 +135,21 @@ document.addEventListener('DOMContentLoaded', () => {
         titleEl.innerHTML = data.title;
         renderTable(data.table);
         renderChart(data.chart);
+
+        // Handle extra actions (like Add Client button)
+        extraActions.innerHTML = '';
+        if (kpi === 'clientes') {
+            const btnAdd = document.createElement('button');
+            btnAdd.className = 'btn-add-item';
+            btnAdd.innerHTML = '<i class="fas fa-plus"></i> Añadir Cliente';
+            btnAdd.onclick = () => {
+                addClientFormBox.style.display = addClientFormBox.style.display === 'none' ? 'block' : 'none';
+                if (addClientFormBox.style.display === 'block') {
+                    addClientFormBox.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+            extraActions.appendChild(btnAdd);
+        }
 
         panel.classList.add('visible');
         panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -138,6 +160,43 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach(c => c.classList.remove('active-card'));
         activeKpi = null;
         if (currentChart) { currentChart.destroy(); currentChart = null; }
+        addClientFormBox.style.display = 'none';
+    }
+
+    // ---------- Client Form Handling ----------
+    if (clientForm) {
+        clientForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('client-name').value;
+            const dateInput = document.getElementById('client-date').value;
+            const compras = document.getElementById('client-compras').value;
+            const total = document.getElementById('client-total').value;
+
+            // Format date for display
+            const dateObj = new Date(dateInput);
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            const formattedDate = `${dateObj.getDate().toString().padStart(2, '0')} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+            // Add to data
+            KPI_DATA.clientes.table.rows.unshift([
+                name,
+                formattedDate,
+                compras,
+                `$${parseFloat(total).toLocaleString('es-MX', { minimumFractionDigits: 0 })}`
+            ]);
+
+            // Update UI
+            renderTable(KPI_DATA.clientes.table);
+            addClientFormBox.style.display = 'none';
+            clientForm.reset();
+            alert('¡Cliente añadido exitosamente!');
+        });
+    }
+
+    if (btnCancelClient) {
+        btnCancelClient.addEventListener('click', () => {
+            addClientFormBox.style.display = 'none';
+        });
     }
 
     // ---------- Render Table ----------
