@@ -1,0 +1,147 @@
+/* light.css - Light theme overrides for index and admin pages */
+:root{
+    --bg: #f4f6f8;
+    --panel: #ffffff;
+    --muted: #6c757d;
+    --accent: #17A2B8;
+    --accent-strong: #0f8295;
+    --text: #212529;
+    --success: #28a745;
+    --warning: #ffc107;
+}
+
+html,body{height:100%;}
+body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Header tweaks */
+.main-header-ba{
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    color: var(--text);
+}
+.main-header-ba .logo a{color:var(--accent);}
+
+.top-promo-bar{background:var(--accent);color:#fff}
+
+/* Navs */
+.info-nav{background:transparent;border-bottom:none}
+.category-nav{background:transparent;border-top:none}
+.category-nav li a{color:var(--accent-strong)}
+.category-nav li a:hover{background:transparent;color:#0b5360}
+
+/* Hero / panels */
+.hero-simple{background: linear-gradient(180deg,#ffffff,#f7fafc);box-shadow:0 6px 20px rgba(16,24,40,0.06);}
+.hero-simple h1{color:var(--text)}
+.hero-simple p{color:var(--muted)}
+.btn-hero-action{background:var(--accent);color:#fff}
+
+/* Products: light cards */
+.producto{background:var(--panel);border:1px solid rgba(16,24,40,0.04);box-shadow:0 6px 18px rgba(16,24,40,0.06);color:var(--text)}
+.producto h3{color:var(--text)}
+.producto .precio{color:var(--accent-strong)}
+.agregar-carrito{background:var(--accent);color:#fff;border:none}
+.agregar-carrito:hover{background:var(--accent-strong)}
+
+/* Modal adjustments (ensure readable) */
+.modal-overlay{background:rgba(16,24,40,0.45)}
+.modal-content{background:var(--panel);color:var(--text)}
+
+/* Footer */
+footer{background:transparent;color:var(--muted)}
+
+/* Admin KPI cards (ensure button-like) */
+.kpi-card{background:var(--panel);border:1px solid rgba(16,24,40,0.06);box-shadow:0 8px 24px rgba(16,24,40,0.06);padding:18px;border-radius:10px}
+.kpi-card i{color:var(--accent)}
+.kpi-card .kpi-title{color:var(--muted)}
+.kpi-card .kpi-value{font-size:1.6rem;font-weight:800;color:var(--text)}
+.kpi-card .kpi-trend.success{color:var(--success)}
+.kpi-card .kpi-trend.warning{color:var(--warning)}
+
+/* Detail panel */
+.kpi-detail-panel{background:var(--panel);color:var(--text)}
+.detail-table-box thead th{background:var(--accent);color:#fff}
+
+/* Small responsive improvements */
+@media (max-width:768px){
+    .product-grid-highlight{grid-template-columns:repeat(2,1fr)}
+}
+
+/* === Brillo / Contraste: Force lighter UI for 'normal' brightness === */
+body{
+    background: #ffffff !important;
+    color: var(--text) !important;
+}
+
+/* Header and top bars */
+.main-header-ba, .header-secondary{
+    background: #ffffff !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid rgba(16,24,40,0.06) !important;
+    box-shadow: 0 2px 8px rgba(16,24,40,0.04) !important;
+}
+.main-header-ba .logo a{color:var(--accent) !important}
+.top-promo-bar{background:var(--accent) !important;color:#fff !important}
+
+/* Navs clearer */
+.info-nav, .category-nav{background:transparent !important;border:none !important}
+.category-nav li a, .info-nav li a{color:var(--accent-strong) !important}
+.category-nav li a:hover{background:transparent !important;color:#0b5360 !important}
+
+/* Hero and panels bright */
+.hero-simple{background: linear-gradient(180deg,#ffffff,#f8fbfd) !important;box-shadow:0 6px 14px rgba(16,24,40,0.04) !important}
+.hero-simple h1,.hero-simple p{color:var(--text) !important}
+.btn-hero-action{background:var(--accent) !important;color:#fff !important}
+
+/* Products: pure white cards and reduced shadows */
+.producto{background:var(--panel) !important;border:1px solid rgba(16,24,40,0.04) !important;box-shadow:0 6px 18px rgba(16,24,40,0.04) !important;color:var(--text) !important}
+.producto h3{color:var(--text) !important}
+.producto .precio{color:var(--accent-strong) !important}
+.agregar-carrito{background:var(--accent) !important;color:#fff !important;border:none !important}
+
+/* Filters and cards bright */
+.filtro-categorias{background:var(--panel) !important;border:1px solid rgba(16,24,40,0.04) !important;box-shadow:0 6px 18px rgba(16,24,40,0.04) !important}
+.kpi-card{background:var(--panel) !important;border:1px solid rgba(16,24,40,0.04) !important;box-shadow:0 8px 20px rgba(16,24,40,0.04) !important}
+.kpi-card i{color:var(--accent) !important}
+.kpi-card .kpi-value{color:var(--text) !important}
+.kpi-detail-panel{background:var(--panel) !important;color:var(--text) !important}
+.detail-table-box thead th{background:var(--accent) !important}
+
+/* Modal overlay lighter to reduce perceived darkness */
+.modal-overlay{background:rgba(16,24,40,0.28) !important}
+
+/* Footer lighter */
+footer{color:var(--muted) !important}
+
+/* Aggressive fixes: remove any dark overlays, pseudo-elements or filters */
+html, body, main, .admin-main, .home-main, #kpi-detail-panel {
+    background: #ffffff !important;
+    background-image: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* Hide common overlay elements that dim the UI */
+.loader-overlay, .modal-overlay, .site-overlay, .overlay, #loader, .spinner, .loader {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Remove pseudo-element dimming */
+body::before, body::after, .hero-simple::before, .hero-simple::after, .producto::before, .producto::after {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+}
+
+/* Ensure KPI area fully opaque */
+.kpi-cards, .kpi-card {
+    opacity: 1 !important;
+}
+
+/* Remove any heavy backdrop-filter on containers */
+* { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+

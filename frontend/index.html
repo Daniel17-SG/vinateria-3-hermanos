@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Vinatería Los 3 Hermanos - Los mejores vinos y licores premium con tradición familiar. Tequila, Whisky, Vodka, Ron y más.">
     <title>Vinatería Los 3 Hermanos - Inicio</title>
     <link rel="stylesheet" href="estilos/1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="estilos/legendary.css">
+    <link rel="stylesheet" href="estilos/light.css">
 </head>
 
 <body>
@@ -49,14 +51,21 @@
 
     <nav class="category-nav">
         <ul>
-            <li><a href="catalogo.html?categoria=ofertas" class="nav-button">Ofertas <i class="fas fa-chevron-down"></i></a></li>
-            <li><a href="catalogo.html?categoria=vinos" class="nav-button">Vinos <i class="fas fa-chevron-down"></i></a></li>
-            <li><a href="catalogo.html?categoria=destilados" class="nav-button">Destilados <i class="fas fa-chevron-down"></i></a></li>
-            <li><a href="catalogo.html?categoria=acompañamientos" class="nav-button">Acompañamientos <i class="fas fa-chevron-down"></i></a></li>
-            <li><a href="catalogo.html?categoria=productos%20de%20lucro" class="nav-button">Productos de Lucro <i class="fas fa-chevron-down"></i></a></li>
-            <li><a href="catalogo.html?categoria=marcas" class="nav-button">Marcas <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=ofertas" class="nav-button">Ofertas <i
+                        class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=vinos" class="nav-button">Vinos <i class="fas fa-chevron-down"></i></a>
+            </li>
+            <li><a href="catalogo.html?categoria=destilados" class="nav-button">Destilados <i
+                        class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=acompañamientos" class="nav-button">Acompañamientos <i
+                        class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=productos%20de%20lucro" class="nav-button">Productos de Lucro <i
+                        class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=marcas" class="nav-button">Marcas <i
+                        class="fas fa-chevron-down"></i></a></li>
             <li><a href="ayuda.html" class="nav-button">Ayuda <i class="fas fa-chevron-down"></i></a></li>
-            <li><a href="catalogo.html?categoria=eventos" class="nav-button">Eventos <i class="fas fa-chevron-down"></i></a></li>
+            <li><a href="catalogo.html?categoria=eventos" class="nav-button">Eventos <i
+                        class="fas fa-chevron-down"></i></a></li>
             <!-- retain internal anchors -->
             <li><a href="#ubicacion" class="nav-button">Ubicación</a></li>
             <li><a href="#nosotros" class="nav-button">Quiénes Somos</a></li>
@@ -91,7 +100,7 @@
                     <button class="agregar-carrito">Agregar al Carrito</button>
                 </div>
                 <div class="producto">
-                    <img src="imagenes/vodka.jpg" alt="Vodka Cristal">
+                    <img src="imagenes/Vodka.jpg" alt="Vodka Cristal">
                     <h3>Vodka Absolut</h3>
                     <p class="precio">$650</p>
                     <button class="agregar-carrito">Agregar al Carrito</button>
@@ -112,7 +121,11 @@
         <div class="map-container">
             <h2><i class="fas fa-map-marker-alt"></i> Nuestra Ubicación</h2>
             <p>Visítanos en nuestra sucursal. ¡Te esperamos!</p>
-            <div id="google-map"></div>
+            <iframe id="google-map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3596.0!2d-100.3161!3d25.6866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8662bf5d2b6e98c7%3A0x5e60abc3e5fa8e0!2sAv.%20Constituci%C3%B3n%20%26%20Padre%20Mier%2C%20Centro%2C%2064000%20Monterrey%2C%20N.L.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx"
+                style="border:0; width:100%; height:400px; border-radius:12px;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
         </div>
     </section>
 
@@ -146,7 +159,8 @@
                     </div>
                     <div class="form-row">
                         <label for="contact-message">Mensaje</label>
-                        <textarea id="contact-message" name="message" rows="5" placeholder="Escribe aquí tus opiniones, dudas o sugerencias" required></textarea>
+                        <textarea id="contact-message" name="message" rows="5"
+                            placeholder="Escribe aquí tus opiniones, dudas o sugerencias" required></textarea>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn-contact-send">Enviar Mensaje</button>
@@ -205,7 +219,7 @@
             const HOMEPAGE_PRODUCTS = [
                 { id: 1, name: 'Tequila Maestro Dobel', price: 1250, img: 'imagenes/tequila.jpg' },
                 { id: 4, name: 'Whisky Buchanans 18', price: 1950, img: 'imagenes/18.jpg' },
-                { id: 9, name: 'Vodka Absolut', price: 650, img: 'imagenes/vodka.jpg' },
+                { id: 9, name: 'Vodka Absolut', price: 650, img: 'imagenes/Vodka.jpg' },
                 { id: 11, name: 'Ron Matusalem', price: 520, img: 'imagenes/ron.png' }
             ];
 
@@ -277,33 +291,6 @@
             });
         });
 
-        // ---------- GOOGLE MAPS ----------
-        // ⚠️ CAMBIA ESTA API KEY POR LA TUYA:
-        const GOOGLE_MAPS_API_KEY = 'TU_API_KEY_AQUI';
-
-        function initMap() {
-            // Coordenadas de ejemplo (Ciudad de México)
-            const businessLocation = { lat: 19.4326, lng: -99.1332 };
-
-            const map = new google.maps.Map(document.getElementById('google-map'), {
-                zoom: 15,
-                center: businessLocation,
-                styles: [
-                    { elementType: "geometry", stylers: [{ color: "#1d2c4d" }] },
-                    { elementType: "labels.text.fill", stylers: [{ color: "#8ec3b9" }] },
-                    { elementType: "labels.text.stroke", stylers: [{ color: "#1a3646" }] },
-                    { featureType: "water", elementType: "geometry.fill", stylers: [{ color: "#0e1626" }] },
-                    { featureType: "road", elementType: "geometry", stylers: [{ color: "#304a7d" }] }
-                ]
-            });
-
-            new google.maps.Marker({
-                position: businessLocation,
-                map: map,
-                title: 'Vinatería Los 3 Hermanos',
-                animation: google.maps.Animation.DROP
-            });
-        }
     </script>
 
     <script src="script/cart-badge.js"></script>
@@ -326,9 +313,6 @@
         });
     </script>
 
-    <!-- Google Maps API - Cambia TU_API_KEY_AQUI por tu clave real -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&callback=initMap">
-    </script>
 </body>
 
 </html>

@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Finaliza tu compra de forma segura - Vinatería Los 3 Hermanos">
     <title>Checkout y Pago - Los 3 Hermanos</title>
     <link rel="stylesheet" href="estilos/1.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="estilos/legendary.css">
 </head>
@@ -21,6 +21,14 @@
         </nav>
     </header>
 
+    <nav class="breadcrumb" aria-label="Navegación de ubicación">
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <a href="carrito.html">Carrito</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="current">Pago</span>
+    </nav>
+
     <main class="checkout-main">
         <h1>Finalizar Compra</h1>
 
@@ -30,23 +38,54 @@
 
                 <div class="checkout-section">
                     <h2>1. Dirección de Envío</h2>
-                    <form class="form-envio">
+                    <form class="form-envio" id="form-envio">
                         <div class="form-group-grid">
-                            <input type="text" placeholder="Nombre(s)" required>
-                            <input type="text" placeholder="Apellidos" required>
+                            <div>
+                                <label for="ship-name">Nombre(s)</label>
+                                <input type="text" id="ship-name" name="name" autocomplete="given-name"
+                                    placeholder="Nombre(s)" required>
+                            </div>
+                            <div>
+                                <label for="ship-lastname">Apellidos</label>
+                                <input type="text" id="ship-lastname" name="lastname" autocomplete="family-name"
+                                    placeholder="Apellidos" required>
+                            </div>
                         </div>
-                        <input type="email" placeholder="Correo Electrónico" required>
-                        <input type="tel" placeholder="Teléfono" required>
-                        <input type="text" placeholder="Calle y Número Exterior/Interior" required>
+                        <label for="ship-email">Correo Electrónico</label>
+                        <input type="email" id="ship-email" name="email" autocomplete="email"
+                            placeholder="Correo Electrónico" required>
+                        <label for="ship-phone">Teléfono</label>
+                        <input type="tel" id="ship-phone" name="phone" autocomplete="tel" placeholder="Teléfono"
+                            required>
+                        <label for="ship-address">Calle y Número</label>
+                        <input type="text" id="ship-address" name="address" autocomplete="street-address"
+                            placeholder="Calle y Número Exterior/Interior" required>
                         <div class="form-group-grid">
-                            <input type="text" placeholder="Colonia" required>
-                            <input type="text" placeholder="Código Postal" required>
+                            <div>
+                                <label for="ship-colonia">Colonia</label>
+                                <input type="text" id="ship-colonia" name="colonia" placeholder="Colonia" required>
+                            </div>
+                            <div>
+                                <label for="ship-zip">Código Postal</label>
+                                <input type="text" id="ship-zip" name="zip" autocomplete="postal-code"
+                                    placeholder="Código Postal" required>
+                            </div>
                         </div>
                         <div class="form-group-grid">
-                            <input type="text" placeholder="Ciudad" required>
-                            <input type="text" placeholder="Estado" required>
+                            <div>
+                                <label for="ship-city">Ciudad</label>
+                                <input type="text" id="ship-city" name="city" autocomplete="address-level2"
+                                    placeholder="Ciudad" required>
+                            </div>
+                            <div>
+                                <label for="ship-state">Estado</label>
+                                <input type="text" id="ship-state" name="state" autocomplete="address-level1"
+                                    placeholder="Estado" required>
+                            </div>
                         </div>
-                        <textarea placeholder="Referencias Adicionales (Ej: Tocar timbre, Edificio B)"></textarea>
+                        <label for="ship-notes">Referencias Adicionales</label>
+                        <textarea id="ship-notes" name="notes"
+                            placeholder="Referencias Adicionales (Ej: Tocar timbre, Edificio B)"></textarea>
                     </form>
                 </div>
 
@@ -57,13 +96,29 @@
                         <input type="radio" id="pago_tarjeta" name="metodo_pago" value="tarjeta" checked>
                         <label for="pago_tarjeta"><i class="fas fa-credit-card"></i> Pagar con Tarjeta</label>
 
-                        <div class="card-details">
-                            <input type="text" placeholder="Número de Tarjeta" required>
+                        <div class="card-details" id="card-details">
+                            <label for="card-number">Número de Tarjeta</label>
+                            <input type="text" id="card-number" name="card-number" autocomplete="cc-number"
+                                placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" required>
+                            <span class="validation-msg" id="card-number-msg"></span>
+
                             <div class="form-group-grid">
-                                <input type="text" placeholder="MM/AA" required>
-                                <input type="text" placeholder="CVV" required>
+                                <div>
+                                    <label for="card-expiry">Fecha de Expiración</label>
+                                    <input type="text" id="card-expiry" name="card-expiry" autocomplete="cc-exp"
+                                        placeholder="MM/AA" maxlength="5" inputmode="numeric" required>
+                                    <span class="validation-msg" id="card-expiry-msg"></span>
+                                </div>
+                                <div>
+                                    <label for="card-cvv">CVV</label>
+                                    <input type="text" id="card-cvv" name="card-cvv" autocomplete="cc-csc"
+                                        placeholder="CVV" maxlength="4" inputmode="numeric" required>
+                                    <span class="validation-msg" id="card-cvv-msg"></span>
+                                </div>
                             </div>
-                            <input type="text" placeholder="Nombre en la Tarjeta" required>
+                            <label for="card-holder">Nombre en la Tarjeta</label>
+                            <input type="text" id="card-holder" name="card-holder" autocomplete="cc-name"
+                                placeholder="Nombre en la Tarjeta" required>
                         </div>
                     </div>
 
@@ -85,18 +140,18 @@
             <aside class="carrito-resumen pago-resumen">
                 <h2>Resumen de Pedido</h2>
 
-                <div class="resumen-detalle">
-                    <p>Subtotal (3 productos): <span>$7,350.00</span></p>
+                <div class="resumen-detalle" id="checkout-items-summary">
+                    <p>Subtotal: <span id="checkout-subtotal">$0.00</span></p>
                     <p>Costo de Envío: <span>$0.00</span></p>
-                    <p>Impuestos (IVA): <span>$1,176.00</span></p>
+                    <p>Impuestos (IVA 16%): <span id="checkout-tax">$0.00</span></p>
                 </div>
 
                 <div class="resumen-total">
                     <p>TOTAL FINAL</p>
-                    <p class="total-price">$8,526.00</p>
+                    <p class="total-price" id="checkout-total">$0.00</p>
                 </div>
 
-                <button type="submit" class="btn-final-pago">CONFIRMAR Y PAGAR $8,526.00</button>
+                <button type="submit" class="btn-final-pago" id="btn-confirm-pay">CONFIRMAR Y PAGAR</button>
 
                 <div class="resumen-info">
                     <p><i class="fas fa-lock"></i> Pago Seguro Garantizado.</p>
@@ -112,7 +167,6 @@
     </footer>
 
     <!-- PayPal SDK -->
-    <!-- NOTA: Reemplaza client-id=test con tu propio Client ID de Sandbox cuando esté configurado correctamente -->
     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=MXN"></script>
     <script src="script/pago.js"></script>
 </body>

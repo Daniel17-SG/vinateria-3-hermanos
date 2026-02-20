@@ -1,123 +1,244 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Reportes y Dashboard - Los 3 Hermanos</title>
-    <link rel="stylesheet" href="estilos/1.css"> 
+    <meta name="description" content="Panel de administración - Vinatería Los 3 Hermanos">
+    <title>Admin Dashboard - Los 3 Hermanos</title>
+    <link rel="stylesheet" href="estilos/1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="estilos/legendary.css">
+    <link rel="stylesheet" href="estilos/light.css">
+    <!-- NO legendary.css here — admin uses light theme -->
+    <style>
+        /* Admin-specific light overrides */
+        body {
+            background: #F0F2F5;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #212529;
+        }
+
+        .breadcrumb {
+            background: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 40px;
+        }
+
+        .breadcrumb a {
+            color: #17A2B8;
+        }
+
+        .breadcrumb .current {
+            color: #212529;
+        }
+
+        .breadcrumb .separator {
+            color: #adb5bd;
+        }
+
+        /* KPI cards as buttons */
+        .kpi-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            user-select: none;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(23, 162, 184, 0.15);
+            border-left-color: #0F8295;
+        }
+
+        .kpi-card.active-card {
+            border-left: 5px solid #e76f21;
+            box-shadow: 0 8px 25px rgba(231, 111, 33, 0.18);
+            transform: translateY(-2px);
+        }
+
+        .kpi-card .kpi-click-hint {
+            font-size: 0.75rem;
+            color: #17A2B8;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .kpi-card.active-card .kpi-click-hint {
+            color: #e76f21;
+        }
+
+        /* Detail panel */
+        .kpi-detail-panel {
+            display: none;
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .kpi-detail-panel.visible {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kpi-detail-panel h2 {
+            color: #17A2B8;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        .kpi-detail-panel h2 i {
+            margin-right: 8px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .detail-chart-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .detail-table-box {
+            overflow-x: auto;
+        }
+
+        .detail-table-box table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .detail-table-box thead th {
+            background: #17A2B8;
+            color: #fff;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .detail-table-box tbody td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .detail-table-box tbody tr:hover {
+            background: #f1f8ff;
+        }
+
+        @media (max-width: 768px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    
-   <header class="admin-header">
-    <div class="logo">ADMINISTRACIÓN</div>
-    <nav class="admin-nav">
-        <a href="admi.html" class="admin-nav-item active"><i class="fas fa-chart-line"></i> Reportes</a>
-        <a href="inventario.html" class="admin-nav-item"><i class="fas fa-boxes"></i> Inventario</a>
-        <a href="index.html" class="admin-nav-item logout-btn"><i class="fas fa-sign-out-alt"></i> Salir</a>
+
+    <header class="admin-header">
+        <div class="logo">ADMINISTRACIÓN</div>
+        <nav class="admin-nav">
+            <a href="admi.html" class="admin-nav-item active"><i class="fas fa-chart-line"></i> Reportes</a>
+            <a href="inventario.html" class="admin-nav-item"><i class="fas fa-boxes"></i> Inventario</a>
+            <a href="index.html" class="admin-nav-item logout-btn"><i class="fas fa-sign-out-alt"></i> Salir</a>
+        </nav>
+    </header>
+
+    <nav class="breadcrumb" aria-label="Navegación de ubicación">
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="current">Admin — Dashboard</span>
     </nav>
-</header>
 
     <main class="admin-main">
-        <h1>Dashboard Principal y Reportes</h1>
-        <p>Vista general de las métricas clave de la vinatería.</p>
+        <h1>Dashboard Principal</h1>
+        <p>Haz clic en cualquier tarjeta para ver los detalles y gráfica correspondiente.</p>
 
         <section class="kpi-cards">
-            
-            <div class="kpi-card">
+
+            <div class="kpi-card" data-kpi="ventas" role="button" tabindex="0">
                 <i class="fas fa-dollar-sign"></i>
                 <div class="kpi-info">
                     <p class="kpi-title">Ventas del Mes</p>
                     <p class="kpi-value">$124,500.00</p>
                     <p class="kpi-trend success"><i class="fas fa-arrow-up"></i> +12% vs mes anterior</p>
+                    <p class="kpi-click-hint"><i class="fas fa-hand-pointer"></i> Ver detalle</p>
                 </div>
             </div>
 
-            <div class="kpi-card">
+            <div class="kpi-card" data-kpi="stock" role="button" tabindex="0">
                 <i class="fas fa-boxes"></i>
                 <div class="kpi-info">
                     <p class="kpi-title">Productos en Stock</p>
                     <p class="kpi-value">856 unidades</p>
                     <p class="kpi-trend neutral"><i class="fas fa-arrows-alt-h"></i> Estable</p>
+                    <p class="kpi-click-hint"><i class="fas fa-hand-pointer"></i> Ver detalle</p>
                 </div>
             </div>
-            
-            <div class="kpi-card">
+
+            <div class="kpi-card" data-kpi="clientes" role="button" tabindex="0">
                 <i class="fas fa-users"></i>
                 <div class="kpi-info">
                     <p class="kpi-title">Nuevos Clientes</p>
                     <p class="kpi-value">45</p>
                     <p class="kpi-trend warning"><i class="fas fa-arrow-down"></i> -5% vs mes anterior</p>
+                    <p class="kpi-click-hint"><i class="fas fa-hand-pointer"></i> Ver detalle</p>
                 </div>
             </div>
-            
-            <div class="kpi-card">
+
+            <div class="kpi-card" data-kpi="pedidos" role="button" tabindex="0">
                 <i class="fas fa-shipping-fast"></i>
                 <div class="kpi-info">
                     <p class="kpi-title">Pedidos Pendientes</p>
                     <p class="kpi-value">8</p>
                     <p class="kpi-trend success"><i class="fas fa-check-circle"></i> Excelente manejo</p>
+                    <p class="kpi-click-hint"><i class="fas fa-hand-pointer"></i> Ver detalle</p>
                 </div>
-            </div>
-            
-        </section>
-        
-        <section class="report-details">
-            
-            <div class="chart-container sales-chart">
-                <h2>Ventas por Categoría (Últimos 6 meses)</h2>
-                <div class="placeholder-chart">
-                    <p>Gráfica de Ventas (Tequila, Whisky, Brandy...)</p>
-                </div>
-            </div>
-            
-            <div class="recent-orders">
-                <h2>Pedidos Más Recientes</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID Pedido</th>
-                            <th>Cliente</th>
-                            <th>Total</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>#00123</td>
-                            <td>Ana G.</td>
-                            <td>$5,200</td>
-                            <td class="status delivered">Entregado</td>
-                            <td><button class="btn-detail">Ver</button></td>
-                        </tr>
-                        <tr>
-                            <td>#00124</td>
-                            <td>Jorge R.</td>
-                            <td>$1,850</td>
-                            <td class="status pending">Pendiente</td>
-                            <td><button class="btn-detail">Ver</button></td>
-                        </tr>
-                        <tr>
-                            <td>#00125</td>
-                            <td>Elena M.</td>
-                            <td>$12,400</td>
-                            <td class="status shipped">Enviado</td>
-                            <td><button class="btn-detail">Ver</button></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
 
+        </section>
+
+        <!-- Dynamic detail panel (one at a time) -->
+        <section id="kpi-detail-panel" class="kpi-detail-panel">
+            <h2 id="detail-title"><i class="fas fa-chart-bar"></i> <span>Detalle</span></h2>
+            <div class="detail-grid">
+                <div class="detail-chart-box">
+                    <canvas id="detailChart" width="500" height="280"></canvas>
+                </div>
+                <div class="detail-table-box" id="detail-table-container">
+                    <!-- table rendered by JS -->
+                </div>
+            </div>
         </section>
 
     </main>
 
     <footer>
-        <p>&copy; 2024 Panel Administrativo Los 3 Hermanos.</p>
+        <p>&copy; 2024 Panel de Administración. Vinatería Los 3 Hermanos.</p>
     </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script src="script/admi.js"></script>
 </body>
+
 </html>

@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 6, name: 'Whisky Jack Daniels', category: 'Whisky', price: 620, status: 'Disponible', img: 'imagenes/whiski.jpg' },
         { id: 7, name: 'Brandy Torres 10', category: 'Brandy', price: 450, status: 'Disponible', img: 'imagenes/brandy.jpg' },
         { id: 8, name: 'Brandy Don Pedro', category: 'Brandy', price: 280, status: 'Disponible', img: 'imagenes/brandy.jpg' },
-        { id: 9, name: 'Vodka Absolut Original', category: 'Vodka', price: 650, status: 'Disponible', img: 'imagenes/vodka.jpg' },
-        { id: 10, name: 'Vodka Grey Goose', category: 'Vodka', price: 890, status: 'Disponible', img: 'imagenes/vodka.jpg' },
+        { id: 9, name: 'Vodka Absolut Original', category: 'Vodka', price: 650, status: 'Disponible', img: 'imagenes/Vodka.jpg' },
+        { id: 10, name: 'Vodka Grey Goose', category: 'Vodka', price: 890, status: 'Disponible', img: 'imagenes/Vodka.jpg' },
         { id: 11, name: 'Ron Matusalem Gran Reserva', category: 'Ron', price: 520, status: 'Disponible', img: 'imagenes/ron.png' },
         { id: 12, name: 'Ron Bacardí Añejo', category: 'Ron', price: 380, status: 'Disponible', img: 'imagenes/ron.png' }
     ];
