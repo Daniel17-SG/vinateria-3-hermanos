@@ -58,9 +58,54 @@
         }, 1800);
     }
 
+    function updateAuthUI() {
+        const userStr = localStorage.getItem('user');
+        let user = null;
+        try {
+            user = (userStr && userStr !== "null" && userStr !== "undefined") ? JSON.parse(userStr) : null;
+        } catch (e) { user = null; }
+
+        const authContainers = document.querySelectorAll('.auth-nav, .header-icons');
+        authContainers.forEach(container => {
+            // Check if we already have a logout link
+            let logoutLink = container.querySelector('.logout-link');
+            if (user) {
+                if (!logoutLink) {
+                    logoutLink = document.createElement('a');
+                    logoutLink.href = "#";
+                    logoutLink.className = "icon-link logout-link";
+                    logoutLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Salir';
+                    logoutLink.style.marginLeft = "10px";
+                    logoutLink.style.color = "#dc3545"; // Red color for logout
+                    logoutLink.onclick = (e) => {
+                        e.preventDefault();
+                        cerrarSesion();
+                    };
+                    container.appendChild(logoutLink);
+                }
+                // Update user link if exists
+                const userLink = container.querySelector('a[href="login.html"]');
+                if (userLink) {
+                    userLink.innerHTML = `<i class="fas fa-user-circle"></i> Holas, ${user.name.split(' ')[0]}`;
+                    userLink.href = "#"; // Disable login link when logged in
+                }
+            } else {
+                if (logoutLink) logoutLink.remove();
+                const userLink = container.querySelector('a[href="login.html"], .icon-link:not(.cart-link):not(.logout-link):not(.nav-toggle)');
+                if (userLink) {
+                    userLink.innerHTML = '<i class="fas fa-user-circle"></i>';
+                    userLink.href = "login.html";
+                }
+            }
+        });
+    }
+
     function updateBadge() {
         const cart = getCart();
         const total = getTotalQuantity(cart);
+
+        // Update auth UI too
+        updateAuthUI();
 
         // Update all badges with id cart-badge or class cart-badge
         const byId = document.querySelectorAll('#cart-badge');
@@ -89,7 +134,14 @@
     }
 
     function verificarSesion(redirectToPago = false) {
-        const user = localStorage.getItem('user');
+        const userStr = localStorage.getItem('user');
+        let user = null;
+        try {
+            user = (userStr && userStr !== "null" && userStr !== "undefined") ? JSON.parse(userStr) : null;
+        } catch (e) {
+            user = null;
+        }
+
         if (!user) {
             alert("✋ ¡Espera! Para tu seguridad, debes iniciar sesión antes de continuar.");
             window.location.href = "login.html";
@@ -101,13 +153,20 @@
         return true;
     }
 
+    function cerrarSesion() {
+        localStorage.removeItem('user');
+        alert("Has cerrado sesión exitosamente.");
+        window.location.href = "index.html";
+    }
+
     // Expose utilities
     window.cartUtils = {
         getCart,
         saveCart,
         updateBadge,
         getTotalQuantity,
-        verificarSesion
+        verificarSesion,
+        cerrarSesion
     };
 
     // Auto run after DOM ready

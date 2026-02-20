@@ -15,9 +15,12 @@
 
     <header class="header-secondary">
         <div class="logo">Vinatería Los 3 Hermanos</div>
-        <nav>
+        <nav class="header-icons">
             <a href="index.html" class="nav-button">Inicio</a>
             <a href="catalogo.html" class="nav-button">Catálogo</a>
+            <a href="login.html" class="icon-link"><i class="fas fa-user-circle"></i></a>
+            <a href="carrito.html" class="icon-link cart-link"><i class="fas fa-shopping-cart"></i><span
+                    class="cart-badge" id="cart-badge">0</span></a>
         </nav>
     </header>
 
@@ -168,6 +171,7 @@
 
     <!-- PayPal SDK -->
     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=MXN"></script>
+    <script src="script/cart-badge.js"></script>
     <script src="script/pago.js"></script>
 </body>
 
