@@ -1,0 +1,19 @@
+<<<<<<< HEAD
+# Entornos virtuales de Python
+venv/
+.venv/
+env/
+ENV/
+.env
+.env.local
+.env.development
+db.sqlite3
+db.sqlite3-journal
+__pycache__/
+*.py[cod]
+*$py.class
+media/
+staticfiles/
+*.log
+=======
+venv/

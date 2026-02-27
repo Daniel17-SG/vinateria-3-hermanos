@@ -1,0 +1,143 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block title %}Pedido Exitoso - Los 3 Hermanos{% endblock %}
+
+{% block extra_css %}
+<style>
+    .exito-container {
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 30px;
+        text-align: center;
+    }
+    .exito-icon {
+        font-size: 80px;
+        color: #28a745;
+        margin-bottom: 20px;
+    }
+    .exito-titulo {
+        color: #28a745;
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+    .exito-subtitulo {
+        color: #6c757d;
+        font-size: 1.1em;
+        margin-bottom: 30px;
+    }
+    .detalles-pedido {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        text-align: left;
+        margin-bottom: 30px;
+    }
+    .detalle-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+    .detalle-row:last-child {
+        border-bottom: none;
+    }
+    .detalle-label {
+        font-weight: 600;
+        color: #495057;
+    }
+    .detalle-value {
+        color: #212529;
+    }
+    .productos-comprados {
+        text-align: left;
+        margin-top: 20px;
+    }
+    .producto-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background: white;
+        margin-bottom: 8px;
+        border-radius: 5px;
+    }
+    .btn-seguir-comprando {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #2c3e50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .btn-seguir-comprando:hover {
+        background: #34495e;
+    }
+    .info-pago {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="exito-container">
+    <div class="exito-icon">
+        <i class="fas fa-check-circle"></i>
+    </div>
+    
+    <h1 class="exito-titulo">¡Pedido Confirmado!</h1>
+    <p class="exito-subtitulo">Tu pago ha sido procesado exitosamente.</p>
+    
+    <div class="info-pago">
+        <i class="fas fa-check"></i> Pago verificado con PayPal
+    </div>
+    
+    <div class="detalles-pedido">
+        <div class="detalle-row">
+            <span class="detalle-label">Número de Pedido:</span>
+            <span class="detalle-value">#{{ venta.id }}</span>
+        </div>
+        <div class="detalle-row">
+            <span class="detalle-label">Fecha:</span>
+            <span class="detalle-value">{{ venta.fecha_venta|date:"d/m/Y H:i" }}</span>
+        </div>
+        <div class="detalle-row">
+            <span class="detalle-label">Estatus:</span>
+            <span class="detalle-value">{{ venta.get_estatus_display }}</span>
+        </div>
+        <div class="detalle-row">
+            <span class="detalle-label">Total Pagado:</span>
+            <span class="detalle-value" style="font-size: 1.2em; font-weight: bold;">${{ venta.total|floatformat:2 }}</span>
+        </div>
+        <div class="detalle-row">
+            <span class="detalle-label">Dirección de Envío:</span>
+            <span class="detalle-value">{{ venta.direccion_envio }}</span>
+        </div>
+        
+        <div class="productos-comprados">
+            <h3>Productos Comprados</h3>
+            {% for detalle in detalles %}
+            <div class="producto-item">
+                <div>
+                    <strong>{{ detalle.producto.nombre }}</strong><br>
+                    <small>{{ detalle.cantidad }} x ${{ detalle.precio_unitario|floatformat:2 }}</small>
+                </div>
+                <div>${{ detalle.subtotal|floatformat:2 }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <p>Gracias por tu compra en Vinatería Los 3 Hermanos.</p>
+    <p>Te enviaremos un correo de confirmación pronto.</p>
+    
+    <a href="{% url 'tienda:catalogo' %}" class="btn-seguir-comprando">
+        <i class="fas fa-shopping-bag"></i> Seguir Comprando
+    </a>
+</div>
+{% endblock %}

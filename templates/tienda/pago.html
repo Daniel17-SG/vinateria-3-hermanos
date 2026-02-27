@@ -1,0 +1,200 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block title %}Pago - Los 3 Hermanos{% endblock %}
+
+{% block extra_css %}
+<style>
+    .pago-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+    .pago-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    .resumen-carrito {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .item-carrito {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+    .total-carrito {
+        font-size: 1.3em;
+        font-weight: bold;
+        text-align: right;
+        margin-top: 15px;
+        color: #2c3e50;
+    }
+    .formulario-pago {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    #paypal-button-container {
+        margin-top: 20px;
+        min-height: 150px;
+    }
+    .loading-spinner {
+        text-align: center;
+        padding: 20px;
+    }
+    .error-message {
+        color: #dc3545;
+        padding: 10px;
+        margin-top: 10px;
+        display: none;
+    }
+    @media (max-width: 768px) {
+        .pago-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pago-container">
+    <h1>Finalizar Compra</h1>
+    
+    <div class="pago-grid">
+        <div class="resumen-carrito">
+            <h2>Resumen del Pedido</h2>
+            {% for item in items %}
+            <div class="item-carrito">
+                <div>
+                    <strong>{{ item.producto.nombre }}</strong><br>
+                    <small>Cantidad: {{ item.cantidad }}</small>
+                </div>
+                <div>${{ item.subtotal|floatformat:2 }}</div>
+            </div>
+            {% endfor %}
+            <div class="total-carrito">
+                Total: ${{ total|floatformat:2 }}
+            </div>
+        </div>
+        
+        <div class="formulario-pago">
+            <h2>Información de Envío</h2>
+            <form id="form-pago">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="direccion">Dirección de Envío</label>
+                    <textarea id="direccion" name="direccion" rows="3" required>{{ perfil.direccion|default:'' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono de Contacto</label>
+                    <input type="text" id="telefono" name="telefono" value="{{ perfil.telefono|default:'' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="notas">Notas adicionales (opcional)</label>
+                    <textarea id="notas" name="notas" rows="2"></textarea>
+                </div>
+                
+                <h3>Método de Pago</h3>
+                <div id="paypal-button-container"></div>
+                <div id="error-message" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency=MXN&intent=capture"></script>
+<script>
+    const csrfToken = '{{ csrf_token }}';
+    let paypalOrderId = null;
+    
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color: 'blue',
+            shape: 'rect',
+            label: 'paypal'
+        },
+        createOrder: function(data, actions) {
+            return fetch('{% url "tienda:crear_orden_paypal" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    paypalOrderId = data.order_id;
+                    return data.order_id;
+                } else {
+                    throw new Error(data.error || 'Error al crear orden');
+                }
+            });
+        },
+        onApprove: function(data, actions) {
+            const direccion = document.getElementById('direccion').value;
+            const telefono = document.getElementById('telefono').value;
+            const notas = document.getElementById('notas').value;
+            
+            if (!direccion || !telefono) {
+                document.getElementById('error-message').textContent = 'Por favor completa la dirección y teléfono';
+                document.getElementById('error-message').style.display = 'block';
+                return;
+            }
+            
+            return fetch('{% url "tienda:capturar_orden_paypal" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    order_id: data.orderID,
+                    direccion: direccion,
+                    telefono: telefono,
+                    notas: notas
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '{% url "tienda:pago_exitoso" 0 %}'.replace('0', data.venta_id);
+                } else {
+                    throw new Error(data.error || 'Error al procesar pago');
+                }
+            })
+            .catch(error => {
+                document.getElementById('error-message').textContent = error.message;
+                document.getElementById('error-message').style.display = 'block';
+            });
+        },
+        onError: function(err) {
+            console.error('PayPal Error:', err);
+            window.location.href = '{% url "tienda:ver_carrito" %}?error=paypal';
+        },
+        onCancel: function(data) {
+            window.location.href = '{% url "tienda:ver_carrito" %}?error=cancelado';
+        }
+    }).render('#paypal-button-container');
+</script>
+{% endblock %}
