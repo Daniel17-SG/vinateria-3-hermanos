@@ -1,0 +1,100 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Términos y Condiciones - Los 3 Hermanos{% endblock %}
+
+{% block content %}
+<main class="terminos-main">
+    <style>
+        .terminos-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .terminos-container h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #8B0000;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .terminos-container h2 {
+            color: #8B0000;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .terminos-container p, .terminos-container li {
+            line-height: 1.8;
+            color: #555;
+        }
+        .terminos-container ul {
+            margin-left: 20px;
+        }
+        .terminos-container li {
+            margin-bottom: 10px;
+        }
+        .fecha-actualizacion {
+            color: #888;
+            font-size: 0.9em;
+            text-align: right;
+            margin-top: 30px;
+        }
+    </style>
+    
+    <div class="terminos-container">
+        <h1>Términos y Condiciones</h1>
+        
+        <p>Bienvenido a Vinatería Los 3 Hermanos. Al acceder y utilizar nuestro sitio web, aceptas los siguientes términos y condiciones. Por favor, léelos cuidadosamente.</p>
+        
+        <h2>1. Uso del Sitio Web</h2>
+        <p>El sitio web de Vinatería Los 3 Hermanos está destinado exclusivamente a personas mayores de edad para la compra de bebidas alcohólicas. Al utilizar este sitio, declaras que eres mayor de 18 años.</p>
+        
+        <h2>2. Cuentas de Usuario</h2>
+        <ul>
+            <li>Para realizar compras, debes crear una cuenta proporcionando información veraz y actualizada.</li>
+            <li>Eres responsable de mantener la confidencialidad de tu cuenta y contraseña.</li>
+            <li>Nos reservamos el derecho de suspender o cancelar cuentas que incumplan estos términos.</li>
+        </ul>
+        
+        <h2>3. Productos y Precios</h2>
+        <ul>
+            <li>Todos los productos están sujetos a disponibilidad.</li>
+            <li>Los precios mostrados incluyen IVA y pueden cambiar sin previo aviso.</li>
+            <li>Las imágenes de productos son referenciales y pueden diferir del producto real.</li>
+        </ul>
+        
+        <h2>4. Pedidos y Pagos</h2>
+        <ul>
+            <li>Los pedidos se confirman mediante correo electrónico.</li>
+            <li>Aceptamos pagos a través de PayPal y otros métodos especificados en el sitio.</li>
+            <li>Nos reservamos el derecho de cancelar pedidos en caso de sospecha de fraude.</li>
+        </ul>
+        
+        <h2>5. Envíos y Entregas</h2>
+        <p>El envío gratuito aplica para pedidos mayores a $1,500 MXN. Los tiempos de entrega son estimados y pueden variar según la ubicación.</p>
+        
+        <h2>6. Políticas de Devolución</h2>
+        <p>No se aceptan devoluciones de productos alcoholic consumidos. Para productos defectuosos o dañados, contacta nuestro servicio al cliente dentro de las 24 horas posteriores a la entrega.</p>
+        
+        <h2>7. Privacidad</h2>
+        <p>Tu información personal será tratada conforme a nuestra Política de Privacidad. Al usar nuestro sitio, aceptas el procesamiento de tus datos conforme a dichos términos.</p>
+        
+        <h2>8. Limitación de Responsabilidad</h2>
+        <p>Vinatería Los 3 Hermanos no será responsable por daños indirectos, incidentales o consecuentes derivados del uso del sitio.</p>
+        
+        <h2>9. Modificaciones</h2>
+        <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios entrarán en vigor desde su publicación en el sitio.</p>
+        
+        <h2>10. Contacto</h2>
+        <p>Para cualquier duda o aclaración sobre estos términos, contacta a:</p>
+        <ul>
+            <li>Email: contacto@los3hermanos.com</li>
+            <li>Teléfono: 55-XXXX-XXXX</li>
+            <li>Dirección: Centro Histórico, Ciudad de México</li>
+        </ul>
+        
+        <p class="fecha-actualizacion">Última actualización: Febrero 2026</p>
+    </div>
+</main>
+{% endblock %}

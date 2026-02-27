@@ -1,0 +1,102 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}Crear Cuenta - Los 3 Hermanos{% endblock %}
+
+{% block content %}
+<main class="login-main-premium">
+    <style>
+    .social-login {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .social-login p {
+        color: #666;
+        margin-bottom: 10px;
+    }
+    .btn-google {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px;
+        background: #fff;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    .btn-google:hover {
+        background: #f5f5f5;
+        border-color: #ccc;
+    }
+    .btn-google i {
+        font-size: 1.2em;
+    }
+    </style>
+    <div class="login-container-premium">
+        <div class="user-icon-circle">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        
+        <h2>¡Crea tu Cuenta!</h2>
+        <p>Únete a la familia Los 3 Hermanos y disfruta de beneficios exclusivos.</p>
+
+        <form method="post" class="login-form-premium">
+            {% csrf_token %}
+            
+            <div class="input-group-premium">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Usuario" required>
+            </div>
+            
+            <div class="input-group-premium">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Correo Electrónico" required>
+            </div>
+            
+            <div class="input-group-premium">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password1" placeholder="Contraseña" required>
+            </div>
+            
+            <div class="input-group-premium">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password2" placeholder="Confirmar Contraseña" required>
+            </div>
+            
+            {% if form.errors %}
+            <div style="color: red; margin-bottom: 15px; font-weight: bold;">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <button type="submit" class="btn-login-premium">
+                Crear Cuenta
+            </button>
+        </form>
+
+        <div class="social-login">
+            <p>o regístrate con</p>
+            <a href="{% provider_login_url 'google' %}" class="btn-google">
+                <i class="fab fa-google"></i> Continuar con Google
+            </a>
+        </div>
+        
+        <p class="no-account-link-premium">
+            ¿Ya tienes cuenta? <a href="{% url 'tienda:login' %}">Iniciar Sesión</a>
+        </p>
+    </div>
+</main>
+{% endblock %}
