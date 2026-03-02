@@ -97,7 +97,13 @@ def registro(request):
         if form.is_valid():
             user = form.save()
             PerfilCliente.objects.create(user=user)
-            login(request, user)
+            raw_password = form.cleaned_data.get('password1')
+            # Autenticar para que Django asigne backend al usuario antes de hacer login
+            user = authenticate(request, username=user.username, password=raw_password)
+            if user is not None:
+                login(request, user)
+            else:
+                messages.warning(request, 'Tu cuenta fue creada, inicia sesión con tus credenciales.')
             messages.success(request, '¡Bienvenido! Tu cuenta ha sido creada.')
             return redirect('tienda:index')
         else:
@@ -182,7 +188,10 @@ def ver_carrito(request):
 @require_POST
 def agregar_carrito(request, producto_id):
     """Agregar producto al carrito - con protección contra race conditions"""
-    cantidad = int(request.POST.get('cantidad', 1))
+    try:
+        cantidad = int(request.POST.get('cantidad', 1))
+    except (ValueError, TypeError):
+        return JsonResponse({'success': False, 'error': 'Cantidad inválida'})
     
     if cantidad <= 0:
         return JsonResponse({'success': False, 'error': 'Cantidad inválida'})
@@ -228,7 +237,10 @@ def agregar_carrito(request, producto_id):
 def actualizar_carrito(request, item_id):
     """Actualizar cantidad de un item"""
     item = get_object_or_404(CarritoItem, id=item_id, usuario=request.user)
-    cantidad = int(request.POST.get('cantidad', 1))
+    try:
+        cantidad = int(request.POST.get('cantidad', 1))
+    except (ValueError, TypeError):
+        return JsonResponse({'success': False, 'error': 'Cantidad inválida'})
     
     if cantidad <= 0:
         item.delete()
@@ -311,9 +323,15 @@ def procesar_pago(request):
         return JsonResponse({'success': False, 'error': 'Carrito vacío'})
     
     with transaction.atomic():
-        # Verificar stock otra vez
+        producto_ids = [item.producto_id for item in items]
+        productos_bloqueados = Producto.objects.select_for_update().filter(
+            id__in=producto_ids
+        )
+        productos_dict = {p.id: p for p in productos_bloqueados}
+        
         for item in items:
-            if item.cantidad > item.producto.stock:
+            producto = productos_dict.get(item.producto_id)
+            if not producto or item.cantidad > producto.stock:
                 return JsonResponse({
                     'success': False, 
                     'error': f'Stock insuficiente para {item.producto.nombre}'
@@ -321,7 +339,6 @@ def procesar_pago(request):
         
         total = sum(item.subtotal for item in items)
         
-        # Crear venta
         venta = Venta.objects.create(
             usuario=request.user,
             total=total,
@@ -331,19 +348,17 @@ def procesar_pago(request):
             notas=request.POST.get('notas', '')
         )
         
-        # Crear detalles y actualizar stock
         for item in items:
+            producto = productos_dict[item.producto_id]
             DetalleVenta.objects.create(
                 venta=venta,
-                producto=item.producto,
+                producto=producto,
                 cantidad=item.cantidad,
-                precio_unitario=item.producto.precio
+                precio_unitario=producto.precio
             )
-            # Reducir stock
-            item.producto.stock -= item.cantidad
-            item.producto.save()
+            producto.stock -= item.cantidad
+            producto.save()
         
-        # Vaciar carrito
         items.delete()
     
     messages.success(request, f'¡Pedido #{venta.id} realizado con éxito!')
@@ -353,12 +368,9 @@ def procesar_pago(request):
 # ==================== ADMINISTRACIÓN ====================
 
 @login_required
+@staff_member_required
 def admin_productos(request):
     """Panel de administración de productos"""
-    if not request.user.is_staff:
-        messages.error(request, 'No tienes acceso a esta sección.')
-        return redirect('tienda:index')
-    
     productos = Producto.objects.all().order_by('-fecha_creacion')
     categorias = Categoria.objects.all()
     
@@ -370,12 +382,9 @@ def admin_productos(request):
 
 
 @login_required
+@staff_member_required
 def admin_inventario(request):
     """Panel de administración de inventario"""
-    if not request.user.is_staff:
-        messages.error(request, 'No tienes acceso a esta sección.')
-        return redirect('tienda:index')
-    
     productos = Producto.objects.all().order_by('stock')
     
     # KPIs
@@ -437,11 +446,9 @@ def admin_crear_producto(request):
 
 
 @login_required
+@staff_member_required
 def admin_ventas(request):
     """Panel de ventas"""
-    if not request.user.is_staff:
-        return redirect('tienda:index')
-    
     ventas = Venta.objects.all().order_by('-fecha_venta')
     
     context = {
@@ -488,6 +495,7 @@ def contacto(request):
 # ==================== PAYPAL ====================
 
 @login_required
+@require_POST
 def crear_orden_paypal(request):
     """Crear orden en PayPal - recalcula total desde DB"""
     items = CarritoItem.objects.select_related('producto').filter(usuario=request.user)
@@ -619,8 +627,15 @@ def capturar_orden_paypal(request):
             }, status=400)
         
         with transaction.atomic():
+            producto_ids = [item.producto_id for item in items]
+            productos_bloqueados = Producto.objects.select_for_update().filter(
+                id__in=producto_ids
+            )
+            productos_dict = {p.id: p for p in productos_bloqueados}
+            
             for item in items:
-                if item.cantidad > item.producto.stock:
+                producto = productos_dict.get(item.producto_id)
+                if not producto or item.cantidad > producto.stock:
                     return JsonResponse({
                         'success': False, 
                         'error': f'Stock insuficiente para {item.producto.nombre}'
@@ -636,14 +651,15 @@ def capturar_orden_paypal(request):
             )
             
             for item in items:
+                producto = productos_dict[item.producto_id]
                 DetalleVenta.objects.create(
                     venta=venta,
-                    producto=item.producto,
+                    producto=producto,
                     cantidad=item.cantidad,
-                    precio_unitario=item.producto.precio
+                    precio_unitario=producto.precio
                 )
-                item.producto.stock -= item.cantidad
-                item.producto.save()
+                producto.stock -= item.cantidad
+                producto.save()
             
             items.delete()
         

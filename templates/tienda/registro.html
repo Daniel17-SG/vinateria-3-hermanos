@@ -1,7 +1,5 @@
 {% extends 'tienda/base.html' %}
 {% load static %}
-{% load socialaccount %}
-
 {% block title %}Crear Cuenta - Los 3 Hermanos{% endblock %}
 
 {% block content %}
@@ -86,13 +84,6 @@
                 Crear Cuenta
             </button>
         </form>
-
-        <div class="social-login">
-            <p>o regístrate con</p>
-            <a href="{% provider_login_url 'google' %}" class="btn-google">
-                <i class="fab fa-google"></i> Continuar con Google
-            </a>
-        </div>
         
         <p class="no-account-link-premium">
             ¿Ya tienes cuenta? <a href="{% url 'tienda:login' %}">Iniciar Sesión</a>
