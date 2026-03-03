@@ -1,4 +1,11 @@
-# Entornos virtuales y dependencias
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.sqlite3
+media/
+staticfiles/# Entornos virtuales y dependencias
 venv/
 .venv/
 ENV/

@@ -151,14 +151,29 @@ a {
     background-color: #138496;
 }
 
-.header-icons .icon-link {
-    display: flex;
-    flex-direction: column; 
+/* Contenedor de iconos del header: fila garantizada */
+.main-header-ba .header-icons {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.main-header-ba .header-icons > * {
+    display: inline-flex;
+    align-items: center;
+}
+
+.main-header-ba .header-icons .icon-link {
+    display: inline-flex;
+    flex-direction: column;
     align-items: center;
     color: #212529;
-    font-size: 0.85em; 
+    font-size: 0.85em;
     font-weight: 600;
     transition: color 0.2s;
+    white-space: nowrap;
 }
 
 .header-icons .icon-link i {
@@ -169,6 +184,16 @@ a {
 
 .header-icons .icon-link:hover {
     color: #17A2B8;
+}
+
+.header-icons .icon-link-admin i {
+    color: #6c757d;
+}
+.header-icons .icon-link-admin:hover {
+    color: #495057;
+}
+.header-icons .icon-link-admin:hover i {
+    color: #212529;
 }
 
 /* 3. MENÚ DE CATEGORÍAS */

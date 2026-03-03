@@ -153,28 +153,20 @@ pip install -r requirements.txt
 
 3.3 CONFIGURAR VARIABLES DE ENTORNO
 ------------------------------------
-# Copiar archivo de ejemplo
-copy .env.example .env    (Windows)
-cp .env.example .env      (Linux/Mac)
-
-# Editar .env con tus credenciales:
-
-# Django
-SECRET_KEY=tu-clave-secreta-aqui
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Google OAuth (obtener en Google Cloud Console)
-SOCIAL_AUTH_GOOGLE_CLIENT_ID=xxxx.apps.googleusercontent.com
-SOCIAL_AUTH_GOOGLE_SECRET=tu-google-secret
-
-# Google Maps (obtener en Google Cloud Console)
-GOOGLE_MAPS_API_KEY=tu-api-key-de-maps
-
-# PayPal (Sandbox para pruebas)
-PAYPAL_CLIENT_ID=tu-paypal-client-id
-PAYPAL_SECRET=tu-paypal-secret
-PAYPAL_MODE=sandbox
+# Copiar archivo de ejemplo (si trabajas en desarrollo local)
+# cp .env.example .env
+#
+# Configuración de variables de entorno:
+# - En producción no almacenes valores sensibles en archivos de texto dentro del repositorio.
+# - Usa el gestor de secretos de la plataforma (Render, AWS Secrets Manager, GitHub Secrets, .etc.)
+# - Define las variables necesarias desde la UI de secretos de tu plataforma de despliegue.
+#
+# Variables requeridas (ejemplos):
+# - clave secreta de Django (configurar en el gestor de secretos)
+# - flag DEBUG (usar False en producción)
+# - hosts permitidos (ALLOWED_HOSTS, coma-separado)
+# - credenciales de OAuth (cliente/secret de proveedore x), API keys externas
+# - credenciales de pasarela de pago y modo (sandbox/live)
 
 3.4 PREPARAR BASE DE DATOS
 ---------------------------
@@ -228,24 +220,18 @@ vinateria-3-hermanos/
 └── db.sqlite3             # Base de datos
 
 ================================================================================
- 5. VARIABLES DE ENTORNO REQUERIDAS
+ 5. VARIABLES DE ENTORNO REQUERIDAS (resumen)
 ================================================================================
 
-SECRET_KEY              # Clave secreta de Django
-DEBUG                   # True para desarrollo, False para producción
-ALLOWED_HOSTS           # Hosts permitidos separados por coma
+Este proyecto requiere variables de entorno para funcionar correctamente. Por
+seguridad, NUNCA almacenes valores sensibles en archivos de texto dentro del
+repositorio. En producción, utiliza el gestor de secretos de la plataforma de
+despliegue (por ejemplo Render, GitHub Secrets, AWS Secrets Manager, etc.).
 
-# Autenticación
-SOCIAL_AUTH_GOOGLE_CLIENT_ID
-SOCIAL_AUTH_GOOGLE_SECRET
-
-# Google Maps
-GOOGLE_MAPS_API_KEY
-
-# PayPal
-PAYPAL_CLIENT_ID
-PAYPAL_SECRET
-PAYPAL_MODE            # 'sandbox' o 'live'
+Las variables incluyen claves secretas, credenciales de servicios externos
+y flags de configuración (DEBUG, ALLOWED_HOSTS, credenciales de PayPal/Google,
+API keys). Define estos valores desde la UI de secretos de tu plataforma de
+despliegue o mediante un vault; no los pongas en archivos de texto en el repo.
 
 ================================================================================
  6. TECNOLOGÍAS UTILIZADAS

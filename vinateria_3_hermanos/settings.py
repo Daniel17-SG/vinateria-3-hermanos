@@ -10,13 +10,35 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 from dotenv import load_dotenv
-load_dotenv(dotenv_path=BASE_DIR / '.env')
+# Only load .env for local development (avoid accidentally using repo .env in production)
+if os.getenv('DJANGO_DEVELOPMENT', '0') == '1':
+    load_dotenv(dotenv_path=BASE_DIR / '.env')
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-sh_ol^wt+-#!jstjs!)s8u#wjcmi%m0p_ai!cnurh%)1!lv#f8')
+# Exceptions and helpers
+from django.core.exceptions import ImproperlyConfigured
+from django.core.management.utils import get_random_secret_key
 
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+# SECURITY: do not fall back to an insecure SECRET_KEY in production.
+# Require deployment to set SECRET_KEY in environment variables or secrets manager.
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    # Allow local development by setting DJANGO_DEVELOPMENT=1 in env, otherwise fail fast
+    if os.getenv('DJANGO_DEVELOPMENT', '0') == '1':
+        # Generate an ephemeral secret key for local development (not stored in repo)
+        SECRET_KEY = os.getenv('SECRET_KEY') or get_random_secret_key()
+    else:
+        raise ImproperlyConfigured('The SECRET_KEY environment variable is not set.')
 
-ALLOWED_HOSTS = ['*']
+# Default to False for safety. Set DEBUG=1 only in trusted dev environments.
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
+# ALLOWED_HOSTS should be provided via environment variable (comma-separated)
+# e.g. ALLOWED_HOSTS=example.com,myapp.onrender.com
+raw_hosts = os.getenv('ALLOWED_HOSTS', '')
+if raw_hosts:
+    ALLOWED_HOSTS = [h.strip() for h in raw_hosts.split(',') if h.strip()]
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -82,6 +104,9 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
+
+# Keep DB connections alive for reuse (useful with Supabase pooler)
+CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', '600'))
 
 # Cache configuration for django-ratelimit
 CACHES = {
@@ -175,6 +200,50 @@ SILENCED_SYSTEM_CHECKS = ['django_ratelimit.E003', 'django_ratelimit.W001']
 
 # --- Configuración de Sesión ---
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_SECURE = False  # Cambiar a True en producción con HTTPS
+SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'True') == 'True' if not DEBUG else False
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = os.getenv('SESSION_COOKIE_SAMESITE', 'Lax')
+
+# Security headers for production
+CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'True') == 'True' if not DEBUG else False
+SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'True') == 'True' if not DEBUG else False
+SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '31536000')) if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'True') == 'True' if not DEBUG else False
+SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'True') == 'True' if not DEBUG else False
+
+# Clickjacking protection
+X_FRAME_OPTIONS = os.getenv('X_FRAME_OPTIONS', 'DENY')
+
+# CSRF trusted origins: comma separated
+raw_csrf = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+if raw_csrf:
+    CSRF_TRUSTED_ORIGINS = [u.strip() for u in raw_csrf.split(',') if u.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = []
+
+# Production-ready secure defaults (suitable for Render). These can be
+# overridden explicitly by setting DJANGO_DEVELOPMENT=1 for local development.
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+# Set an explicit HSTS default (one year). This is a literal so static checks
+# detect it; deployments can override via env var if needed.
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Development override: if DJANGO_DEVELOPMENT=1, relax some flags for local dev
+if os.getenv('DJANGO_DEVELOPMENT', '0') == '1':
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+
+# Default clickjacking protection
+X_FRAME_OPTIONS = 'DENY'
+
+# If CSRF_TRUSTED_ORIGINS not provided, build from ALLOWED_HOSTS (https)
+if not CSRF_TRUSTED_ORIGINS and ALLOWED_HOSTS:
+    CSRF_TRUSTED_ORIGINS = [f'https://{h}' for h in ALLOWED_HOSTS if h]

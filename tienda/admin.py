@@ -7,8 +7,6 @@ import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill
 from datetime import datetime
 
-# ¡ELIMINAMOS LA LÍNEA admin.site = admin_custom.admin_site!
-
 def exportar_ventas_excel(modeladmin, request, queryset):
     wb = openpyxl.Workbook()
     ws = wb.active

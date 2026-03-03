@@ -24,10 +24,13 @@ from django.conf.urls.static import static
 from tienda import admin_custom
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('dashboard/', admin_custom.admin_site.urls),
+    # Panel de gerencia (ruta no obvia para el admin personalizado)
+    path('cp-3h-ops/', admin_custom.admin_site.urls),
+    # Autenticación de clientes (allauth)
     path('accounts/', include('allauth.urls')),
+    # Rutas públicas de la tienda
     path('', include('tienda.urls', namespace='tienda')),
+    # Auth de Django (reset de contraseña, etc.)
     path('', include('django.contrib.auth.urls')),
 ]
 
