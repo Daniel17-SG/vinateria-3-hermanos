@@ -36,7 +36,12 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 # e.g. ALLOWED_HOSTS=example.com,myapp.onrender.com
 raw_hosts = os.getenv('ALLOWED_HOSTS', '')
 if raw_hosts:
-    ALLOWED_HOSTS = [h.strip() for h in raw_hosts.split(',') if h.strip()]
+    ALLOWED_HOSTS = [
+    'vinateria-3-hermanos-ucsx.onrender.com', 
+    '.onrender.com',
+    'localhost', 
+    '127.0.0.1'
+]
 else:
     ALLOWED_HOSTS = []
 
