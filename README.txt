@@ -190,8 +190,8 @@ El servidor estará disponible en: http://127.0.0.1:8000
 
 3.6 ACCESOS
 -----------
-- Panel Admin: http://127.0.0.1:8000/admin/
-- Dashboard: http://127.0.0.1:8000/admin/dashboard/
+- Panel Admin: http://127.0.0.1:8000/cp-3h-ops/
+- Dashboard: http://127.0.0.1:8000/cp-3h-ops/
 - Catálogo: http://127.0.0.1:8000/catalogo/
 
 ================================================================================

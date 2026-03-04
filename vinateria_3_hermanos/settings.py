@@ -10,24 +10,41 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 from dotenv import load_dotenv
-# Only load .env for local development (avoid accidentally using repo .env in production)
-if os.getenv('DJANGO_DEVELOPMENT', '0') == '1':
-    load_dotenv(dotenv_path=BASE_DIR / '.env')
 
-# Exceptions and helpers
+# ---------------------------------------------------------------------------
+# .env loading strategy (resuelve el problema "huevo y gallina"):
+#
+#   LOCAL DEV  → el archivo .env EXISTE en disco  → load_dotenv lo lee
+#   PRODUCCIÓN → el archivo .env NO EXISTE         → load_dotenv es un no-op
+#
+# La decisión se basa en la EXISTENCIA DEL ARCHIVO, no en una variable
+# que vive dentro de él.  Esto es seguro porque:
+#   • En producción (Render) el .env NO se despliega (.gitignore lo excluye).
+#   • Localmente el archivo provee todos los secretos para desarrollo.
+# ---------------------------------------------------------------------------
+_env_path = BASE_DIR / '.env'
+if _env_path.is_file():
+    load_dotenv(dotenv_path=_env_path)
+
+# Helpers
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.utils import get_random_secret_key
 
-# SECURITY: do not fall back to an insecure SECRET_KEY in production.
-# Require deployment to set SECRET_KEY in environment variables or secrets manager.
+# ---------------------------------------------------------------------------
+# SECRET_KEY
+# ---------------------------------------------------------------------------
+# Producción: DEBE estar como variable de entorno real (Render → Environment).
+# Local: se lee del .env.  Si no existe en ningún lado, genera una efímera
+# SOLO cuando DJANGO_DEVELOPMENT=1 para que un olvido en prod falle ruidosamente.
 SECRET_KEY = os.getenv('SECRET_KEY')
 if not SECRET_KEY:
-    # Allow local development by setting DJANGO_DEVELOPMENT=1 in env, otherwise fail fast
     if os.getenv('DJANGO_DEVELOPMENT', '0') == '1':
-        # Generate an ephemeral secret key for local development (not stored in repo)
-        SECRET_KEY = os.getenv('SECRET_KEY') or get_random_secret_key()
+        SECRET_KEY = get_random_secret_key()
     else:
-        raise ImproperlyConfigured('The SECRET_KEY environment variable is not set.')
+        raise ImproperlyConfigured(
+            'SECRET_KEY is not set. '
+            'Set it as an environment variable or in .env for local development.'
+        )
 
 # Default to False for safety. Set DEBUG=1 only in trusted dev environments.
 DEBUG = True
@@ -216,53 +233,30 @@ GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
 RATELIMIT_USE_CACHE = 'default'
 SILENCED_SYSTEM_CHECKS = ['django_ratelimit.E003', 'django_ratelimit.W001']
 
-# --- Configuración de Sesión ---
+# ---------------------------------------------------------------------------
+# Sesión
+# ---------------------------------------------------------------------------
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'True') == 'True' if not DEBUG else False
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = os.getenv('SESSION_COOKIE_SAMESITE', 'Lax')
+SESSION_COOKIE_SAMESITE = 'Lax'
 
-# Security headers for production
-CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'True') == 'True' if not DEBUG else False
-SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'True') == 'True' if not DEBUG else False
-SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '31536000')) if not DEBUG else 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'True') == 'True' if not DEBUG else False
-SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'True') == 'True' if not DEBUG else False
+# ---------------------------------------------------------------------------
+# Security headers — Producción por defecto, relajados en desarrollo
+# ---------------------------------------------------------------------------
+_is_dev = os.getenv('DJANGO_DEVELOPMENT', '0') == '1'
 
-# Clickjacking protection
-X_FRAME_OPTIONS = os.getenv('X_FRAME_OPTIONS', 'DENY')
+SESSION_COOKIE_SECURE          = not _is_dev
+CSRF_COOKIE_SECURE             = not _is_dev
+SECURE_SSL_REDIRECT            = not _is_dev
+SECURE_HSTS_SECONDS            = 0 if _is_dev else 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not _is_dev
+SECURE_HSTS_PRELOAD            = not _is_dev
 
-# CSRF trusted origins: comma separated
-raw_csrf = os.getenv('CSRF_TRUSTED_ORIGINS', '')
-if raw_csrf:
-    CSRF_TRUSTED_ORIGINS = [u.strip() for u in raw_csrf.split(',') if u.strip()]
-else:
-    CSRF_TRUSTED_ORIGINS = []
-
-# Production-ready secure defaults (suitable for Render). These can be
-# overridden explicitly by setting DJANGO_DEVELOPMENT=1 for local development.
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
-# Set an explicit HSTS default (one year). This is a literal so static checks
-# detect it; deployments can override via env var if needed.
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-# Development override: if DJANGO_DEVELOPMENT=1, relax some flags for local dev
-if os.getenv('DJANGO_DEVELOPMENT', '0') == '1':
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    SECURE_SSL_REDIRECT = False
-    SECURE_HSTS_SECONDS = 0
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-    SECURE_HSTS_PRELOAD = False
-
-# Default clickjacking protection
 X_FRAME_OPTIONS = 'DENY'
 
-# If CSRF_TRUSTED_ORIGINS not provided, build from ALLOWED_HOSTS (https)
+# CSRF trusted origins (comma-separated env var, or auto-build from ALLOWED_HOSTS)
+raw_csrf = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [u.strip() for u in raw_csrf.split(',') if u.strip()]
 if not CSRF_TRUSTED_ORIGINS and ALLOWED_HOSTS:
     CSRF_TRUSTED_ORIGINS = [f'https://{h}' for h in ALLOWED_HOSTS if h]
 if not DEBUG:

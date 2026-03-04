@@ -17,7 +17,6 @@ Including another URLconf
 """
 URL configuration for vinateria_3_hermanos project.
 """
-from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static

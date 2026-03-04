@@ -6,6 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponseForbidden
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.views.decorators.cache import never_cache
 from django.db import transaction, IntegrityError, DatabaseError
@@ -129,14 +130,16 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 
-                # Redirección condicional: admin → panel, usuario → tienda
+                # Redirección condicional: admin → panel secreto, usuario → tienda
+                # Prioridad: 1) ?next= si existe, 2) staff → admin, 3) cliente → tienda
                 next_url = request.GET.get('next')
                 if next_url:
                     redirect_url = next_url
                 elif user.is_staff or user.is_superuser:
-                    redirect_url = '/admin/'
+                    # Usar reverse() para evitar URLs hardcodeadas (seguridad + mantenibilidad)
+                    redirect_url = reverse('vinateria_admin:index')
                 else:
-                    redirect_url = 'tienda:index'
+                    redirect_url = reverse('tienda:index')
                 
                 messages.success(request, f'¡Bienvenido de nuevo, {username}!')
                 return redirect(redirect_url)

@@ -1,11 +1,9 @@
-from django.contrib import admin
 from django.contrib.admin import AdminSite
-from django.utils.html import format_html
 from django.urls import path
 from django.shortcuts import render
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count
 from datetime import datetime, timedelta
-from .models import Categoria, Producto, PerfilCliente, CarritoItem, Venta, DetalleVenta, MensajeContacto
+from .models import Producto, Venta, DetalleVenta
 
 
 class VinateriaAdminSite(AdminSite):

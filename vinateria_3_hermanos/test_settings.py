@@ -16,7 +16,12 @@ PASSWORD_HASHERS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
-from .settings import *
+
+# Disable production security redirects so the test client works over HTTP
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_HSTS_SECONDS = 0
 
 # Test settings override to ensure tests don't connect to production Supabase
 DATABASES = {
