@@ -30,7 +30,7 @@ if not SECRET_KEY:
         raise ImproperlyConfigured('The SECRET_KEY environment variable is not set.')
 
 # Default to False for safety. Set DEBUG=1 only in trusted dev environments.
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
 # ALLOWED_HOSTS should be provided via environment variable (comma-separated)
 # e.g. ALLOWED_HOSTS=example.com,myapp.onrender.com
