@@ -1,0 +1,94 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block title %}Vinatería Los 3 Hermanos - Inicio{% endblock %}
+
+{% block content %}
+<main class="home-main">
+    
+    <section class="hero-simple" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{% static 'tienda/imagenes/reposado.png' %}'); background-size: cover; background-position: center;">
+        <div class="hero-content-simple">
+            <h1>Bienvenidos a Vinatería Los 3 Hermanos</h1>
+            <p>Tradición familiar desde hace tres generaciones. Ofrecemos los mejores vinos y licores premium seleccionados especialmente para ti.</p>
+            <a href="{% url 'tienda:catalogo' %}" class="btn-hero-action">CATÁLOGO</a>
+        </div>
+    </section>
+
+    <section class="featured-products">
+        <h2>LOS MÁS VENDIDOS</h2>
+        <div class="product-grid-highlight">
+            {% for producto in productos_destacados %}
+            <div class="producto">
+                <div class="producto-img-container">
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                    {% else %}
+                    <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ producto.nombre }}">
+                    {% endif %}
+                </div>
+                <h3>{{ producto.nombre }}</h3>
+                <p class="precio">${{ producto.precio }}</p>
+                
+                {% if producto.stock > 0 %}
+                <button class="agregar-carrito" data-producto-id="{{ producto.id }}">Agregar al Carrito</button>
+                {% else %}
+                <button class="agregar-carrito" disabled style="background-color: #ccc; cursor: not-allowed;">Agotado</button>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="no-products">
+                <p>No hay productos disponibles en este momento.</p>
+                
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Tu script de Fetch API está perfecto, no necesita cambios.
+document.addEventListener('DOMContentLoaded', function() {
+    const agregarBtns = document.querySelectorAll('.agregar-carrito');
+    
+    agregarBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productoId = this.dataset.productoId;
+            
+            fetch(`/carrito/agregar/${productoId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'cantidad=1'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const toast = document.getElementById('notification-toast');
+                    const toastMsg = document.getElementById('toast-message');
+                    if (toast && toastMsg) {
+                        toastMsg.textContent = data.message;
+                        toast.classList.remove('notification-hidden');
+                        toast.classList.add('notification-show');
+                        
+                        setTimeout(() => {
+                            toast.classList.remove('notification-show');
+                            toast.classList.add('notification-hidden');
+                        }, 3000);
+                    } else {
+                        alert(data.message); // Fallback si el toast no existe en base.html
+                    }
+                } else {
+                    alert(data.error || 'Error al agregar al carrito');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+</script>
+{% endblock %}

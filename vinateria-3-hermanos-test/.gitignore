@@ -1,0 +1,53 @@
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.sqlite3
+media/
+staticfiles/# Entornos virtuales y dependencias
+venv/
+.venv/
+ENV/
+bin/
+lib/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.installed.cfg
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Configuración y Secretos (VITAL para Supabase)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Base de datos local (SQLite)
+db.sqlite3
+db.sqlite3-journal
+
+# Archivos de Python y Caché
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Archivos estáticos y de medios (No subir a GitHub)
+media/
+staticfiles/
+
+# Logs y archivos temporales
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.swp

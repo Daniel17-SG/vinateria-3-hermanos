@@ -1,0 +1,438 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Mi Perfil - Los 3 Hermanos{% endblock %}
+
+{% block content %}
+<main class="perfil-main">
+    <div class="perfil-container">
+        <div class="perfil-header">
+            <div class="perfil-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <h1>Bienvenido, {{ user.first_name|default:user.username }}</h1>
+                    <p><i class="fas fa-envelope"></i> {{ user.email }}</p>
+                    <p class="fecha-registro">Miembro desde: {{ user.date_joined|date:"d de F de Y" }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="perfil-datos">
+            <h2><i class="fas fa-id-card"></i> Mis Datos</h2>
+            {% if perfil %}
+            <div class="datos-grid">
+                <div class="dato-item">
+                    <label>Teléfono:</label>
+                    <span>{{ perfil.telefono|default:"No registrado" }}</span>
+                </div>
+                <div class="dato-item">
+                    <label>Dirección:</label>
+                    <span>{{ perfil.direccion|default:"No registrada" }}</span>
+                </div>
+                <div class="dato-item">
+                    <label>Ciudad:</label>
+                    <span>{{ perfil.ciudad|default:"No registrada" }}</span>
+                </div>
+                <div class="dato-item">
+                    <label>Código Postal:</label>
+                    <span>{{ perfil.cp|default:"No registrado" }}</span>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-datos">Completa tu perfil en el panel de administración.</p>
+            {% endif %}
+        </div>
+        
+        <div class="historial-pedidos">
+            <h2><i class="fas fa-shopping-bag"></i> Mi Historial de Pedidos</h2>
+            
+            {% if ventas %}
+            <div class="tabla-responsive">
+                <table class="tabla-pedidos">
+                    <thead>
+                        <tr>
+                            <th>Orden #</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Detalles</th>
+                            <th>Recibo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venta in ventas %}
+                        <tr>
+                            <td><strong>#{{ venta.id }}</strong></td>
+                            <td>{{ venta.fecha_venta|date:"d/m/Y H:i" }}</td>
+                            <td>${{ venta.total|floatformat:2 }}</td>
+                            <td>
+                                <span class="estado-badge estado-{{ venta.estatus }}">
+                                    {{ venta.get_estatus_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-ver-detalles" onclick="mostrarDetalles({{ venta.id }})">
+                                    <i class="fas fa-eye"></i> Ver
+                                </button>
+                            </td>
+                            <td>
+                                <a href="{% url 'tienda:descargar_recibo_pdf' venta.id %}" class="btn-descargar-pdf" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if ventas.has_other_pages %}
+            <div class="pagination">
+                {% if ventas.has_previous %}
+                <a href="?page={{ ventas.previous_page_number }}" class="btn-pagination">
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </a>
+                {% endif %}
+                
+                <span class="page-info">Página {{ ventas.number }} de {{ ventas.paginator.num_pages }}</span>
+                
+                {% if ventas.has_next %}
+                <a href="?page={{ ventas.next_page_number }}" class="btn-pagination">
+                    Siguiente <i class="fas fa-chevron-right"></i>
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            {% else %}
+            <div class="no-pedidos">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>No tienes pedidos aún</h3>
+                <p>¡Explora nuestro catálogo y realiza tu primera compra!</p>
+                <a href="{% url 'tienda:catalogo' %}" class="btn-catalogo">Ver Catálogo</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+<!-- Modal de Detalles -->
+<div id="modal-detalles" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="cerrarModal()">&times;</span>
+        <h2>Detalles del Pedido #<span id="modal-orden-id"></span></h2>
+        
+        <div class="modal-info-pedido">
+            <p><strong>Fecha:</strong> <span id="modal-fecha"></span></p>
+            <p><strong>Estado:</strong> <span id="modal-estado"></span></p>
+            <p><strong>Dirección de envío:</strong> <span id="modal-direccion"></span></p>
+            <p><strong>Teléfono:</strong> <span id="modal-telefono"></span></p>
+        </div>
+        
+        <table class="tabla-detalles">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit.</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="modal-detalles-body">
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td><strong id="modal-total"></strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .perfil-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+    .perfil-header {
+        background: linear-gradient(135deg, #8B0000 0%, #a52a2a 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    .perfil-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .perfil-info i {
+        font-size: 60px;
+    }
+    .perfil-info h1 {
+        margin: 0 0 10px 0;
+        font-size: 1.8em;
+    }
+    .perfil-info p {
+        margin: 5px 0;
+        opacity: 0.9;
+    }
+    .fecha-registro {
+        font-size: 0.9em;
+        opacity: 0.7;
+    }
+    .perfil-datos, .historial-pedidos {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    .perfil-datos h2, .historial-pedidos h2 {
+        color: #8B0000;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    .datos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    .dato-item {
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+    .dato-item label {
+        display: block;
+        font-weight: bold;
+        color: #666;
+        margin-bottom: 5px;
+    }
+    .dato-item span {
+        color: #333;
+        font-size: 1.1em;
+    }
+    .tabla-responsive {
+        overflow-x: auto;
+    }
+    .tabla-pedidos {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .tabla-pedidos th, .tabla-pedidos td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    .tabla-pedidos th {
+        background: #f8f9fa;
+        color: #333;
+        font-weight: bold;
+    }
+    .tabla-pedidos tr:hover {
+        background: #fafafa;
+    }
+    .estado-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+    }
+    .estado-pagado { background: #d4edda; color: #155724; }
+    .estado-pendiente { background: #fff3cd; color: #856404; }
+    .estado-enviado { background: #cce5ff; color: #004085; }
+    .estado-entregado { background: #d1ecf1; color: #0c5460; }
+    .estado-cancelado { background: #f8d7da; color: #721c24; }
+    .btn-ver-detalles {
+        padding: 8px 15px;
+        background: #8B0000;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .btn-ver-detalles:hover {
+        background: #a00000;
+    }
+    .btn-descargar-pdf {
+        display: inline-block;
+        padding: 8px 15px;
+        background: #dc3545;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 13px;
+        transition: background 0.3s;
+    }
+    .btn-descargar-pdf:hover {
+        background: #c82333;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+        padding: 20px;
+    }
+    .btn-pagination {
+        padding: 10px 20px;
+        background: #8B0000;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
+    .btn-pagination:hover {
+        background: #a00000;
+    }
+    .page-info {
+        color: #666;
+    }
+    .no-pedidos {
+        text-align: center;
+        padding: 50px 20px;
+    }
+    .no-pedidos i {
+        font-size: 60px;
+        color: #ccc;
+        margin-bottom: 20px;
+    }
+    .no-pedidos h3 {
+        color: #555;
+        margin-bottom: 10px;
+    }
+    .btn-catalogo {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 12px 30px;
+        background: #8B0000;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 30px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 700px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .close-modal {
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #aaa;
+    }
+    .close-modal:hover {
+        color: #000;
+    }
+    .modal-info-pedido {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .modal-info-pedido p {
+        margin: 8px 0;
+    }
+    .tabla-detalles {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .tabla-detalles th, .tabla-detalles td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    .tabla-detalles th {
+        background: #f8f9fa;
+    }
+    .tabla-detalles tfoot {
+        background: #f0f0f0;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const datosPedidos = {
+    {% for venta in ventas %}
+    {{ venta.id }}: {
+        fecha: '{{ venta.fecha_venta|date:"d/m/Y H:i" }}',
+        estado: '{{ venta.get_estatus_display }}',
+        direccion: '{{ venta.direccion_envio|escapejs }}',
+        telefono: '{{ venta.telefono_contacto }}',
+        total: '${{ venta.total|floatformat:2 }}',
+        detalles: [
+            {% for detalle in venta.detalles.all %}
+            {
+                producto: '{{ detalle.producto.nombre|escapejs }}',
+                cantidad: {{ detalle.cantidad }},
+                precio: '${{ detalle.precio_unitario|floatformat:2 }}',
+                subtotal: '${{ detalle.subtotal|floatformat:2 }}'
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+};
+
+function mostrarDetalles(pedidoId) {
+    const pedido = datosPedidos[pedidoId];
+    if (!pedido) return;
+    
+    document.getElementById('modal-orden-id').textContent = pedidoId;
+    document.getElementById('modal-fecha').textContent = pedido.fecha;
+    document.getElementById('modal-estado').textContent = pedido.estado;
+    document.getElementById('modal-direccion').textContent = pedido.direccion || 'No especificada';
+    document.getElementById('modal-telefono').textContent = pedido.telefono;
+    document.getElementById('modal-total').textContent = pedido.total;
+    
+    const tbody = document.getElementById('modal-detalles-body');
+    tbody.innerHTML = pedido.detalles.map(d => `
+        <tr>
+            <td>${d.producto}</td>
+            <td>${d.cantidad}</td>
+            <td>${d.precio}</td>
+            <td>${d.subtotal}</td>
+        </tr>
+    `).join('');
+    
+    document.getElementById('modal-detalles').style.display = 'block';
+}
+
+function cerrarModal() {
+    document.getElementById('modal-detalles').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('modal-detalles');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

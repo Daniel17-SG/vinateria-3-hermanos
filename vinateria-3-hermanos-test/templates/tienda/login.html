@@ -1,0 +1,84 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+{% block title %}Iniciar Sesión - Los 3 Hermanos{% endblock %}
+
+{% block content %}
+<main class="login-main-premium">
+    <style>
+    .social-login {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .social-login p {
+        color: #666;
+        margin-bottom: 10px;
+    }
+    .btn-google {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px;
+        background: #fff;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    .btn-google:hover {
+        background: #f5f5f5;
+        border-color: #ccc;
+    }
+    .btn-google i {
+        font-size: 1.2em;
+    }
+    </style>
+    <div class="login-container-premium">
+        <div class="user-icon-circle">
+            <i class="fas fa-user"></i>
+        </div>
+        
+        <h2>¡Bienvenido de Nuevo!</h2>
+        <p>Ingresa tus credenciales para acceder a tu cuenta.</p>
+
+        <form method="post" class="login-form-premium" action="{% url 'tienda:login' %}">
+            {% csrf_token %}
+            
+            <div class="input-group-premium">
+                <i class="fas fa-envelope"></i>
+                <input type="text" name="username" placeholder="Usuario" required>
+            </div>
+            
+            <div class="input-group-premium">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Contraseña" required>
+            </div>
+            
+            {% if form.errors %}
+            <div style="color: red; margin-bottom: 15px; font-weight: bold;">
+                Usuario o contraseña incorrectos.
+            </div>
+            {% endif %}
+            
+            <div class="options-row-premium">
+                <div class="remember-me-premium">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Recordarme</label>
+                </div>
+                <a href="{% url 'password_reset' %}" class="forgot-password-premium">¿Olvidaste tu contraseña?</a>
+            </div>
+            
+            <button type="submit" class="btn-login-premium">
+                Iniciar Sesión
+            </button>
+        </form>
+        
+        <p class="no-account-link-premium">
+            ¿No tienes una cuenta? <a href="{% url 'tienda:registro' %}">Crear Cuenta</a>
+        </p>
+    </div>
+</main>
+{% endblock %}

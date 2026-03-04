@@ -1,0 +1,149 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block title %}{{ producto.nombre }} - Vinatería Los 3 Hermanos{% endblock %}
+
+{% block content %}
+<main class="catalogo-main producto-detalle-main">
+    <nav class="breadcrumb-inline">
+        <a href="{% url 'tienda:index' %}">Inicio</a>
+        <span>/</span>
+        <a href="{% url 'tienda:catalogo' %}">Catálogo</a>
+        <span>/</span>
+        <span>{{ producto.nombre }}</span>
+    </nav>
+
+    <section class="producto-detalle-card">
+        <div class="producto-detalle-imagen">
+            {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+            {% else %}
+            <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ producto.nombre }}">
+            {% endif %}
+        </div>
+        <div class="producto-detalle-info">
+            <p class="categoria-badge">{{ producto.categoria.nombre }}</p>
+            <h1>{{ producto.nombre }}</h1>
+            <p class="precio">${{ producto.precio }} MXN</p>
+            {% if producto.descripcion %}
+            <div class="descripcion">{{ producto.descripcion|linebreaks }}</div>
+            {% endif %}
+            <p class="stock-info">
+                {% if producto.stock > 0 %}
+                <span class="disponible">Disponible ({{ producto.stock }} en stock)</span>
+                {% else %}
+                <span class="agotado">Agotado</span>
+                {% endif %}
+            </p>
+            {% if producto.stock > 0 %}
+            <button class="agregar-carrito btn-hero-action" data-producto-id="{{ producto.id }}">Agregar al Carrito</button>
+            {% else %}
+            <button class="agregar-carrito" disabled style="background-color: #ccc; cursor: not-allowed;">Agotado</button>
+            {% endif %}
+            <a href="{% url 'tienda:catalogo' %}" class="btn-volver">Volver al Catálogo</a>
+        </div>
+    </section>
+
+    {% if productos_relacionados %}
+    <section class="productos-relacionados">
+        <h2>También te puede interesar</h2>
+        <div class="grid-productos">
+            {% for rel in productos_relacionados %}
+            <div class="producto">
+                <a href="{% url 'tienda:producto_detalle' rel.id %}">
+                    {% if rel.imagen %}
+                    <img src="{{ rel.imagen.url }}" alt="{{ rel.nombre }}">
+                    {% else %}
+                    <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ rel.nombre }}">
+                    {% endif %}
+                </a>
+                <h3>{{ rel.nombre }}</h3>
+                <p class="precio">${{ rel.precio }}</p>
+                {% if rel.stock > 0 %}
+                <button class="agregar-carrito" data-producto-id="{{ rel.id }}">Agregar al Carrito</button>
+                {% else %}
+                <button class="agregar-carrito" disabled>Agotado</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .breadcrumb-inline { margin-bottom: 20px; color: #666; font-size: 0.9em; }
+    .breadcrumb-inline a { color: #8B0000; text-decoration: none; }
+    .breadcrumb-inline a:hover { text-decoration: underline; }
+    .breadcrumb-inline span { margin: 0 6px; }
+    .producto-detalle-card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        max-width: 900px;
+        margin: 0 auto 40px;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .producto-detalle-imagen img { width: 100%; border-radius: 8px; }
+    .producto-detalle-info h1 { margin: 10px 0 15px; color: #2c3e50; }
+    .producto-detalle-info .precio { font-size: 1.5em; font-weight: bold; color: #8B0000; margin-bottom: 15px; }
+    .producto-detalle-info .descripcion { margin-bottom: 20px; line-height: 1.6; color: #555; }
+    .stock-info { margin-bottom: 20px; }
+    .stock-info .disponible { color: #28a745; }
+    .stock-info .agotado { color: #dc3545; }
+    .btn-volver { display: inline-block; margin-top: 15px; color: #666; text-decoration: none; font-size: 0.95em; }
+    .btn-volver:hover { color: #8B0000; }
+    .productos-relacionados { max-width: 900px; margin: 0 auto; }
+    .productos-relacionados h2 { margin-bottom: 20px; color: #2c3e50; }
+    @media (max-width: 768px) {
+        .producto-detalle-card { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.agregar-carrito').forEach(btn => {
+        if (btn.disabled) return;
+        btn.addEventListener('click', function() {
+            const productoId = this.dataset.productoId;
+            fetch(`/carrito/agregar/${productoId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'cantidad=1'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const toast = document.getElementById('notification-toast');
+                    const toastMsg = document.getElementById('toast-message');
+                    if (toast && toastMsg) {
+                        toastMsg.textContent = data.message;
+                        toast.classList.remove('notification-hidden');
+                        toast.classList.add('notification-show');
+                        setTimeout(() => {
+                            toast.classList.remove('notification-show');
+                            toast.classList.add('notification-hidden');
+                        }, 3000);
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    alert(data.error || 'Error al agregar al carrito');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+</script>
+{% endblock %}
