@@ -44,12 +44,15 @@ if raw_hosts:
     '*'
 ]
 else:
-    ALLOWED_HOSTS = [ 'vinateria-3-hermanos-ucsx.onrender.com', 
+   ALLOWED_HOSTS = [
+    'vinateria-3-hermanos-ucsx.onrender.com', 
     '.onrender.com',
     'localhost', 
     '127.0.0.1',
-    '*']
+    '*'  # El comodín asegura que la petición pase sí o sí
+]
 
+# ESTA LÍNEA ES LA CLAVE: Añádela justo debajo del bloque anterior
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
@@ -261,3 +264,9 @@ X_FRAME_OPTIONS = 'DENY'
 # If CSRF_TRUSTED_ORIGINS not provided, build from ALLOWED_HOSTS (https)
 if not CSRF_TRUSTED_ORIGINS and ALLOWED_HOSTS:
     CSRF_TRUSTED_ORIGINS = [f'https://{h}' for h in ALLOWED_HOSTS if h]
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+else:
+    SECURE_SSL_REDIRECT = False    
