@@ -40,10 +40,17 @@ if raw_hosts:
     'vinateria-3-hermanos-ucsx.onrender.com', 
     '.onrender.com',
     'localhost', 
-    '127.0.0.1'
+    '127.0.0.1',
+    '*'
 ]
 else:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = [ 'vinateria-3-hermanos-ucsx.onrender.com', 
+    '.onrender.com',
+    'localhost', 
+    '127.0.0.1',
+    '*']
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -64,6 +71,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -160,6 +168,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Media files (imágenes subidas por usuarios)
