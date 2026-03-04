@@ -1,0 +1,32 @@
+Auditoría y blindaje de seguridad para despliegue en Render
+===========================================================
+
+Fecha: 4 de marzo de 2026
+
+Acciones realizadas:
+--------------------
+1. Parcheo de settings.py:
+   - DEBUG ahora es False por defecto. Solo se activa si DJANGO_DEVELOPMENT=1.
+   - ALLOWED_HOSTS configurado dinámicamente para Render y dominios personalizados. Eliminado '*'.
+   - Añadida cabecera SECURE_PROXY_SSL_HEADER para compatibilidad SSL en Render.
+
+2. Creación de plantillas de error de producción:
+   - templates/404.html: Página amigable para errores 404.
+   - templates/500.html: Página amigable para errores 500.
+
+3. Validación de seguridad:
+   - Suite de tests automatizados: 8 pruebas pasaron correctamente.
+   - Comando `python manage.py check --deploy` ejecutado para verificar configuración segura.
+   - Advertencia: SECRET_KEY debe ser largo y aleatorio (mínimo 50 caracteres).
+
+4. Instrucciones para Render.com:
+   - SECRET_KEY: Definir en Environment con valor seguro.
+   - DJANGO_DEVELOPMENT: No definir en producción.
+   - ALLOWED_HOSTS: Definir solo si usas dominio personalizado.
+
+Notas de ciberseguridad:
+------------------------
+- DEBUG=True en producción expone rutas, variables y secretos críticos.
+- Django detecta automáticamente 404.html y 500.html en templates si DEBUG=False.
+
+Fin del reporte.

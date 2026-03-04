@@ -46,30 +46,35 @@ if not SECRET_KEY:
             'Set it as an environment variable or in .env for local development.'
         )
 
-# Default to False for safety. Set DEBUG=1 only in trusted dev environments.
-DEBUG = True
+# ==============================================================================
+# CONFIGURACIÓN DE SEGURIDAD CRÍTICA
+# ==============================================================================
+# DEBUG: Debe ser False por defecto para producción (Render).
+# Solo será True si detecta la variable de entorno DJANGO_DEVELOPMENT=1 explícita.
+# Esto previene la fuga de información sensible (variables, rutas, código fuente).
+DEBUG = os.getenv('DJANGO_DEVELOPMENT') == '1'
 
-# ALLOWED_HOSTS should be provided via environment variable (comma-separated)
-# e.g. ALLOWED_HOSTS=example.com,myapp.onrender.com
-raw_hosts = os.getenv('ALLOWED_HOSTS', '')
-if raw_hosts:
-    ALLOWED_HOSTS = [
-    'vinateria-3-hermanos-ucsx.onrender.com', 
-    '.onrender.com',
-    'localhost', 
-    '127.0.0.1',
-    '*'
-]
-else:
-   ALLOWED_HOSTS = [
-    'vinateria-3-hermanos-ucsx.onrender.com', 
-    '.onrender.com',
-    'localhost', 
-    '127.0.0.1',
-    '*'  # El comodín asegura que la petición pase sí o sí
-]
+# ALLOWED_HOSTS: Dominios permitidos para servir la aplicación.
+# Render inyecta RENDER_EXTERNAL_HOSTNAME automáticamente.
+ALLOWED_HOSTS = []
 
-# ESTA LÍNEA ES LA CLAVE: Añádela justo debajo del bloque anterior
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Permitir hosts adicionales definidos manualmente (separados por coma)
+_extra_hosts = os.getenv('ALLOWED_HOSTS')
+if _extra_hosts:
+    ALLOWED_HOSTS.extend(_extra_hosts.split(','))
+
+# Siempre permitir .onrender.com para asegurar despliegues exitosos
+ALLOWED_HOSTS.append('.onrender.com')
+
+# Si estamos en modo DEBUG o local, siempre permitimos localhost
+if DEBUG:
+    ALLOWED_HOSTS.extend(['localhost', '127.0.0.1', '[::1]'])
+
+# Cabeceras SSL detrás del proxy de Render
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 

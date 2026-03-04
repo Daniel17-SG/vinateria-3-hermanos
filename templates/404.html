@@ -1,0 +1,16 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Página no encontrada | Vinatería Los 3 Hermanos{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 100px 20px; min-height: 60vh;">
+    <h1 style="font-size: 6rem; color: #8b0000; margin-bottom: 20px;">404</h1>
+    <h2 style="font-size: 2rem; margin-bottom: 20px;">¡Ups! Página no encontrada</h2>
+    <p style="font-size: 1.2rem; color: #666; margin-bottom: 40px;">
+        Parece que la botella que buscas ya se terminó o nunca existió.
+    </p>
+    <a href="{% url 'tienda:index' %}" class="btn" style="background-color: #8b0000; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        <i class="fas fa-home"></i> Volver al Inicio
+    </a>
+</div>
+{% endblock %}
