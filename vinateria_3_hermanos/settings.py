@@ -216,8 +216,8 @@ LOGIN_REDIRECT_URL = 'tienda:catalogo'
 LOGOUT_REDIRECT_URL = 'tienda:index'
 
 # --- Configuración de pasarela de pagos ---
-PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID', '').strip().strip('"').strip("'")
-PAYPAL_SECRET = os.getenv('PAYPAL_SECRET', '').strip().strip('"').strip("'")
+PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID', '').strip().strip('"').strip("'").replace('\n', '').replace('\r', '')
+PAYPAL_SECRET = os.getenv('PAYPAL_SECRET', '').strip().strip('"').strip("'").replace('\n', '').replace('\r', '')
 PAYPAL_MODE = os.getenv('PAYPAL_MODE', 'sandbox').strip().lower()
 
 # --- Configuración de Google Maps ---

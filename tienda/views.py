@@ -526,7 +526,10 @@ def crear_orden_paypal(request):
     try:
         access_token = obtener_access_token_paypal()
         if not access_token:
-            return JsonResponse({'success': False, 'error': 'Error de conexión con PayPal'}, status=500)
+            return JsonResponse({
+                'success': False,
+                'error': 'No fue posible autenticar con PayPal. Verifica credenciales sandbox/live en Render.'
+            }, status=502)
     except RequestException as e:
         logger.error(f"Error de conexión PayPal en crear_orden: {e}")
         return JsonResponse({'success': False, 'error': 'Error de conexión con el servidor de pagos'}, status=503)
