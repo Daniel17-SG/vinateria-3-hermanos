@@ -53,6 +53,42 @@
         border: 1px solid #ddd;
         border-radius: 5px;
     }
+    .metodos-pago {
+        display: grid;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .metodo-opcion {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fafafa;
+    }
+    .metodo-opcion input[type="radio"] {
+        width: auto;
+        margin: 0;
+    }
+    .metodo-opcion.inactivo {
+        opacity: 0.6;
+    }
+    .btn-confirmar {
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        padding: 12px;
+        font-weight: 600;
+        background: #1f2937;
+        color: #fff;
+        cursor: pointer;
+        margin-top: 16px;
+    }
+    .btn-confirmar:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
     #paypal-button-container {
         margin-top: 20px;
         min-height: 150px;
@@ -114,87 +150,210 @@
                 </div>
                 
                 <h3>Método de Pago</h3>
-                <div id="paypal-button-container"></div>
+                <div class="metodos-pago">
+                    <label class="metodo-opcion" id="label-metodo-paypal" for="metodo-paypal">
+                        <input type="radio" id="metodo-paypal" name="metodo_pago" value="paypal">
+                        <span>PayPal</span>
+                    </label>
+                    <label class="metodo-opcion" for="metodo-contraentrega">
+                        <input type="radio" id="metodo-contraentrega" name="metodo_pago" value="contraentrega" checked>
+                        <span>Pago contra entrega</span>
+                    </label>
+                </div>
+
+                <div id="paypal-section" style="display: none;">
+                    <div id="paypal-button-container"></div>
+                </div>
+
+                <button type="button" id="btn-confirmar-pedido" class="btn-confirmar">Confirmar pedido</button>
                 <div id="error-message" class="error-message"></div>
             </form>
         </div>
     </div>
 </div>
 
-<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency=MXN&intent=capture"></script>
+{% if paypal_client_id %}
+<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id|urlencode }}&currency=MXN&intent=capture"></script>
+{% endif %}
 <script>
     const csrfToken = '{{ csrf_token }}';
-    let paypalOrderId = null;
-    
-    paypal.Buttons({
-        style: {
-            layout: 'vertical',
-            color: 'blue',
-            shape: 'rect',
-            label: 'paypal'
-        },
-        createOrder: function(data, actions) {
-            return fetch('{% url "tienda:crear_orden_paypal" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    paypalOrderId = data.order_id;
-                    return data.order_id;
-                } else {
-                    throw new Error(data.error || 'Error al crear orden');
-                }
-            });
-        },
-        onApprove: function(data, actions) {
-            const direccion = document.getElementById('direccion').value;
-            const telefono = document.getElementById('telefono').value;
-            const notas = document.getElementById('notas').value;
-            
-            if (!direccion || !telefono) {
-                document.getElementById('error-message').textContent = 'Por favor completa la dirección y teléfono';
-                document.getElementById('error-message').style.display = 'block';
+    const paypalClientId = '{{ paypal_client_id|default:"" }}';
+    const errorEl = document.getElementById('error-message');
+    const paypalSection = document.getElementById('paypal-section');
+    const paypalRadio = document.getElementById('metodo-paypal');
+    const contraEntregaRadio = document.getElementById('metodo-contraentrega');
+    const paypalLabel = document.getElementById('label-metodo-paypal');
+    const btnConfirmar = document.getElementById('btn-confirmar-pedido');
+    const formPago = document.getElementById('form-pago');
+    let paypalDisponible = false;
+
+    function mostrarError(mensaje) {
+        errorEl.textContent = mensaje;
+        errorEl.style.display = 'block';
+    }
+
+    function limpiarError() {
+        errorEl.textContent = '';
+        errorEl.style.display = 'none';
+    }
+
+    function validarDatosEnvio() {
+        const direccion = document.getElementById('direccion').value.trim();
+        const telefono = document.getElementById('telefono').value.trim();
+
+        if (!direccion || !telefono) {
+            mostrarError('Por favor completa la dirección y teléfono');
+            return false;
+        }
+        return true;
+    }
+
+    function actualizarMetodoSeleccionado() {
+        limpiarError();
+
+        if (paypalRadio.checked) {
+            if (!paypalDisponible) {
+                mostrarError('PayPal no está disponible en este momento. Selecciona pago contra entrega.');
+                contraEntregaRadio.checked = true;
+                paypalSection.style.display = 'none';
+                btnConfirmar.style.display = 'block';
                 return;
             }
-            
-            return fetch('{% url "tienda:capturar_orden_paypal" %}', {
+            paypalSection.style.display = 'block';
+            btnConfirmar.style.display = 'none';
+            return;
+        }
+
+        paypalSection.style.display = 'none';
+        btnConfirmar.style.display = 'block';
+    }
+
+    async function procesarContraEntrega() {
+        if (!validarDatosEnvio()) {
+            return;
+        }
+
+        btnConfirmar.disabled = true;
+        limpiarError();
+
+        const formData = new FormData(formPago);
+
+        try {
+            const response = await fetch('{% url "tienda:procesar_pago" %}', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken
                 },
-                body: JSON.stringify({
-                    order_id: data.orderID,
-                    direccion: direccion,
-                    telefono: telefono,
-                    notas: notas
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = '{% url "tienda:pago_exitoso" 0 %}'.replace('0', data.venta_id);
-                } else {
-                    throw new Error(data.error || 'Error al procesar pago');
-                }
-            })
-            .catch(error => {
-                document.getElementById('error-message').textContent = error.message;
-                document.getElementById('error-message').style.display = 'block';
+                body: formData
             });
-        },
-        onError: function(err) {
-            console.error('PayPal Error:', err);
-            window.location.href = '{% url "tienda:ver_carrito" %}?error=paypal';
-        },
-        onCancel: function(data) {
-            window.location.href = '{% url "tienda:ver_carrito" %}?error=cancelado';
+
+            const data = await response.json();
+            if (data.success) {
+                window.location.href = '{% url "tienda:pago_exitoso" 0 %}'.replace('0', data.venta_id);
+                return;
+            }
+
+            mostrarError(data.error || 'No se pudo procesar el pedido');
+        } catch (error) {
+            mostrarError('No fue posible conectar con el servidor. Intenta de nuevo.');
+        } finally {
+            btnConfirmar.disabled = false;
         }
-    }).render('#paypal-button-container');
+    }
+
+    function configurarPayPal() {
+        if (!paypalClientId || typeof paypal === 'undefined' || typeof paypal.Buttons !== 'function') {
+            paypalDisponible = false;
+            paypalRadio.disabled = true;
+            paypalLabel.classList.add('inactivo');
+            return;
+        }
+
+        paypalDisponible = true;
+
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color: 'blue',
+                shape: 'rect',
+                label: 'paypal'
+            },
+            createOrder: function(data, actions) {
+                return fetch('{% url "tienda:crear_orden_paypal" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        return data.order_id;
+                    }
+                    throw new Error(data.error || 'Error al crear orden');
+                });
+            },
+            onApprove: function(data, actions) {
+                const direccion = document.getElementById('direccion').value;
+                const telefono = document.getElementById('telefono').value;
+                const notas = document.getElementById('notas').value;
+
+                if (!validarDatosEnvio()) {
+                    return;
+                }
+
+                return fetch('{% url "tienda:capturar_orden_paypal" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        order_id: data.orderID,
+                        direccion: direccion,
+                        telefono: telefono,
+                        notas: notas
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '{% url "tienda:pago_exitoso" 0 %}'.replace('0', data.venta_id);
+                        return;
+                    }
+                    throw new Error(data.error || 'Error al procesar pago');
+                })
+                .catch(error => {
+                    mostrarError(error.message);
+                });
+            },
+            onError: function(err) {
+                mostrarError('No fue posible iniciar PayPal. Selecciona pago contra entrega.');
+                paypalDisponible = false;
+                paypalRadio.disabled = true;
+                paypalLabel.classList.add('inactivo');
+                contraEntregaRadio.checked = true;
+                actualizarMetodoSeleccionado();
+            },
+            onCancel: function(data) {
+                mostrarError('Pago cancelado. Puedes intentar de nuevo o elegir pago contra entrega.');
+            }
+        }).render('#paypal-button-container').catch(function() {
+            paypalDisponible = false;
+            paypalRadio.disabled = true;
+            paypalLabel.classList.add('inactivo');
+            contraEntregaRadio.checked = true;
+            actualizarMetodoSeleccionado();
+        });
+    }
+
+    document.querySelectorAll('input[name="metodo_pago"]').forEach((radio) => {
+        radio.addEventListener('change', actualizarMetodoSeleccionado);
+    });
+
+    btnConfirmar.addEventListener('click', procesarContraEntrega);
+    configurarPayPal();
+    actualizarMetodoSeleccionado();
 </script>
 {% endblock %}
