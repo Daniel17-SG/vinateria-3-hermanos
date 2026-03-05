@@ -12,6 +12,7 @@ from django.db import transaction, IntegrityError, DatabaseError
 from django.db.models import Q
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils.http import url_has_allowed_host_and_scheme
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django_ratelimit.decorators import ratelimit
@@ -118,7 +119,9 @@ def registro(request):
 def login_view(request):
     """Inicio de sesión"""
     if request.user.is_authenticated:
-        return redirect('tienda:index')
+        if request.user.is_staff or request.user.is_superuser:
+            return redirect('tienda:admin_productos')
+        return redirect('tienda:catalogo')
     
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -130,13 +133,17 @@ def login_view(request):
                 login(request, user)
                 
                 # Redirección condicional: admin → panel, usuario → tienda
-                next_url = request.GET.get('next')
-                if next_url:
+                next_url = request.POST.get('next') or request.GET.get('next')
+                if next_url and url_has_allowed_host_and_scheme(
+                    next_url,
+                    allowed_hosts={request.get_host()},
+                    require_https=request.is_secure(),
+                ):
                     redirect_url = next_url
                 elif user.is_staff or user.is_superuser:
-                    redirect_url = '/admin/'
+                    redirect_url = 'tienda:admin_productos'
                 else:
-                    redirect_url = 'tienda:index'
+                    redirect_url = settings.LOGIN_REDIRECT_URL
                 
                 messages.success(request, f'¡Bienvenido de nuevo, {username}!')
                 return redirect(redirect_url)

@@ -130,12 +130,12 @@ class ProductoAdmin(admin.ModelAdmin):
     def thumbnail(self, obj):
         if obj.imagen:
             return format_html('<img src="{}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">', obj.imagen.url)
-        return format_html('<span style="color: #999;">Sin imagen</span>')
+        return format_html('<span style="color: #999;">{}</span>', 'Sin imagen')
     thumbnail.short_description = 'Imagen'
     
     def stock_badge(self, obj):
         if obj.stock == 0:
-            return format_html('<span style="background-color: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px;">AGOTADO</span>')
+            return format_html('<span style="background-color: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px;">{}</span>', 'AGOTADO')
         elif obj.stock < 10:
             return format_html('<span style="background-color: #ffc107; color: #333; padding: 3px 8px; border-radius: 4px; font-size: 12px;">BAJO ({})</span>', obj.stock)
         return obj.stock

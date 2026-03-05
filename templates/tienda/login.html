@@ -46,6 +46,11 @@
 
         <form method="post" class="login-form-premium" action="{% url 'tienda:login' %}">
             {% csrf_token %}
+            {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% elif request.POST.next %}
+            <input type="hidden" name="next" value="{{ request.POST.next }}">
+            {% endif %}
             
             <div class="input-group-premium">
                 <i class="fas fa-envelope"></i>

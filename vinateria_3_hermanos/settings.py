@@ -10,9 +10,8 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 from dotenv import load_dotenv
-# Only load .env for local development (avoid accidentally using repo .env in production)
-if os.getenv('DJANGO_DEVELOPMENT', '0') == '1':
-    load_dotenv(dotenv_path=BASE_DIR / '.env')
+# Load local .env if present (ignored by git) to improve local developer experience.
+load_dotenv(dotenv_path=BASE_DIR / '.env')
 
 # Exceptions and helpers
 from django.core.exceptions import ImproperlyConfigured
@@ -29,8 +28,8 @@ if not SECRET_KEY:
     else:
         raise ImproperlyConfigured('The SECRET_KEY environment variable is not set.')
 
-# Default to False for safety. Set DEBUG=1 only in trusted dev environments.
-DEBUG = True
+# Default to True for local development unless explicitly overridden.
+DEBUG = os.getenv('DEBUG', 'True').lower() in {'1', 'true', 'yes', 'on'}
 
 # ALLOWED_HOSTS should be provided via environment variable (comma-separated)
 # e.g. ALLOWED_HOSTS=example.com,myapp.onrender.com
@@ -110,17 +109,32 @@ WSGI_APPLICATION = 'vinateria_3_hermanos.wsgi.application'
 
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-        'sslmode': 'require',
+db_name = os.getenv('DB_NAME')
+db_user = os.getenv('DB_USER')
+db_password = os.getenv('DB_PASSWORD')
+db_host = os.getenv('DB_HOST')
+
+if all([db_name, db_user, db_password, db_host]):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': db_name,
+            'USER': db_user,
+            'PASSWORD': db_password,
+            'HOST': db_host,
+            'PORT': os.getenv('DB_PORT', '5432'),
+            'OPTIONS': {
+                'sslmode': os.getenv('DB_SSLMODE', 'require'),
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Keep DB connections alive for reuse (useful with Supabase pooler)
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', '600'))
@@ -128,11 +142,8 @@ CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', '600'))
 # Cache configuration for django-ratelimit
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'cache_table',
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000
-        }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'vinateria-local-cache',
     }
 }
 
@@ -201,7 +212,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # --- Configuración de autenticación y redirecciones ---
 LOGIN_URL = 'tienda:login'
-LOGIN_REDIRECT_URL = 'tienda:index'
+LOGIN_REDIRECT_URL = 'tienda:catalogo'
 LOGOUT_REDIRECT_URL = 'tienda:index'
 
 # --- Configuración de pasarela de pagos ---
