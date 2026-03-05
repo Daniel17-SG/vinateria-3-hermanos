@@ -39,7 +39,29 @@ class Producto(models.Model):
 
     @property
     def imagen_url(self):
-        fallback = static('tienda/imagenes/reposado.png')
+        categoria_slug = (getattr(self.categoria, 'slug', '') or '').strip().lower()
+        categoria_nombre = (getattr(self.categoria, 'nombre', '') or '').strip().lower()
+        nombre_producto = (self.nombre or '').strip().lower()
+
+        fallback_por_categoria = {
+            'tequila': 'tienda/imagenes/tequila.jpg',
+            'whisky': 'tienda/imagenes/whiski.jpg',
+            'whiskey': 'tienda/imagenes/whiski.jpg',
+            'brandy': 'tienda/imagenes/brandy.jpg',
+        }
+
+        fallback_path = fallback_por_categoria.get(categoria_slug)
+        if not fallback_path:
+            if 'tequila' in categoria_nombre or 'tequila' in nombre_producto:
+                fallback_path = 'tienda/imagenes/tequila.jpg'
+            elif 'whisky' in categoria_nombre or 'whiskey' in categoria_nombre or 'whisky' in nombre_producto or 'whiskey' in nombre_producto:
+                fallback_path = 'tienda/imagenes/whiski.jpg'
+            elif 'brandy' in categoria_nombre or 'brandy' in nombre_producto:
+                fallback_path = 'tienda/imagenes/brandy.jpg'
+            else:
+                fallback_path = 'tienda/imagenes/reposado.png'
+
+        fallback = static(fallback_path)
         if not self.imagen:
             return fallback
 
