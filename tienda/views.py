@@ -501,6 +501,16 @@ def contacto(request):
 
 # ==================== PAYPAL ====================
 
+def obtener_config_paypal():
+    """Resolver modo y base URL de PayPal de forma segura."""
+    mode = (getattr(settings, 'PAYPAL_MODE', 'sandbox') or 'sandbox').strip().lower()
+    if mode not in {'sandbox', 'live'}:
+        logger.warning(f"PAYPAL_MODE inválido '{mode}'. Se usará sandbox.")
+        mode = 'sandbox'
+
+    base_url = 'https://api-m.sandbox.paypal.com' if mode == 'sandbox' else 'https://api-m.paypal.com'
+    return mode, base_url
+
 @login_required
 @require_POST
 def crear_orden_paypal(request):
@@ -511,8 +521,7 @@ def crear_orden_paypal(request):
     
     total = sum(item.subtotal for item in items)
     
-    paypal_mode = 'sandbox' if settings.PAYPAL_MODE == 'sandbox' else 'live'
-    base_url = f'https://api-m.{paypal_mode}.paypal.com' if paypal_mode == 'sandbox' else 'https://api-m.paypal.com'
+    _, base_url = obtener_config_paypal()
     
     try:
         access_token = obtener_access_token_paypal()
@@ -581,8 +590,7 @@ def capturar_orden_paypal(request):
     
     total_db = sum(item.subtotal for item in items)
     
-    paypal_mode = 'sandbox' if settings.PAYPAL_MODE == 'sandbox' else 'live'
-    base_url = f'https://api-m.{paypal_mode}.paypal.com' if paypal_mode == 'sandbox' else 'https://api-m.paypal.com'
+    _, base_url = obtener_config_paypal()
     
     try:
         access_token = obtener_access_token_paypal()
@@ -680,8 +688,7 @@ def capturar_orden_paypal(request):
 
 def obtener_access_token_paypal():
     """Obtener token de acceso de PayPal"""
-    paypal_mode = 'sandbox' if settings.PAYPAL_MODE == 'sandbox' else 'live'
-    base_url = f'https://api-m.{paypal_mode}.paypal.com' if paypal_mode == 'sandbox' else 'https://api-m.paypal.com'
+    _, base_url = obtener_config_paypal()
     
     client_id = settings.PAYPAL_CLIENT_ID
     secret = settings.PAYPAL_SECRET
