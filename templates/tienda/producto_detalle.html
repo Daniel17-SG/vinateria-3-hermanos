@@ -15,11 +15,7 @@
 
     <section class="producto-detalle-card">
         <div class="producto-detalle-imagen">
-            {% if producto.imagen %}
-            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
-            {% else %}
-            <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ producto.nombre }}">
-            {% endif %}
+            <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}">
         </div>
         <div class="producto-detalle-info">
             <p class="categoria-badge">{{ producto.categoria.nombre }}</p>
@@ -51,11 +47,7 @@
             {% for rel in productos_relacionados %}
             <div class="producto">
                 <a href="{% url 'tienda:producto_detalle' rel.id %}">
-                    {% if rel.imagen %}
-                    <img src="{{ rel.imagen.url }}" alt="{{ rel.nombre }}">
-                    {% else %}
-                    <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ rel.nombre }}">
-                    {% endif %}
+                    <img src="{{ rel.imagen_url }}" alt="{{ rel.nombre }}">
                 </a>
                 <h3>{{ rel.nombre }}</h3>
                 <p class="precio">${{ rel.precio }}</p>

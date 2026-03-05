@@ -35,11 +35,7 @@
     <div class="grid-productos">
         {% for producto in productos %}
         <div class="producto" data-category="{{ producto.categoria.slug }}">
-            {% if producto.imagen %}
-            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
-            {% else %}
-            <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ producto.nombre }}">
-            {% endif %}
+            <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}">
             <h3>{{ producto.nombre }}</h3>
             <p class="categoria-badge">{{ producto.categoria.nombre }}</p>
             <p class="desc">{{ producto.descripcion|truncatechars:50 }}</p>

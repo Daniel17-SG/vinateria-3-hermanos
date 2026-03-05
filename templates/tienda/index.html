@@ -20,11 +20,7 @@
             {% for producto in productos_destacados %}
             <div class="producto">
                 <div class="producto-img-container">
-                    {% if producto.imagen %}
-                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
-                    {% else %}
-                    <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ producto.nombre }}">
-                    {% endif %}
+                    <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}">
                 </div>
                 <h3>{{ producto.nombre }}</h3>
                 <p class="precio">${{ producto.precio }}</p>

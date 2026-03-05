@@ -11,11 +11,7 @@
         <section class="carrito-productos">
             {% for item in items %}
             <article class="carrito-item">
-                {% if item.producto.imagen %}
-                <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}" class="item-img">
-                {% else %}
-                <img src="{% static 'tienda/imagenes/reposado.png' %}" alt="{{ item.producto.nombre }}" class="item-img">
-                {% endif %}
+                <img src="{{ item.producto.imagen_url }}" alt="{{ item.producto.nombre }}" class="item-img">
                 <div class="item-details">
                     <h3 class="item-name">{{ item.producto.nombre }}</h3>
                     <p class="item-price">${{ item.producto.precio }} MXN</p>

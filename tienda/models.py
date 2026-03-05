@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.templatetags.static import static
 
 
 class Categoria(models.Model):
@@ -35,6 +36,20 @@ class Producto(models.Model):
     
     def __str__(self):
         return self.nombre
+
+    @property
+    def imagen_url(self):
+        fallback = static('tienda/imagenes/reposado.png')
+        if not self.imagen:
+            return fallback
+
+        try:
+            if self.imagen.name and self.imagen.storage.exists(self.imagen.name):
+                return self.imagen.url
+        except Exception:
+            return fallback
+
+        return fallback
 
 
 class PerfilCliente(models.Model):
