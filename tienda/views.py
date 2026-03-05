@@ -688,14 +688,22 @@ def capturar_orden_paypal(request):
 
 def obtener_access_token_paypal():
     """Obtener token de acceso de PayPal"""
-    _, base_url = obtener_config_paypal()
+    mode, base_url = obtener_config_paypal()
     
-    client_id = settings.PAYPAL_CLIENT_ID
-    secret = settings.PAYPAL_SECRET
+    client_id = (settings.PAYPAL_CLIENT_ID or '').strip()
+    secret = (settings.PAYPAL_SECRET or '').strip()
     
     if not client_id or not secret:
-        logger.error("PayPal credentials no configuradas en settings")
+        logger.error(
+            f"PayPal credentials no configuradas (mode={mode}, "
+            f"client_id_len={len(client_id)}, secret_len={len(secret)})"
+        )
         return None
+    
+    logger.info(
+        f"Solicitando access token PayPal (mode={mode}, base_url={base_url}, "
+        f"client_id_prefix={client_id[:8]}..., client_id_len={len(client_id)}, secret_len={len(secret)})"
+    )
     
     url = f'{base_url}/v1/oauth2/token'
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -709,7 +717,18 @@ def obtener_access_token_paypal():
     
     if response.status_code == 200:
         return response.json().get('access_token')
-    logger.error(f"Error al obtener access token PayPal - Status: {response.status_code}")
+
+    paypal_debug_id = response.headers.get('paypal-debug-id', 'N/A')
+    response_preview = (response.text or '')[:600]
+    logger.error(
+        f"Error al obtener access token PayPal - Status: {response.status_code}, "
+        f"mode={mode}, paypal-debug-id={paypal_debug_id}, response={response_preview}"
+    )
+    if response.status_code == 401:
+        logger.error(
+            "PayPal 401 Unauthorized: verifica que PAYPAL_CLIENT_ID/PAYPAL_SECRET "
+            "correspondan al mismo modo (sandbox/live) y no tengan espacios/comillas extra."
+        )
     return None
 
 
