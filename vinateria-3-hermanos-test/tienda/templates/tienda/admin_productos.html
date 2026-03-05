@@ -1,0 +1,35 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Panel de productos{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 24px 0;">
+  <h1>Panel de productos</h1>
+  <p>Total de productos: {{ productos|length }}</p>
+
+  <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+    <thead>
+      <tr>
+        <th style="text-align: left; border-bottom: 1px solid #ddd; padding: 8px;">Producto</th>
+        <th style="text-align: left; border-bottom: 1px solid #ddd; padding: 8px;">Categoría</th>
+        <th style="text-align: left; border-bottom: 1px solid #ddd; padding: 8px;">Precio</th>
+        <th style="text-align: left; border-bottom: 1px solid #ddd; padding: 8px;">Stock</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for producto in productos %}
+      <tr>
+        <td style="border-bottom: 1px solid #f1f1f1; padding: 8px;">{{ producto.nombre }}</td>
+        <td style="border-bottom: 1px solid #f1f1f1; padding: 8px;">{{ producto.categoria.nombre }}</td>
+        <td style="border-bottom: 1px solid #f1f1f1; padding: 8px;">${{ producto.precio }}</td>
+        <td style="border-bottom: 1px solid #f1f1f1; padding: 8px;">{{ producto.stock }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" style="padding: 10px;">No hay productos registrados.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
