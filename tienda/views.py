@@ -599,6 +599,54 @@ def _respuesta_reglas_negocio_chatbot(mensaje):
     return respuesta
 
 
+def _respuesta_inventario_completo_chatbot(mensaje):
+    """Responde con inventario completo cuando el usuario lo solicita."""
+    triggers = [
+        'todos los productos',
+        'tus productos',
+        'todo el catalogo',
+        'todo el catálogo',
+        'inventario completo',
+        'lista de productos',
+        'que productos tienes',
+        'qué productos tienes',
+        'que manejan',
+        'qué manejan',
+    ]
+
+    if not any(t in mensaje for t in triggers):
+        return None
+
+    productos = list(
+        Producto.objects.filter(activo=True, stock__gt=0)
+        .select_related('categoria')
+        .order_by('categoria__nombre', 'nombre')
+    )
+
+    if not productos:
+        return 'Por ahora no tengo productos con stock disponible en el inventario.'
+
+    por_categoria = {}
+    for producto in productos:
+        categoria_nombre = getattr(producto.categoria, 'nombre', 'Sin categoría')
+        por_categoria.setdefault(categoria_nombre, []).append(producto)
+
+    secciones = []
+    for categoria, items in por_categoria.items():
+        bloque = [f"{categoria}:"]
+        for item in items:
+            bloque.append(f"- {item.nombre} (${item.precio}) | Stock: {item.stock}")
+        secciones.append('\n'.join(bloque))
+
+    total = len(productos)
+    cuerpo = '\n\n'.join(secciones)
+    return (
+        f"Este es nuestro inventario actual ({total} productos disponibles):\n\n"
+        f"{cuerpo}\n\n"
+        "Si quieres, te ayudo a filtrar por presupuesto, categoría o tipo de ocasión."
+    )
+
+
 def _respuesta_catalogo(mensaje):
     """Intenta recomendar productos/categorias con base en el mensaje."""
     if len(mensaje) < 2:
@@ -632,6 +680,25 @@ def _respuesta_catalogo(mensaje):
         | Q(categoria__nombre__icontains=mensaje)
     ).select_related('categoria')[:3]
 
+    if not sugeridos:
+        stopwords = {
+            'quiero', 'busco', 'para', 'con', 'sin', 'algo', 'una', 'uno', 'unos', 'unas',
+            'del', 'de', 'los', 'las', 'que', 'qué', 'tengo', 'tienen', 'productos', 'producto'
+        }
+        tokens = [
+            t for t in re.findall(r'[a-z0-9áéíóúñ]+', mensaje)
+            if len(t) >= 3 and t not in stopwords
+        ]
+        if tokens:
+            query = Q()
+            for token in tokens:
+                query |= (
+                    Q(nombre__icontains=token)
+                    | Q(descripcion__icontains=token)
+                    | Q(categoria__nombre__icontains=token)
+                )
+            sugeridos = Producto.objects.filter(activo=True, stock__gt=0).filter(query).select_related('categoria')[:3]
+
     if sugeridos:
         lista = '\n'.join([f"- {p.nombre} (${p.precio})" for p in sugeridos])
         return (
@@ -653,6 +720,10 @@ def _respuesta_intencion_general(mensaje):
 
     respuestas = [
         (
+            ['adios', 'adiós', 'hasta luego', 'nos vemos', 'bye', 'gracias'],
+            'Gracias por visitar Vinatería Los 3 Hermanos. ¡Que tengas excelente día y aquí te esperamos!',
+        ),
+        (
             ['hola', 'buenas', 'que tal', 'saludos'],
             '¡Hola! Soy el asistente de Vinatería Los 3 Hermanos. ¿Buscas una recomendación o ayuda con tu pedido?',
         ),
@@ -670,7 +741,12 @@ def _respuesta_intencion_general(mensaje):
         ),
         (
             ['pago', 'paypal', 'tarjeta', 'metodo de pago', 'método de pago'],
-            'Puedes finalizar tu compra desde la sección de pago y usar PayPal de forma segura.',
+            (
+                'Contamos con estos métodos de pago:\n'
+                '- PayPal\n'
+                '- Pago contra entrega\n\n'
+                'Si quieres, te explico cuál te conviene según tu pedido.'
+            ),
         ),
         (
             ['catalogo', 'catálogo', 'productos', 'categorias', 'categorías'],
@@ -708,15 +784,19 @@ def chatbot_responder(request):
             'error': 'Escribe un mensaje un poco más descriptivo.'
         }, status=400)
 
-    respuesta_reglas = _respuesta_reglas_negocio_chatbot(mensaje)
-    if respuesta_reglas:
-        respuesta = respuesta_reglas
+    respuesta_inventario = _respuesta_inventario_completo_chatbot(mensaje)
+    if respuesta_inventario:
+        respuesta = respuesta_inventario
     else:
-        respuesta_catalogo = _respuesta_catalogo(mensaje)
-        if respuesta_catalogo:
-            respuesta = respuesta_catalogo
+        respuesta_reglas = _respuesta_reglas_negocio_chatbot(mensaje)
+        if respuesta_reglas:
+            respuesta = respuesta_reglas
         else:
-            respuesta = _respuesta_intencion_general(mensaje)
+            respuesta_catalogo = _respuesta_catalogo(mensaje)
+            if respuesta_catalogo:
+                respuesta = respuesta_catalogo
+            else:
+                respuesta = _respuesta_intencion_general(mensaje)
 
     return JsonResponse({
         'success': True,

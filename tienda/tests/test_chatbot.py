@@ -112,3 +112,74 @@ def test_chatbot_regla_fiesta_prioriza_valor(client):
     assert data.get('success') is True
     assert 'ron fiesta valor' in texto
     assert 'ocasión fiesta' in data.get('respuesta', '')
+
+
+@pytest.mark.django_db
+def test_chatbot_muestra_inventario_completo(client):
+    tequila = Categoria.objects.create(nombre='Tequila', slug='tequila')
+    vodka = Categoria.objects.create(nombre='Vodka', slug='vodka')
+
+    Producto.objects.create(
+        nombre='Tequila Inventario',
+        slug='tequila-inventario',
+        categoria=tequila,
+        precio='500.00',
+        stock=3,
+        activo=True,
+    )
+    Producto.objects.create(
+        nombre='Vodka Inventario',
+        slug='vodka-inventario',
+        categoria=vodka,
+        precio='390.00',
+        stock=6,
+        activo=True,
+    )
+
+    url = reverse('tienda:chatbot_responder')
+    response = client.post(
+        url,
+        data='{"mensaje": "quiero ver todos los productos"}',
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    texto = data.get('respuesta', '').lower()
+    assert data.get('success') is True
+    assert 'inventario actual' in texto
+    assert 'tequila inventario' in texto
+    assert 'vodka inventario' in texto
+
+
+@pytest.mark.django_db
+def test_chatbot_informa_metodos_pago(client):
+    url = reverse('tienda:chatbot_responder')
+    response = client.post(
+        url,
+        data='{"mensaje": "que metodos de pago tienen"}',
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    texto = data.get('respuesta', '').lower()
+    assert data.get('success') is True
+    assert 'paypal' in texto
+    assert 'contra entrega' in texto
+
+
+@pytest.mark.django_db
+def test_chatbot_responde_despedida(client):
+    url = reverse('tienda:chatbot_responder')
+    response = client.post(
+        url,
+        data='{"mensaje": "gracias, adios"}',
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    texto = data.get('respuesta', '').lower()
+    assert data.get('success') is True
+    assert 'gracias por visitar' in texto or 'excelente día' in texto
