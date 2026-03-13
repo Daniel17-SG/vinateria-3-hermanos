@@ -37,6 +37,7 @@ urlpatterns = [
     
     # Contacto
     path('api/contacto/', views.contacto, name='contacto'),
+    path('api/chatbot/', views.chatbot_responder, name='chatbot_responder'),
     
     # Páginas estáticas
     path('terminos/', views.terminos_condiciones, name='terminos'),

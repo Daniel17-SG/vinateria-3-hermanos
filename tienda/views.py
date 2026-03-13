@@ -21,6 +21,7 @@ import json
 import logging
 from requests.exceptions import RequestException
 from decimal import Decimal, InvalidOperation
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -465,6 +466,262 @@ def admin_ventas(request):
 
 
 # ==================== CONTACTO ====================
+
+def _normalizar_texto_chatbot(texto):
+    """Normaliza texto libre para facilitar matching de intenciones."""
+    texto = (texto or '').lower().strip()
+    return re.sub(r'\s+', ' ', texto)
+
+
+def _detectar_categoria_chatbot(mensaje):
+    """Detecta categoría de destilado mencionada por el usuario."""
+    mapping = {
+        'tequila': ['tequila', 'reposado', 'anejo', 'añejo', 'blanco'],
+        'whisky': ['whisky', 'whiskey', 'bourbon', 'scotch'],
+        'brandy': ['brandy', 'cognac'],
+        'vodka': ['vodka'],
+        'ron': ['ron', 'rum'],
+    }
+
+    for slug, keywords in mapping.items():
+        if any(k in mensaje for k in keywords):
+            return slug
+    return None
+
+
+def _extraer_presupuesto_chatbot(mensaje):
+    """Extrae rango de presupuesto desde texto libre."""
+    numeros = [Decimal(n) for n in re.findall(r'\d{2,6}(?:\.\d{1,2})?', mensaje)]
+    if not numeros:
+        return None, None
+
+    if ('entre' in mensaje or 'rango' in mensaje) and len(numeros) >= 2:
+        low = min(numeros[0], numeros[1])
+        high = max(numeros[0], numeros[1])
+        return low, high
+
+    if any(k in mensaje for k in ['menos de', 'maximo', 'máximo', 'hasta', 'tope']):
+        return None, numeros[0]
+
+    if any(k in mensaje for k in ['mas de', 'más de', 'desde', 'minimo', 'mínimo']):
+        return numeros[0], None
+
+    if any(k in mensaje for k in ['presupuesto', 'cuesta', 'costo', 'barato', 'económico', 'economico']):
+        return None, numeros[0]
+
+    return None, None
+
+
+def _respuesta_reglas_negocio_chatbot(mensaje):
+    """Aplica reglas de negocio de vinatería para recomendar productos."""
+    categoria_slug = _detectar_categoria_chatbot(mensaje)
+    presupuesto_min, presupuesto_max = _extraer_presupuesto_chatbot(mensaje)
+
+    ocasion = None
+    if any(k in mensaje for k in ['regalo', 'premium', 'especial', 'aniversario']):
+        ocasion = 'regalo'
+    elif any(k in mensaje for k in ['fiesta', 'reunion', 'reunión', 'evento', 'boda']):
+        ocasion = 'fiesta'
+    elif any(k in mensaje for k in ['coctel', 'cocteles', 'cóctel', 'mezclar', 'mixologia', 'mixología']):
+        ocasion = 'coctel'
+
+    sabor = None
+    if any(k in mensaje for k in ['suave', 'ligero', 'fino']):
+        sabor = 'suave'
+    elif any(k in mensaje for k in ['fuerte', 'intenso', 'robusto']):
+        sabor = 'intenso'
+    elif any(k in mensaje for k in ['dulce', 'caramelo', 'vainilla']):
+        sabor = 'dulce'
+
+    activar_reglas = any([categoria_slug, presupuesto_min, presupuesto_max, ocasion, sabor])
+    if not activar_reglas:
+        return None
+
+    productos = Producto.objects.filter(activo=True, stock__gt=0).select_related('categoria')
+
+    if categoria_slug:
+        productos = productos.filter(categoria__slug__iexact=categoria_slug)
+
+    if ocasion == 'coctel' and not categoria_slug:
+        productos = productos.filter(categoria__slug__in=['vodka', 'ron', 'tequila'])
+
+    if presupuesto_min is not None:
+        productos = productos.filter(precio__gte=presupuesto_min)
+    if presupuesto_max is not None:
+        productos = productos.filter(precio__lte=presupuesto_max)
+
+    if ocasion == 'regalo':
+        productos = productos.order_by('-precio', '-fecha_creacion')
+    elif ocasion == 'fiesta':
+        productos = productos.order_by('precio', '-stock')
+    elif ocasion == 'coctel':
+        productos = productos.order_by('precio', '-fecha_creacion')
+    else:
+        productos = productos.order_by('-fecha_creacion')
+
+    sugeridos = list(productos[:3])
+    if not sugeridos:
+        return (
+            'Con esas reglas no encontré productos disponibles en este momento. '
+            'Si quieres, ajusta tu presupuesto o categoría y te propongo otras opciones.'
+        )
+
+    etiquetas = []
+    if categoria_slug:
+        etiquetas.append(f"tipo {categoria_slug}")
+    if presupuesto_max is not None and presupuesto_min is None:
+        etiquetas.append(f"presupuesto hasta ${presupuesto_max}")
+    if presupuesto_min is not None and presupuesto_max is not None:
+        etiquetas.append(f"rango ${presupuesto_min}-${presupuesto_max}")
+    if ocasion:
+        etiquetas.append(f"ocasión {ocasion}")
+    if sabor:
+        etiquetas.append(f"perfil {sabor}")
+
+    encabezado = 'Te recomiendo estas opciones según tus reglas de negocio'
+    if etiquetas:
+        encabezado += f" ({', '.join(etiquetas)}):"
+    else:
+        encabezado += ':'
+
+    lista = '\n'.join([f"- {p.nombre} (${p.precio})" for p in sugeridos])
+
+    tips = {
+        'suave': 'Tip de sommelier: para un perfil suave, sírvelo ligeramente frío en copa corta.',
+        'intenso': 'Tip de sommelier: para perfil intenso, úsalo en las rocas para abrir aromas.',
+        'dulce': 'Tip de maridaje: combina perfiles dulces con chocolate amargo o postres secos.',
+    }
+    tip = tips.get(sabor)
+
+    respuesta = f"{encabezado}\n{lista}\n\nSolo vendemos a mayores de edad (+18)."
+    if tip:
+        respuesta = f"{respuesta}\n{tip}"
+    return respuesta
+
+
+def _respuesta_catalogo(mensaje):
+    """Intenta recomendar productos/categorias con base en el mensaje."""
+    if len(mensaje) < 2:
+        return None
+
+    categorias = list(
+        Categoria.objects.filter(activo=True).values_list('slug', 'nombre')
+    )
+
+    for slug, nombre in categorias:
+        if slug and slug.lower() in mensaje:
+            productos = Producto.objects.filter(
+                activo=True,
+                stock__gt=0,
+                categoria__slug=slug,
+            ).order_by('-fecha_creacion')[:3]
+
+            if productos:
+                lista = '\n'.join([f"- {p.nombre} (${p.precio})" for p in productos])
+                return (
+                    f"Claro, te recomiendo estos productos de {nombre}:\n{lista}\n\n"
+                    "Puedes verlos en el catálogo y agregarlos al carrito desde ahí."
+                )
+
+    sugeridos = Producto.objects.filter(
+        activo=True,
+        stock__gt=0,
+    ).filter(
+        Q(nombre__icontains=mensaje)
+        | Q(descripcion__icontains=mensaje)
+        | Q(categoria__nombre__icontains=mensaje)
+    ).select_related('categoria')[:3]
+
+    if sugeridos:
+        lista = '\n'.join([f"- {p.nombre} (${p.precio})" for p in sugeridos])
+        return (
+            "Encontré estas opciones para ti:\n"
+            f"{lista}\n\n"
+            "Si quieres, también te puedo sugerir por categoría: tequila, whisky, brandy, vodka o ron."
+        )
+
+    return None
+
+
+def _respuesta_intencion_general(mensaje):
+    """Respuestas rápidas para preguntas frecuentes de tienda."""
+    categorias = ', '.join(
+        Categoria.objects.filter(activo=True)
+        .values_list('nombre', flat=True)
+        .order_by('nombre')
+    ) or 'Tequila, Whisky, Brandy, Vodka y Ron'
+
+    respuestas = [
+        (
+            ['hola', 'buenas', 'que tal', 'saludos'],
+            '¡Hola! Soy el asistente de Vinatería Los 3 Hermanos. ¿Buscas una recomendación o ayuda con tu pedido?',
+        ),
+        (
+            ['horario', 'abren', 'cierran', 'abierto'],
+            'Nuestro horario es: Lun-Sáb 9:00-21:00 y Dom 10:00-20:00.',
+        ),
+        (
+            ['ubicacion', 'ubicación', 'direccion', 'dirección', 'donde', 'dónde'],
+            'Estamos en el Centro Histórico, Ciudad de México. También puedes ver el mapa en el pie de página.',
+        ),
+        (
+            ['envio', 'envío', 'entrega', 'domicilio'],
+            'Tenemos envío gratis en compras mayores a $1,500. El tiempo de entrega depende de tu zona.',
+        ),
+        (
+            ['pago', 'paypal', 'tarjeta', 'metodo de pago', 'método de pago'],
+            'Puedes finalizar tu compra desde la sección de pago y usar PayPal de forma segura.',
+        ),
+        (
+            ['catalogo', 'catálogo', 'productos', 'categorias', 'categorías'],
+            f'En catálogo manejamos: {categorias}. Dime una categoría y te recomiendo opciones.',
+        ),
+        (
+            ['contacto', 'telefono', 'teléfono', 'correo', 'email'],
+            'Puedes escribirnos desde el formulario de contacto en el footer y te responderemos pronto.',
+        ),
+    ]
+
+    for keywords, respuesta in respuestas:
+        if any(k in mensaje for k in keywords):
+            return respuesta
+
+    return (
+        'Puedo ayudarte con recomendaciones, categorías, horario, ubicación, envíos y pagos. '
+        'Cuéntame qué necesitas y te apoyo.'
+    )
+
+
+@require_POST
+@ratelimit(key='ip', rate='20/m', method='POST', block=True)
+def chatbot_responder(request):
+    """Endpoint JSON para responder mensajes del chatbot web."""
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({'success': False, 'error': 'Solicitud inválida'}, status=400)
+
+    mensaje = _normalizar_texto_chatbot(data.get('mensaje'))
+    if len(mensaje) < 2:
+        return JsonResponse({
+            'success': False,
+            'error': 'Escribe un mensaje un poco más descriptivo.'
+        }, status=400)
+
+    respuesta_reglas = _respuesta_reglas_negocio_chatbot(mensaje)
+    if respuesta_reglas:
+        respuesta = respuesta_reglas
+    else:
+        respuesta_catalogo = _respuesta_catalogo(mensaje)
+        if respuesta_catalogo:
+            respuesta = respuesta_catalogo
+        else:
+            respuesta = _respuesta_intencion_general(mensaje)
+
+    return JsonResponse({
+        'success': True,
+        'respuesta': respuesta,
+    })
 
 @require_POST
 def contacto(request):
