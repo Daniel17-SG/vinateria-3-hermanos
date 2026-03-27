@@ -109,12 +109,17 @@ WSGI_APPLICATION = 'vinateria_3_hermanos.wsgi.application'
 
 
 # Database
+# Detects if running in Render, otherwise falls back to local/other envs.
+# Uses PostgreSQL if DB_* vars are set, otherwise SQLite.
 db_name = os.getenv('DB_NAME')
 db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')
 db_host = os.getenv('DB_HOST')
 
-if all([db_name, db_user, db_password, db_host]):
+# Check for PostgreSQL environment variables
+use_postgres = all([db_name, db_user, db_password, db_host])
+
+if use_postgres:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -129,10 +134,27 @@ if all([db_name, db_user, db_password, db_host]):
         }
     }
 else:
+    # Fallback to SQLite with a persistent path for Render
+    # Get the path from env var, or default based on Render/local env.
+    sqlite_path_str = os.getenv('SQLITE_PATH')
+    
+    if sqlite_path_str:
+        # Use the path from environment variable if provided
+        sqlite_path = Path(sqlite_path_str)
+    elif os.getenv('RENDER', '0') == '1':
+        # In Render, use the persistent disk path
+        # Ensure you have a disk mounted at /var/data
+        data_dir = Path('/var/data')
+        data_dir.mkdir(exist_ok=True) # Create directory if it doesn't exist
+        sqlite_path = data_dir / 'db.sqlite3'
+    else:
+        # For local development, use the project's base directory
+        sqlite_path = BASE_DIR / 'db.sqlite3'
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': sqlite_path,
         }
     }
 
