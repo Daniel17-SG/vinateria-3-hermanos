@@ -1,7 +1,8 @@
 import pytest
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
-from tienda.models import Categoria, Producto
+from tienda.models import Categoria, Producto, Venta
 
 
 @pytest.mark.django_db
@@ -183,3 +184,74 @@ def test_chatbot_responde_despedida(client):
     texto = data.get('respuesta', '').lower()
     assert data.get('success') is True
     assert 'gracias por visitar' in texto or 'excelente día' in texto
+
+
+@pytest.mark.django_db
+def test_chatbot_seguimiento_requiere_login(client):
+    url = reverse('tienda:chatbot_responder')
+    response = client.post(
+        url,
+        data='{"mensaje": "seguimiento de pedido"}',
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get('success') is True
+    assert 'inicies sesión' in data.get('respuesta', '')
+
+
+@pytest.mark.django_db
+def test_chatbot_seguimiento_ultimo_pedido_autenticado(client):
+    user = get_user_model().objects.create_user(username='chatuser', password='pass1234')
+    client.force_login(user)
+
+    Venta.objects.create(
+        usuario=user,
+        total='799.00',
+        estatus='enviado',
+        direccion_envio='Calle Test 123',
+        telefono_contacto='5512345678',
+        notas='',
+    )
+
+    url = reverse('tienda:chatbot_responder')
+    response = client.post(
+        url,
+        data='{"mensaje": "quiero seguimiento de pedido"}',
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    texto = data.get('respuesta', '').lower()
+    assert data.get('success') is True
+    assert 'estado: enviado' in texto
+    assert 'pedido #' in texto
+
+
+@pytest.mark.django_db
+def test_chatbot_recomendacion_general_licor(client):
+    tequila = Categoria.objects.create(nombre='Tequila', slug='tequila')
+    Producto.objects.create(
+        nombre='Licor Recomendado 1',
+        slug='licor-recomendado-1',
+        categoria=tequila,
+        precio='420.00',
+        stock=10,
+        activo=True,
+    )
+
+    url = reverse('tienda:chatbot_responder')
+    response = client.post(
+        url,
+        data='{"mensaje": "me recomiendas algun licor"}',
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    texto = data.get('respuesta', '').lower()
+    assert data.get('success') is True
+    assert 'te recomiendo estos licores' in texto
+    assert 'licor recomendado 1' in texto

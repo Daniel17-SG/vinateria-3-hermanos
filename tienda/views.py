@@ -647,6 +647,97 @@ def _respuesta_inventario_completo_chatbot(mensaje):
     )
 
 
+def _respuesta_seguimiento_pedido_chatbot(request, mensaje):
+    """Permite seguimiento de pedido por ID o último pedido del usuario autenticado."""
+    triggers = [
+        'seguimiento',
+        'estado de pedido',
+        'estado del pedido',
+        'donde va mi pedido',
+        'dónde va mi pedido',
+        'rastrear pedido',
+        'tracking',
+        'pedido',
+    ]
+    if not any(t in mensaje for t in triggers):
+        return None
+
+    if not request.user.is_authenticated:
+        return (
+            'Para consultar el estado de tu pedido necesito que inicies sesión. '
+            'Después puedes preguntarme: "seguimiento de pedido" o "pedido #123".'
+        )
+
+    coincidencia = re.search(r'(?:pedido\s*#?\s*|venta\s*#?\s*)(\d+)', mensaje)
+    if coincidencia:
+        venta_id = int(coincidencia.group(1))
+        venta = Venta.objects.filter(id=venta_id, usuario=request.user).first()
+        if not venta:
+            return (
+                f'No encontré el pedido #{venta_id} en tu cuenta. '
+                'Verifica el número o pídeme el estado de tu último pedido.'
+            )
+    else:
+        venta = Venta.objects.filter(usuario=request.user).order_by('-fecha_venta').first()
+        if not venta:
+            return (
+                'Aún no tienes pedidos registrados en tu cuenta. '
+                'Cuando completes una compra, yo te ayudo a darle seguimiento.'
+            )
+
+    estatus_legible = {
+        'pendiente': 'Pendiente de pago',
+        'pagado': 'Pagado',
+        'enviado': 'Enviado',
+        'entregado': 'Entregado',
+        'cancelado': 'Cancelado',
+    }.get(venta.estatus, venta.estatus)
+
+    fecha = venta.fecha_venta.strftime('%d/%m/%Y %H:%M')
+    return (
+        f'Pedido #{venta.id}\n'
+        f'- Estado: {estatus_legible}\n'
+        f'- Fecha: {fecha}\n'
+        f'- Total: ${venta.total}\n\n'
+        'Si quieres, también te puedo mostrar recomendaciones mientras llega tu pedido.'
+    )
+
+
+def _respuesta_recomendacion_general_chatbot(mensaje):
+    """Recomendaciones generales cuando el usuario pide sugerencias de licor."""
+    triggers = [
+        'recomienda',
+        'recomendacion',
+        'recomendación',
+        'sugiere',
+        'sugerencia',
+        'que licor me recomiendas',
+        'qué licor me recomiendas',
+        'quiero un licor',
+        'algun licor',
+        'algún licor',
+    ]
+    if not any(t in mensaje for t in triggers):
+        return None
+
+    productos = list(
+        Producto.objects.filter(activo=True, stock__gt=0)
+        .select_related('categoria')
+        .order_by('-stock', '-fecha_creacion')[:3]
+    )
+    if not productos:
+        return 'Ahora mismo no tengo productos disponibles para recomendarte.'
+
+    sugerencias = '\n'.join(
+        [f"- {p.nombre} ({p.categoria.nombre}) - ${p.precio}" for p in productos]
+    )
+    return (
+        'Claro, te recomiendo estos licores con buena disponibilidad:\n'
+        f'{sugerencias}\n\n'
+        'Si me dices tu presupuesto o la ocasión, te doy una recomendación más precisa.'
+    )
+
+
 def _respuesta_catalogo(mensaje):
     """Intenta recomendar productos/categorias con base en el mensaje."""
     if len(mensaje) < 2:
@@ -788,15 +879,23 @@ def chatbot_responder(request):
     if respuesta_inventario:
         respuesta = respuesta_inventario
     else:
-        respuesta_reglas = _respuesta_reglas_negocio_chatbot(mensaje)
-        if respuesta_reglas:
-            respuesta = respuesta_reglas
+        respuesta_seguimiento = _respuesta_seguimiento_pedido_chatbot(request, mensaje)
+        if respuesta_seguimiento:
+            respuesta = respuesta_seguimiento
         else:
-            respuesta_catalogo = _respuesta_catalogo(mensaje)
-            if respuesta_catalogo:
-                respuesta = respuesta_catalogo
+            respuesta_reglas = _respuesta_reglas_negocio_chatbot(mensaje)
+            if respuesta_reglas:
+                respuesta = respuesta_reglas
             else:
-                respuesta = _respuesta_intencion_general(mensaje)
+                respuesta_reco_general = _respuesta_recomendacion_general_chatbot(mensaje)
+                if respuesta_reco_general:
+                    respuesta = respuesta_reco_general
+                else:
+                    respuesta_catalogo = _respuesta_catalogo(mensaje)
+                    if respuesta_catalogo:
+                        respuesta = respuesta_catalogo
+                    else:
+                        respuesta = _respuesta_intencion_general(mensaje)
 
     return JsonResponse({
         'success': True,
