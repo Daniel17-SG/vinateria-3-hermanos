@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from tienda import admin_custom
 
+
 urlpatterns = [
     # Alias legacy /admin/ to panel de productos interno
     path('admin/', RedirectView.as_view(pattern_name='tienda:admin_productos', permanent=False)),

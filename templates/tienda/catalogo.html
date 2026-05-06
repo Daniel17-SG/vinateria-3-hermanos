@@ -8,12 +8,14 @@
     <h1>Catálogo de Licores Premium</h1>
     <p>Explora nuestras categorías: Tequila, Whisky, Brandy, Vodka y Ron.</p>
     
-    <form method="get" action="{% url 'tienda:catalogo' %}" class="busqueda-filtros">
+    <form method="get" action="{% url 'tienda:catalogo' %}" class="busqueda-filtros" role="search">
         <div class="busqueda-input">
-            <input type="text" name="q" placeholder="Buscar licores..." value="{{ busqueda_actual|default:'' }}">
+            <label for="search-q" class="visually-hidden">Buscar licores</label>
+            <input id="search-q" type="text" name="q" placeholder="Buscar licores..." value="{{ busqueda_actual|default:'' }}">
         </div>
         <div class="filtro-categoria">
-            <select name="categoria">
+            <label for="category-select" class="visually-hidden">Filtrar por categoría</label>
+            <select name="categoria" id="category-select">
                 <option value="">Todas las categorías</option>
                 {% for cat in categorias %}
                 <option value="{{ cat.slug }}" {% if categoria_actual == cat.slug %}selected{% endif %}>
@@ -41,7 +43,7 @@
             <p class="desc">{{ producto.descripcion|truncatechars:50 }}</p>
             <p class="precio">${{ producto.precio }}</p>
             {% if producto.stock > 0 %}
-            <button class="agregar-carrito" data-producto-id="{{ producto.id }}">Agregar al Carrito</button>
+            <button class="agregar-carrito" data-producto-id="{{ producto.id }}" aria-label="Agregar {{ producto.nombre }} al carrito">Agregar al Carrito</button>
             {% else %}
             <button class="agregar-carrito" disabled>Agotado</button>
             {% endif %}

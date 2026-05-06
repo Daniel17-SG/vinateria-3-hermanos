@@ -15,7 +15,7 @@ from django.template.loader import render_to_string
 from django.utils.http import url_has_allowed_host_and_scheme
 from xhtml2pdf import pisa
 from django.http import HttpResponse
-from django_ratelimit.decorators import ratelimit
+# from django_ratelimit.decorators import ratelimit
 import requests
 import json
 import logging
@@ -26,7 +26,30 @@ import re
 logger = logging.getLogger(__name__)
 
 from .models import Categoria, Producto, CarritoItem, Venta, DetalleVenta, PerfilCliente, MensajeContacto
+from .forms import UserRegisterForm
 
+# ==================== PAYPAL HELPERS ====================
+
+def obtener_access_token_paypal():
+    """Obtiene un token de acceso de la API de PayPal."""
+    auth = (settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET)
+    data = {'grant_type': 'client_credentials'}
+    headers = {'Accept': 'application/json', 'Accept-Language': 'en_US'}
+    
+    # Construye la URL dinámicamente basada en el modo
+    url = f"https://api-m.{'sandbox.' if settings.PAYPAL_MODE == 'sandbox' else ''}paypal.com/v1/oauth2/token"
+    
+    try:
+        response = requests.post(url, auth=auth, data=data, headers=headers, timeout=10)
+        response.raise_for_status()  # Lanza un error para respuestas 4xx/5xx
+        return response.json()['access_token']
+    except RequestException as e:
+        # Loguea el error de forma detallada
+        error_message = f"Error al obtener token de PayPal: {e}"
+        if e.response:
+            error_message += f" | Respuesta: {e.response.text}"
+        logger.error(error_message)
+        return None
 
 # ==================== VISTAS PÚBLICAS ====================
 
@@ -38,7 +61,6 @@ def index(request):
     context = {
         'productos_destacados': productos_destacados,
         'categorias': categorias,
-        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY, 
     }
     return render(request, 'tienda/index.html', context)
 
@@ -91,7 +113,7 @@ def producto_detalle(request, producto_id):
 
 # ==================== AUTENTICACIÓN ====================
 
-@ratelimit(key='ip', rate='10/m', method='POST', block=True)
+# @ratelimit(key='ip', rate='10/m', method='POST', block=True)
 def registro(request):
     """Registro de nuevos usuarios"""
     if request.method == 'POST':
@@ -99,24 +121,17 @@ def registro(request):
         if form.is_valid():
             user = form.save()
             PerfilCliente.objects.create(user=user)
-            raw_password = form.cleaned_data.get('password1')
-            # Autenticar para que Django asigne backend al usuario antes de hacer login
-            user = authenticate(request, username=user.username, password=raw_password)
-            if user is not None:
-                login(request, user)
-            else:
-                messages.warning(request, 'Tu cuenta fue creada, inicia sesión con tus credenciales.')
-            messages.success(request, '¡Bienvenido! Tu cuenta ha sido creada.')
-            return redirect('tienda:index')
+            login(request, user)
+            messages.success(request, f'¡Bienvenido, {user.username}! Tu cuenta ha sido creada.')
+            return redirect('tienda:catalogo')
         else:
-            messages.error(request, 'Por favor corrige los errores below.')
+            messages.error(request, 'Por favor corrige los errores a continuación.')
     else:
         form = UserCreationForm()
-    
     return render(request, 'tienda/registro.html', {'form': form})
 
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=True)
+# @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def login_view(request):
     """Inicio de sesión"""
     if request.user.is_authenticated:
@@ -860,7 +875,7 @@ def _respuesta_intencion_general(mensaje):
 
 
 @require_POST
-@ratelimit(key='ip', rate='20/m', method='POST', block=True)
+# @ratelimit(key='ip', rate='20/m', method='POST', block=True)
 def chatbot_responder(request):
     """Endpoint JSON para responder mensajes del chatbot web."""
     try:
@@ -950,244 +965,147 @@ def obtener_config_paypal():
 @login_required
 @require_POST
 def crear_orden_paypal(request):
-    """Crear orden en PayPal - recalcula total desde DB"""
-    items = CarritoItem.objects.select_related('producto').filter(usuario=request.user)
-    if not items:
-        return JsonResponse({'success': False, 'error': 'Carrito vacío'}, status=400)
-    
-    total = sum(item.subtotal for item in items)
-    
-    _, base_url = obtener_config_paypal()
-    
-    try:
-        access_token = obtener_access_token_paypal()
-        if not access_token:
-            return JsonResponse({
-                'success': False,
-                'error': 'No fue posible autenticar con PayPal. Verifica credenciales sandbox/live en Render.'
-            }, status=502)
-    except RequestException as e:
-        logger.error(f"Error de conexión PayPal en crear_orden: {e}")
-        return JsonResponse({'success': False, 'error': 'Error de conexión con el servidor de pagos'}, status=503)
-    
-    url = f'{base_url}/v2/checkout/orders'
+    """Crea una orden en PayPal y devuelve el ID de la orden."""
+    items_carrito = CarritoItem.objects.filter(usuario=request.user)
+    if not items_carrito.exists():
+        return JsonResponse({'error': 'El carrito está vacío.'}, status=400)
+
+    # Asegura que el total sea un string con dos decimales
+    total = sum(item.subtotal for item in items_carrito)
+    total_str = f"{total:.2f}"
+
+    access_token = obtener_access_token_paypal()
+    if not access_token:
+        return JsonResponse({'error': 'No se pudo autenticar con PayPal en este momento. Intente más tarde.'}, status=503)
+
+    url = f"https://api-m.{'sandbox.' if settings.PAYPAL_MODE == 'sandbox' else ''}paypal.com/v2/checkout/orders"
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {access_token}'
+        'Authorization': f'Bearer {access_token}',
     }
-    
     data = {
-        'intent': 'CAPTURE',
-        'purchase_units': [{
-            'amount': {
-                'currency_code': 'MXN',
-                'value': str(total)
-            },
-            'description': 'Compra en Vinatería Los 3 Hermanos'
+        "intent": "CAPTURE",
+        "purchase_units": [{
+            "amount": {
+                "currency_code": "MXN", # Asegúrate que sea el código correcto
+                "value": total_str
+            }
         }],
-        'application_context': {
-            'return_url': request.build_absolute_uri('/pago/exito/'),
-            'cancel_url': request.build_absolute_uri('/pago/')
+        "application_context": {
+            "brand_name": "Vinatería 3 Hermanos",
+            "landing_page": "LOGIN",
+            "shipping_preference": "NO_SHIPPING",
+            "user_action": "PAY_NOW",
+            "return_url": request.build_absolute_uri(reverse('tienda:pago_exitoso')),
+            "cancel_url": request.build_absolute_uri(reverse('tienda:pago')),
         }
     }
-    
+
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=15)
-    except RequestException as e:
-        logger.error(f"Timeout o error de red PayPal en crear_orden: {e}")
-        return JsonResponse({'success': False, 'error': 'Tiempo de espera agotado. Intenta de nuevo.'}, status=503)
-    
-    if response.status_code == 201:
+        response = requests.post(url, headers=headers, data=json.dumps(data), timeout=15)
+        response.raise_for_status()
         order_data = response.json()
-        return JsonResponse({
-            'success': True,
-            'order_id': order_data['id']
-        })
-    else:
-        logger.error(f"Error PayPal crear orden - Status: {response.status_code}, Response: {response.text}")
-        return JsonResponse({'success': False, 'error': 'Error al crear orden PayPal'}, status=500)
+        return JsonResponse({'orderID': order_data['id']})
+    except RequestException as e:
+        error_message = f"Error al crear orden en PayPal: {e}"
+        if e.response:
+            error_message += f" | Respuesta: {e.response.text}"
+        logger.error(error_message)
+        return JsonResponse({'error': 'Hubo un problema al comunicarse con PayPal.'}, status=502)
 
 
 @login_required
+@require_POST
 def capturar_orden_paypal(request):
-    """Capturar pago de PayPal - solo crear venta si COMPLETED"""
-    if request.method != 'POST':
-        return JsonResponse({'success': False, 'error': 'Método no permitido'}, status=405)
-    
+    """Captura el pago de una orden de PayPal y crea la venta en la base de datos."""
     try:
         data = json.loads(request.body)
-        order_id = data.get('order_id')
-    except:
-        return JsonResponse({'success': False, 'error': 'Datos inválidos'}, status=400)
-    
-    if not order_id:
-        return JsonResponse({'success': False, 'error': 'Order ID requerido'}, status=400)
-    
-    items = CarritoItem.objects.select_related('producto').filter(usuario=request.user)
-    if not items:
-        return JsonResponse({'success': False, 'error': 'Carrito vacío'}, status=400)
-    
-    total_db = sum(item.subtotal for item in items)
-    
-    _, base_url = obtener_config_paypal()
-    
-    try:
-        access_token = obtener_access_token_paypal()
-        if not access_token:
-            return JsonResponse({'success': False, 'error': 'Error de conexión con PayPal'}, status=500)
-    except RequestException as e:
-        logger.error(f"Error de conexión PayPal en capturar: {e}")
-        return JsonResponse({'success': False, 'error': 'Error de conexión con el servidor de pagos'}, status=503)
-    
-    url = f'{base_url}/v2/checkout/orders/{order_id}/capture'
+        order_id = data.get('orderID')
+        if not order_id:
+            return JsonResponse({'error': 'Falta el ID de la orden.'}, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Datos inválidos.'}, status=400)
+
+    access_token = obtener_access_token_paypal()
+    if not access_token:
+        return JsonResponse({'error': 'No se pudo autenticar con PayPal.'}, status=503)
+
+    url = f"https://api-m.{'sandbox.' if settings.PAYPAL_MODE == 'sandbox' else ''}paypal.com/v2/checkout/orders/{order_id}/capture"
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {access_token}'
+        'Authorization': f'Bearer {access_token}',
     }
-    
+
     try:
-        response = requests.post(url, headers=headers, timeout=15)
-    except RequestException as e:
-        logger.error(f"Timeout o error de red PayPal en capturar: {e}")
-        return JsonResponse({'success': False, 'error': 'Tiempo de espera agotado. Intenta de nuevo.'}, status=503)
-    
-    if response.status_code == 201:
-        capture_data = response.json()
-        status = capture_data.get('status')
+        response = requests.post(url, headers=headers, timeout=20)
+        response.raise_for_status()
         
-        if status != 'COMPLETED':
-            return JsonResponse({'success': False, 'error': 'Pago no completado'}, status=400)
-        
-        paypal_amount = None
-        try:
-            purchase_unit = capture_data.get('purchase_units', [{}])[0]
-            payments = purchase_unit.get('payments', {})
-            captures = payments.get('captures', [{}])[0]
-            paypal_amount = Decimal(captures.get('amount', {}).get('value', '0'))
-        except (KeyError, IndexError, InvalidOperation) as e:
-            logger.error(f"Error al parsear monto de PayPal: {e}")
-            return JsonResponse({'success': False, 'error': 'Error al verificar el pago'}, status=500)
-        
-        tolerance = Decimal('0.01')
-        if abs(paypal_amount - total_db) > tolerance:
-            logger.critical(
-                f"ALERTA DE SEGURIDAD: Manipulación de precio detectada. "
-                f"Usuario: {request.user.username}, OrderID: {order_id}, "
-                f"Total DB: {total_db}, Total PayPal: {paypal_amount}"
-            )
-            return JsonResponse({
-                'success': False, 
-                'error': 'Error de validación del pago. Contacta al administrador.'
-            }, status=400)
-        
+        # Usar transaction.atomic para asegurar la integridad de los datos
         with transaction.atomic():
-            producto_ids = [item.producto_id for item in items]
-            productos_bloqueados = Producto.objects.select_for_update().filter(
-                id__in=producto_ids
-            )
-            productos_dict = {p.id: p for p in productos_bloqueados}
+            items = CarritoItem.objects.select_related('producto').filter(usuario=request.user)
+            if not items.exists():
+                # Esto es una salvaguarda, el pago no debería proceder si el carrito está vacío
+                return JsonResponse({'error': 'El carrito está vacío.'}, status=400)
+
+            total = sum(item.subtotal for item in items)
             
-            for item in items:
-                producto = productos_dict.get(item.producto_id)
-                if not producto or item.cantidad > producto.stock:
-                    return JsonResponse({
-                        'success': False, 
-                        'error': f'Stock insuficiente para {item.producto.nombre}'
-                    })
-            
+            # Crear la venta
             venta = Venta.objects.create(
                 usuario=request.user,
-                total=total_db,
+                total=total,
                 estatus='pagado',
-                direccion_envio=data.get('direccion', ''),
-                telefono_contacto=data.get('telefono', ''),
-                notas=data.get('notas', '')
+                id_transaccion_paypal=order_id
             )
             
+            # Crear detalles de la venta y actualizar stock
             for item in items:
-                producto = productos_dict[item.producto_id]
+                producto = item.producto
                 DetalleVenta.objects.create(
                     venta=venta,
                     producto=producto,
                     cantidad=item.cantidad,
                     precio_unitario=producto.precio
                 )
-                producto.stock -= item.cantidad
-                producto.save()
+                # Actualizar stock de forma segura
+                Producto.objects.filter(id=producto.id).update(stock=models.F('stock') - item.cantidad)
             
+            # Vaciar el carrito
             items.delete()
-        
-        return JsonResponse({
-            'success': True,
-            'venta_id': venta.id
-        })
-    else:
-        return JsonResponse({'success': False, 'error': 'Error al capturar pago'}, status=500)
+            
+            # Guardar el ID de la venta en la sesión para la página de éxito
+            request.session['venta_id'] = venta.id
+            
+        return JsonResponse({'success': True})
 
-
-def obtener_access_token_paypal():
-    """Obtener token de acceso de PayPal"""
-    mode, base_url = obtener_config_paypal()
-    
-    client_id = (settings.PAYPAL_CLIENT_ID or '').strip()
-    secret = (settings.PAYPAL_SECRET or '').strip()
-    
-    if not client_id or not secret:
-        logger.error(
-            f"PayPal credentials no configuradas (mode={mode}, "
-            f"client_id_len={len(client_id)}, secret_len={len(secret)})"
-        )
-        return None
-    
-    logger.info(
-        f"Solicitando access token PayPal (mode={mode}, base_url={base_url}, "
-        f"client_id_prefix={client_id[:8]}..., client_id_len={len(client_id)}, secret_len={len(secret)})"
-    )
-    
-    url = f'{base_url}/v1/oauth2/token'
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    data = {'grant_type': 'client_credentials'}
-    
-    try:
-        response = requests.post(url, headers=headers, data=data, auth=(client_id, secret), timeout=15)
     except RequestException as e:
-        logger.error(f"Timeout o error de red al obtener access token PayPal: {e}")
-        return None
-    
-    if response.status_code == 200:
-        return response.json().get('access_token')
+        error_message = f"Error al capturar orden en PayPal: {e}"
+        if e.response:
+            error_message += f" | Respuesta: {e.response.text}"
+        logger.error(error_message)
+        return JsonResponse({'error': 'Error al finalizar el pago con PayPal.'}, status=502)
+    except (DatabaseError, IntegrityError) as e:
+        logger.error(f"Error de base de datos al procesar venta: {e}")
+        # Aquí se podría intentar revertir el pago en PayPal si fuera necesario
+        return JsonResponse({'error': 'Error crítico al guardar el pedido.'}, status=500)
 
-    paypal_debug_id = response.headers.get('paypal-debug-id', 'N/A')
-    response_preview = (response.text or '')[:600]
-    logger.error(
-        f"Error al obtener access token PayPal - Status: {response.status_code}, "
-        f"mode={mode}, paypal-debug-id={paypal_debug_id}, response={response_preview}"
-    )
-    if response.status_code == 401:
-        logger.error(
-            "PayPal 401 Unauthorized: verifica que PAYPAL_CLIENT_ID/PAYPAL_SECRET "
-            "correspondan al mismo modo (sandbox/live) y no tengan espacios/comillas extra."
-        )
-    return None
-
-
-# ==================== VISTA DE ÉXITO ====================
 
 @login_required
-def pago_exitoso(request, venta_id):
-    """Vista de éxito del pago - validación de propiedad"""
-    venta = get_object_or_404(Venta, id=venta_id)
+def pago_exitoso(request):
+    """Página de confirmación de pago exitoso."""
+    venta_id = request.session.get('venta_id')
+    if not venta_id:
+        messages.warning(request, "No se encontró información de la última compra.")
+        return redirect('tienda:catalogo')
     
-    if venta.usuario != request.user:
-        return HttpResponseForbidden()
-    
-    detalles = DetalleVenta.objects.filter(venta=venta)
-    
-    context = {
-        'venta': venta,
-        'detalles': detalles,
-    }
-    return render(request, 'tienda/exito.html', context)
+    try:
+        venta = get_object_or_404(Venta, id=venta_id, usuario=request.user)
+        # Limpiar el ID de la sesión para que no se reutilice
+        del request.session['venta_id']
+    except Http404:
+         messages.error(request, "La compra que buscas no fue encontrada.")
+         return redirect('tienda:catalogo')
+
+    return render(request, 'tienda/pago_exitoso.html', {'venta': venta})
 
 
 # ==================== PÁGINAS ESTÁTICAS ====================
@@ -1250,3 +1168,84 @@ def descargar_recibo_pdf(request, venta_id):
         return HttpResponse('Error al generar PDF', status=500)
     
     return response
+
+
+# ==================== EMAIL VALIDATION & ACTIVATION ====================
+
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import send_mail
+from .forms import UserRegisterForm
+
+def registro_email(request):
+    """
+    Vista para el registro de usuarios con envío de correo de activación.
+    """
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            # Crea el usuario pero no lo guarda en la base de datos todavía.
+            user = form.save(commit=False)
+            user.is_active = False  # El usuario no estará activo hasta que verifique su correo.
+            user.save()
+
+            # Generación de token y enlace de activación
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            activation_link = request.build_absolute_uri(
+                f'/activar/{uid}/{token}/'
+            )
+
+            # Lógica de envío de correo
+            subject = 'Activa tu cuenta en Vinatería Los 3 Hermanos'
+            message = f"""
+Hola {user.username},
+
+Gracias por registrarte en Vinatería Los 3 Hermanos.
+Por favor, haz clic en el siguiente enlace para activar tu cuenta:
+{activation_link}
+
+Si no te registraste, por favor ignora este correo.
+
+Saludos,
+El equipo de Vinatería Los 3 Hermanos
+            """
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
+            )
+            
+            return redirect('tienda:activacion_enviada')
+    else:
+        form = UserRegisterForm()
+    
+    return render(request, 'tienda/registro_email.html', {'form': form})
+
+def activar_cuenta(request, uidb64, token):
+    """
+    Activa la cuenta del usuario si el token y el uid son válidos.
+    """
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        messages.success(request, '¡Tu cuenta ha sido activada exitosamente! Ya puedes comprar.')
+        return redirect('tienda:catalogo')
+    else:
+        return render(request, 'tienda/activacion_invalida.html')
+
+def activacion_enviada(request):
+    """
+    Página que informa al usuario que se ha enviado un correo de activación.
+    """
+    return render(request, 'tienda/activacion_enviada.html')

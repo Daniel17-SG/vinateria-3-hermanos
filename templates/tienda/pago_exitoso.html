@@ -1,0 +1,42 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block title %}Pago Exitoso - Los 3 Hermanos{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 40px; margin-bottom: 40px;">
+    <div class="card text-center">
+        <div class="card-header">
+            <h3>¡Gracias por tu compra!</h3>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Tu pedido #{{ venta.id }} ha sido procesado con éxito.</h5>
+            <p class="card-text">Hemos enviado un correo de confirmación a tu dirección de email. Puedes ver los detalles de tu pedido a continuación.</p>
+            
+            <div class="resumen-pedido" style="margin-top: 30px; text-align: left;">
+                <h4>Resumen del Pedido</h4>
+                <ul class="list-group">
+                    {% for detalle in detalles %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ detalle.producto.nombre }} (x{{ detalle.cantidad }})
+                        <span>${{ detalle.subtotal|floatformat:2 }}</span>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center active">
+                        <strong>Total</strong>
+                        <strong>${{ venta.total|floatformat:2 }}</strong>
+                    </li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <a href="{% url 'tienda:catalogo' %}" class="btn btn-primary">Seguir comprando</a>
+                <a href="{% url 'tienda:mi_perfil' %}" class="btn btn-secondary">Ver mis pedidos</a>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            Fecha del pedido: {{ venta.fecha_venta|date:"d/m/Y H:i" }}
+        </div>
+    </div>
+</div>
+{% endblock %}

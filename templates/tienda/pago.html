@@ -249,7 +249,7 @@
 
             const data = await response.json();
             if (data.success) {
-                window.location.href = '{% url "tienda:pago_exitoso" 0 %}'.replace('0', data.venta_id);
+                window.location.href = "{% url 'tienda:pago_exitoso' %}";
                 return;
             }
 
@@ -319,7 +319,7 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = '{% url "tienda:pago_exitoso" 0 %}'.replace('0', data.venta_id);
+                        window.location.href = "{% url 'tienda:pago_exitoso' %}";
                         return;
                     }
                     throw new Error(data.error || 'Error al procesar pago');
@@ -355,5 +355,132 @@
     btnConfirmar.addEventListener('click', procesarContraEntrega);
     configurarPayPal();
     actualizarMetodoSeleccionado();
+</script>
+
+<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency=MXN&intent=capture"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paypalContainer = document.getElementById('paypal-button-container');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const errorMessage = document.getElementById('error-message');
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        loadingSpinner.style.display = 'none';
+        paypalContainer.style.display = 'none';
+    }
+
+    if (!'{{ paypal_client_id }}') {
+        showError('El ID de cliente de PayPal no está configurado. No se puede procesar el pago.');
+        return;
+    }
+
+    let buttons;
+    try {
+        buttons = paypal.Buttons({
+            // Estilos del botón
+            style: {
+                layout: 'vertical',
+                color:  'gold',
+                shape:  'rect',
+                label:  'paypal'
+            },
+
+            // Crear la orden en el backend
+            createOrder: function(data, actions) {
+                loadingSpinner.style.display = 'block';
+                errorMessage.style.display = 'none';
+                
+                return fetch("{% url 'tienda:crear_orden_paypal' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                }).then(function(res) {
+                    if (!res.ok) {
+                        // Si el servidor responde con un error, lo capturamos aquí
+                        return res.json().then(err => { 
+                            throw new Error(err.error || `Error del servidor: ${res.status}`); 
+                        });
+                    }
+                    return res.json();
+                }).then(function(orderData) {
+                    loadingSpinner.style.display = 'none';
+                    if (orderData.orderID) {
+                        return orderData.orderID;
+                    } else {
+                        throw new Error('No se recibió un ID de orden de PayPal.');
+                    }
+                }).catch(function(err) {
+                    showError('Error al iniciar el pago: ' + err.message);
+                    // Devuelve un ID de orden inválido para que PayPal maneje el error
+                    return 'INVALID_ORDER_ID';
+                });
+            },
+
+            // Capturar el pago después de la aprobación del usuario
+            onApprove: function(data, actions) {
+                loadingSpinner.style.display = 'block';
+                
+                return fetch("{% url 'tienda:capturar_orden_paypal' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        orderID: data.orderID
+                    })
+                }).then(function(res) {
+                    if (!res.ok) {
+                        return res.json().then(err => { 
+                            throw new Error(err.error || 'Error al procesar el pago.'); 
+                        });
+                    }
+                    return res.json();
+                }).then(function(orderData) {
+                    if (orderData.success) {
+                        // Redirigir a la página de éxito
+                        window.location.href = "{% url 'tienda:pago_exitoso' %}";
+                    } else {
+                        throw new Error(orderData.error || 'El pago no pudo ser completado en el servidor.');
+                    }
+                }).catch(function(err) {
+                    showError('Error al finalizar el pago: ' + err.message);
+                });
+            },
+
+            // Manejar errores del SDK de PayPal
+            onError: function(err) {
+                showError('Ocurrió un error inesperado con PayPal. Por favor, recarga la página e intenta de nuevo.');
+                console.error('PayPal SDK Error:', err);
+            },
+
+            // Manejar cancelación del usuario
+            onCancel: function(data) {
+                console.log('Pago cancelado por el usuario.', data);
+                // Opcional: mostrar un mensaje de que el pago fue cancelado
+            }
+        });
+
+    } catch (err) {
+        showError('Error al inicializar los botones de PayPal. Verifica la configuración.');
+        console.error('Error en paypal.Buttons:', err);
+        return;
+    }
+
+    // Renderizar los botones si son válidos
+    if (buttons.isEligible()) {
+        buttons.render('#paypal-button-container').catch(err => {
+            showError('No se pudo mostrar el botón de PayPal. Intenta recargar la página.');
+            console.error('Error al renderizar botones de PayPal:', err);
+        });
+    } else {
+        showError('PayPal no está disponible en este momento. Por favor, intenta más tarde.');
+    }
+});
 </script>
 {% endblock %}

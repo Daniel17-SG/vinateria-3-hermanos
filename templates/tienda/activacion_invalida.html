@@ -1,0 +1,25 @@
+{% extends "tienda/base.html" %}
+
+{% block title %}Activación Inválida{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h2 class="card-title text-danger">Enlace de Activación Inválido</h2>
+                    <p class="card-text">
+                        El enlace de activación que has utilizado es inválido, ha expirado o ya ha sido utilizado.
+                    </p>
+                    <p>
+                        Si tienes problemas para activar tu cuenta, por favor, intenta registrarte de nuevo o contacta con nuestro soporte.
+                    </p>
+                    <a href="{% url 'tienda:registro_email' %}" class="btn btn-warning">Intentar registrarme de nuevo</a>
+                    <a href="{% url 'tienda:index' %}" class="btn btn-secondary">Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -26,7 +26,7 @@
                 <p class="precio">${{ producto.precio }}</p>
                 
                 {% if producto.stock > 0 %}
-                <button class="agregar-carrito" data-producto-id="{{ producto.id }}">Agregar al Carrito</button>
+                <button class="agregar-carrito" data-producto-id="{{ producto.id }}" aria-label="Agregar {{ producto.nombre }} al carrito">Agregar al Carrito</button>
                 {% else %}
                 <button class="agregar-carrito" disabled style="background-color: #ccc; cursor: not-allowed;">Agotado</button>
                 {% endif %}

@@ -33,35 +33,36 @@
         </div>
         
         <div class="search-container">
-            <form action="{% url 'tienda:catalogo' %}" method="get">
-                <input type="search" name="q" placeholder="Buscar en Catálogo...">
-                <button type="submit"><i class="fas fa-search"></i></button>
+            <form action="{% url 'tienda:catalogo' %}" method="get" role="search">
+                <label for="search-input" class="visually-hidden">Buscar en Catálogo</label>
+                <input id="search-input" type="search" name="q" placeholder="Buscar en Catálogo...">
+                <button type="submit" aria-label="Buscar"><i class="fas fa-search" aria-hidden="true"></i></button>
             </form>
         </div>
         
         <div class="header-icons header-icons-row">
             {% if user.is_authenticated and user.is_staff %}
             <a href="{% url 'vinateria_admin:index' %}" class="icon-link icon-link-admin">
-                <i class="fas fa-cog"></i> Panel de Admin
+                <i class="fas fa-cog" aria-hidden="true"></i><span class="visually-hidden">Panel de Administrador</span> Panel de Admin
             </a>
             {% endif %}
             {% if user.is_authenticated %}
             <div class="profile-dropdown" id="profile-dropdown">
-                <a href="#" class="icon-link" id="profile-trigger">
-                    <i class="fas fa-user-circle"></i> {{ user.username }}
+                <a href="#" class="icon-link" id="profile-trigger" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user-circle" aria-hidden="true"></i> {{ user.username }}
                 </a>
-                <div class="profile-dropdown-menu" id="profile-menu">
-                    <a href="{% url 'tienda:mi_perfil' %}"><i class="fas fa-user"></i> Mi Perfil</a>
-                    <a href="{% url 'tienda:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                <div class="profile-dropdown-menu" id="profile-menu" aria-labelledby="profile-trigger">
+                    <a href="{% url 'tienda:mi_perfil' %}"><i class="fas fa-user" aria-hidden="true"></i> Mi Perfil</a>
+                    <a href="{% url 'tienda:logout' %}"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar Sesión</a>
                 </div>
             </div>
             {% else %}
             <a href="{% url 'tienda:login' %}" class="icon-link">
-                <i class="fas fa-sign-in-alt"></i> Login
+                <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login
             </a>
             {% endif %}
             <a href="{% url 'tienda:ver_carrito' %}" class="icon-link">
-                <i class="fas fa-shopping-cart"></i> Carrito
+                <i class="fas fa-shopping-cart" aria-hidden="true"></i> Carrito
                 {% if user.is_authenticated %}
                 <span id="carrito-count">({{ request.user.carrito.count }})</span>
                 {% endif %}

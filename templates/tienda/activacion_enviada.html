@@ -1,0 +1,25 @@
+{% extends "tienda/base.html" %}
+
+{% block title %}Activación Enviada{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">¡Casi listo! Revisa tu correo</h2>
+                    <p class="card-text">
+                        Hemos enviado un enlace de activación a tu dirección de correo electrónico.
+                        Por favor, haz clic en ese enlace para completar tu registro y activar tu cuenta.
+                    </p>
+                    <p class="text-muted">
+                        Si no ves el correo en tu bandeja de entrada, por favor revisa tu carpeta de spam.
+                    </p>
+                    <a href="{% url 'tienda:index' %}" class="btn btn-primary">Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
