@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifica tu cuenta</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f4f4; font-family: Arial, Helvetica, sans-serif;">
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+    style="background-color:#f4f4f4; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+
+        <!-- Tarjeta -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+          style="max-width:600px; background-color:#ffffff; border-radius:10px;
+                 box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow:hidden;">
+
+          <!-- Encabezado vino -->
+          <tr>
+            <td align="center" style="background-color:#8B0000; padding: 32px 40px 26px 40px;">
+              <p style="margin:0; font-size:13px; color:#f0c8a0; letter-spacing:2px;
+                         text-transform:uppercase; font-weight:bold;">
+                VINATERÍA
+              </p>
+              <h1 style="margin:8px 0 0 0; font-size:28px; color:#ffffff; font-weight:bold; letter-spacing:1px;">
+                Los 3 Hermanos
+              </h1>
+              <p style="margin:10px 0 0 0; font-size:13px; color:#f0c8a0;">
+                &#x1F377; Calidad &nbsp;|&nbsp; Tradición &nbsp;|&nbsp; Sabor
+              </p>
+            </td>
+          </tr>
+
+          <!-- Cuerpo -->
+          <tr>
+            <td style="padding: 36px 44px 32px 44px;">
+
+              <h2 style="margin:0 0 14px 0; font-size:20px; color:#3a1a1a; font-weight:bold;">
+                ¡Bienvenido/a, {{ user.username }}!
+              </h2>
+
+              <p style="margin:0 0 14px 0; font-size:15px; color:#555555; line-height:1.7;">
+                Gracias por registrarte en <strong style="color:#8B0000;">Vinatería Los 3 Hermanos</strong>.
+                Tu cuenta está casi lista.
+              </p>
+
+              <p style="margin:0 0 28px 0; font-size:15px; color:#555555; line-height:1.7;">
+                Haz clic en el botón para activar tu cuenta:
+              </p>
+
+              <!-- Botón -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0"
+                style="margin: 0 auto 32px auto;">
+                <tr>
+                  <td align="center" style="border-radius:8px; background-color:#8B0000;">
+                    <a href="{{ url_activacion }}"
+                       target="_blank"
+                       style="display:inline-block; padding:16px 36px;
+                              font-size:16px; font-weight:bold; color:#ffffff;
+                              text-decoration:none; border-radius:8px;
+                              background-color:#8B0000; letter-spacing:0.5px;">
+                      Verificar Cuenta
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- URL alternativa -->
+              <p style="margin:0 0 6px 0; font-size:13px; color:#888888; line-height:1.6;">
+                Si el botón no funciona, copia este enlace en tu navegador:
+              </p>
+              <p style="margin:0 0 28px 0; font-size:12px; word-break:break-all; line-height:1.6;">
+                <a href="{{ url_activacion }}" style="color:#8B0000; text-decoration:underline;">
+                  {{ url_activacion }}
+                </a>
+              </p>
+
+              <hr style="border:none; border-top:1px solid #e8e0d5; margin: 0 0 24px 0;" />
+
+              <!-- Aviso de seguridad -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  <td style="background-color:#fff8f8; border-left:4px solid #f0c8a0;
+                              border-radius:4px; padding:13px 16px;">
+                    <p style="margin:0; font-size:13px; color:#7a3a3a; line-height:1.6;">
+                      <strong>&#x1F512; Aviso de seguridad:</strong>
+                      Si tú no solicitaste este registro, puedes ignorar este correo.
+                      Tu información no está en riesgo.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Pie -->
+          <tr>
+            <td align="center"
+              style="background-color:#f9f5f0; padding: 22px 40px;
+                     border-top:1px solid #ede7dd;">
+              <p style="margin:0 0 4px 0; font-size:13px; color:#999999;">
+                © 2026 Vinatería Los 3 Hermanos &nbsp;·&nbsp; Todos los derechos reservados
+              </p>
+              <p style="margin:0; font-size:12px; color:#bbbbbb;">
+                Este correo fue enviado automáticamente. Por favor no respondas a este mensaje.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

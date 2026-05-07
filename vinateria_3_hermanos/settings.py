@@ -71,9 +71,14 @@ INSTALLED_APPS = [
     # 'django_ratelimit',
     'tienda',
 
+    'django.contrib.sites',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    # Google reCAPTCHA v2
+    'django_recaptcha',
 ]
 
 MIDDLEWARE = [
@@ -204,11 +209,24 @@ PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
 PAYPAL_MODE = config('PAYPAL_MODE', 'sandbox')
 
-# Configuración de Email
-EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
-EMAIL_HOST = config('EMAIL_HOST', default='localhost')
-EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+# Configuración de Email (SMTP Gmail via .env)
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='webmaster@localhost')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Vinatería 3 Hermanos <noreply@vinateria3hermanos.com>')
+
+# ── Google reCAPTCHA v2 ──────────────────────────────────────────────────────────────────────
+RECAPTCHA_PUBLIC_KEY  = config('RECAPTCHA_PUBLIC_KEY',  default='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI')
+RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY', default='6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe')
+SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
+# ──────────────────────────────────────────────────────────────────────────────
+
+# ── Django Allauth — Correos ─────────────────────────────────────────────────────────────
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+PASSWORD_RESET_TIMEOUT = 604800  # 7 días
+# ──────────────────────────────────────────────────────────────────────────────

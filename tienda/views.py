@@ -1172,10 +1172,12 @@ def descargar_recibo_pdf(request, venta_id):
 
 # ==================== EMAIL VALIDATION & ACTIVATION ====================
 
+from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.utils.html import strip_tags
 from .forms import UserRegisterForm
 
 def registro_email(request):
@@ -1199,26 +1201,21 @@ def registro_email(request):
 
             # Lógica de envío de correo
             subject = 'Activa tu cuenta en Vinatería Los 3 Hermanos'
-            message = f"""
-Hola {user.username},
+            html_content = render_to_string('emails/verificacion_email.html', {
+                'user': user,
+                'url_activacion': activation_link,
+            })
+            text_content = strip_tags(html_content)
 
-Gracias por registrarte en Vinatería Los 3 Hermanos.
-Por favor, haz clic en el siguiente enlace para activar tu cuenta:
-{activation_link}
-
-Si no te registraste, por favor ignora este correo.
-
-Saludos,
-El equipo de Vinatería Los 3 Hermanos
-            """
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [user.email],
-                fail_silently=False,
+            email_msg = EmailMultiAlternatives(
+                subject=subject,
+                body=text_content,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[user.email],
             )
-            
+            email_msg.attach_alternative(html_content, 'text/html')
+            email_msg.send(fail_silently=False)
+
             return redirect('tienda:activacion_enviada')
     else:
         form = UserRegisterForm()
@@ -1238,7 +1235,14 @@ def activar_cuenta(request, uidb64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
+
+        # Marcar perfil como email verificado
+        perfil = getattr(user, 'perfil', None)
+        if perfil:
+            perfil.email_verificado = True
+            perfil.save()
+
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         messages.success(request, '¡Tu cuenta ha sido activada exitosamente! Ya puedes comprar.')
         return redirect('tienda:catalogo')
     else:
