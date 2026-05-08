@@ -117,21 +117,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'vinateria_3_hermanos.wsgi.application'
 
+import dj_database_url
 
 # Database
-# Connect to Supabase PostgreSQL
+# Usa DATABASE_URL (Render/Supabase) con fallback a variables individuales
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', '5432'),
-        'OPTIONS': {
-            'sslmode': config('DB_SSLMODE', 'require'),
-        },
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default=None) or
+        f"postgresql://{config('DB_USER')}:{config('DB_PASSWORD')}@{config('DB_HOST')}:{config('DB_PORT', '5432')}/{config('DB_NAME')}",
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
 # Keep DB connections alive for reuse (useful with Supabase pooler)
