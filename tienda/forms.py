@@ -12,18 +12,18 @@ class UserRegisterForm(forms.ModelForm):
     email = forms.EmailField(
         required=True,
         validators=[EmailValidator(message="Por favor, introduce una dirección de correo electrónico válida.")],
-        widget=forms.EmailInput(attrs={'class': 'form-control', 'id': 'email-input', 'placeholder': 'correo@ejemplo.com'})
+        widget=forms.EmailInput(attrs={'style': 'flex-grow:1; border:none; background:transparent; padding:10px 0; font-size:1em; color:#212529; outline:none;', 'placeholder': 'correo@ejemplo.com'})
     )
-    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repetir Contraseña', widget=forms.PasswordInput)
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput(attrs={'style': 'flex-grow:1; border:none; background:transparent; padding:10px 0; font-size:1em; color:#212529; outline:none;', 'placeholder': 'Contraseña'}))
+    password2 = forms.CharField(label='Repetir Contraseña', widget=forms.PasswordInput(attrs={'style': 'flex-grow:1; border:none; background:transparent; padding:10px 0; font-size:1em; color:#212529; outline:none;', 'placeholder': 'Confirmar contraseña'}))
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'email')
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre(s)'}),
+            'username': forms.TextInput(attrs={'style': 'flex-grow:1; border:none; background:transparent; padding:10px 0; font-size:1em; color:#212529; outline:none;', 'placeholder': 'Nombre de usuario'}),
+            'first_name': forms.TextInput(attrs={'style': 'flex-grow:1; border:none; background:transparent; padding:10px 0; font-size:1em; color:#212529; outline:none;', 'placeholder': 'Nombre(s)'}),
         }
         help_texts = {
             'username': None,
