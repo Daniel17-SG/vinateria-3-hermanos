@@ -66,8 +66,17 @@
                             {% endif %}
                         </div>
 
+                        <div class="mb-3">
+                            {{ form.captcha }}
+                            {% if form.captcha.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.captcha.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
                         <div class="d-grid">
-                            <button id="submit-button" type="submit" class="btn btn-primary" disabled>Registrarme</button>
+                            <button id="submit-button" type="submit" class="btn btn-primary">Registrarme</button>
                         </div>
                     </form>
                 </div>

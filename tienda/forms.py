@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
 class UserRegisterForm(forms.ModelForm):
     """
@@ -14,6 +16,7 @@ class UserRegisterForm(forms.ModelForm):
     )
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repetir Contraseña', widget=forms.PasswordInput)
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     class Meta:
         model = User
