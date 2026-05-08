@@ -1214,7 +1214,14 @@ def registro_email(request):
                 to=[user.email],
             )
             email_msg.attach_alternative(html_content, 'text/html')
-            email_msg.send(fail_silently=False)
+            try:
+                email_msg.send(fail_silently=False)
+            except Exception:
+                # Si el correo falla (ej. variables SMTP no configuradas), eliminamos
+                # el usuario creado y mostramos un error en lugar de tirar 500.
+                user.delete()
+                messages.error(request, 'No se pudo enviar el correo de activación. Por favor intenta más tarde.')
+                return render(request, 'tienda/registro_email.html', {'form': form})
 
             return redirect('tienda:activacion_enviada')
     else:
