@@ -65,3 +65,10 @@ class UserRegisterForm(forms.ModelForm):
         if cd.get('password') != cd.get('password2'):
             raise forms.ValidationError('Las contraseñas no coinciden.')
         return cd.get('password2')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+        return user

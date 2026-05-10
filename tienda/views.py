@@ -1190,7 +1190,12 @@ def registro_email(request):
             # Crea el usuario pero no lo guarda en la base de datos todavía.
             user = form.save(commit=False)
             user.is_active = False  # El usuario no estará activo hasta que verifique su correo.
-            user.save()
+            try:
+                user.save()
+            except Exception as e:
+                logger.error(f"Error al guardar usuario durante registro: {e}")
+                messages.error(request, 'No se pudo crear la cuenta. Por favor intenta más tarde.')
+                return render(request, 'tienda/registro_email.html', {'form': form})
 
             # Generación de token y enlace de activación
             token = default_token_generator.make_token(user)
@@ -1216,10 +1221,14 @@ def registro_email(request):
             email_msg.attach_alternative(html_content, 'text/html')
             try:
                 email_msg.send(fail_silently=False)
-            except Exception:
+            except Exception as e:
                 # Si el correo falla (ej. variables SMTP no configuradas), eliminamos
                 # el usuario creado y mostramos un error en lugar de tirar 500.
-                user.delete()
+                logger.error(f"Error al enviar correo de activación: {e}")
+                try:
+                    user.delete()
+                except Exception:
+                    pass
                 messages.error(request, 'No se pudo enviar el correo de activación. Por favor intenta más tarde.')
                 return render(request, 'tienda/registro_email.html', {'form': form})
 
