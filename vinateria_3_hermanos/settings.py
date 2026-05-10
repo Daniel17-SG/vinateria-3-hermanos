@@ -212,6 +212,7 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_TIMEOUT = 10  # segundos — evita que la conexión SMTP se cuelgue
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Vinatería 3 Hermanos <noreply@vinateria3hermanos.com>')
 
 # ── Google reCAPTCHA v2 ──────────────────────────────────────────────────────────────────────
