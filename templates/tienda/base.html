@@ -19,6 +19,7 @@
         });
     })();
     </script>
+    <link rel="stylesheet" href="{% static 'tienda/css/accesibilidad.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -254,6 +255,7 @@
     </script>
     {% else %}
     {% endif %}
+    <script src="{% static 'tienda/js/accesibilidad.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

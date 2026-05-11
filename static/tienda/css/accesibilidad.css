@@ -1,0 +1,176 @@
+/* --- Botón flotante de accesibilidad --- */
+#accessibility-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 10000;
+  background: #222;
+  color: #fff;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#accessibility-btn:focus {
+  outline: 3px solid #00bcd4;
+}
+
+/* --- Panel lateral --- */
+#accessibility-panel {
+  position: fixed;
+  top: 0;
+  right: -340px;
+  width: 320px;
+  height: 100vh;
+  background: #fff;
+  color: #222;
+  z-index: 10001;
+  box-shadow: -2px 0 16px rgba(0,0,0,0.15);
+  transition: right 0.3s cubic-bezier(.4,0,.2,1);
+  overflow-y: auto;
+  font-family: inherit;
+}
+#accessibility-panel.open {
+  right: 0;
+}
+#accessibility-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+#accessibility-panel header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 700;
+}
+#accessibility-panel .close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+}
+#accessibility-panel .section {
+  padding: 1.2rem 1.5rem 0.5rem 1.5rem;
+}
+#accessibility-panel .section label,
+#accessibility-panel .section button {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: 0.7em;
+  font-size: 1rem;
+  cursor: pointer;
+}
+#accessibility-panel .section .subtitle {
+  font-size: 0.95em;
+  color: #666;
+  margin-bottom: 0.5em;
+}
+#accessibility-panel .section .slider {
+  width: 100%;
+}
+#accessibility-panel .section .icon {
+  font-size: 1.3em;
+}
+
+/* --- Modos visuales --- */
+body.access-dark {
+  background: #181818 !important;
+  color: #f1f1f1 !important;
+}
+body.access-dark a { color: #90caf9 !important; }
+body.access-dark header, body.access-dark nav, body.access-dark footer {
+  background: #222 !important;
+  color: #f1f1f1 !important;
+}
+body.access-grayscale {
+  filter: grayscale(1) !important;
+}
+body.access-contrast {
+  filter: contrast(2) !important;
+}
+body.access-invert {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+body.access-easyread {
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif !important;
+  letter-spacing: 0.04em !important;
+  background: #f9f9f9 !important;
+  color: #222 !important;
+}
+body.access-dyslexia {
+  font-family: 'OpenDyslexic', Arial, sans-serif !important;
+}
+body.access-highlight-links a {
+  outline: 2px solid #1976d2 !important;
+  background: #e3f2fd !important;
+}
+body.access-highlight-titles h1, body.access-highlight-titles h2, body.access-highlight-titles h3 {
+  background: #fffde7 !important;
+  color: #d84315 !important;
+  outline: 2px solid #ffd600 !important;
+}
+body.access-large-text {
+  font-size: 1.25em !important;
+}
+body.access-xlarge-text {
+  font-size: 1.5em !important;
+}
+body.access-small-text {
+  font-size: 0.9em !important;
+}
+body.access-letterspace {
+  letter-spacing: 0.12em !important;
+}
+body.access-linespace {
+  line-height: 2 !important;
+}
+
+/* --- Foco visible --- */
+:focus {
+  outline: 3px solid #1976d2 !important;
+  outline-offset: 2px !important;
+}
+
+/* --- Botones grandes --- */
+.access-big-buttons button, .access-big-buttons input[type="submit"], .access-big-buttons .btn {
+  min-height: 48px !important;
+  font-size: 1.15em !important;
+  padding: 0.7em 1.5em !important;
+}
+
+/* --- Área táctil grande --- */
+.access-big-touch *:active {
+  outline: 3px solid #00bcd4 !important;
+}
+
+/* --- Animaciones pausadas --- */
+body.access-pause-animations *, body.access-pause-animations *:before, body.access-pause-animations *:after {
+  animation-play-state: paused !important;
+  transition: none !important;
+}
+
+/* --- Panel responsive --- */
+@media (max-width: 600px) {
+  #accessibility-panel {
+    width: 100vw;
+    right: -100vw;
+    min-width: 0;
+  }
+  #accessibility-panel.open {
+    right: 0;
+  }
+  #accessibility-btn {
+    right: 16px;
+    bottom: 16px;
+  }
+}
