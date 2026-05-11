@@ -1252,11 +1252,7 @@ def activar_cuenta(request, uidb64, token):
         user.is_active = True
         user.save()
 
-        # Marcar perfil como email verificado
-        perfil = getattr(user, 'perfil', None)
-        if perfil:
-            perfil.email_verificado = True
-            perfil.save()
+        # (email_verificado field removed in migration 0004)
 
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         messages.success(request, '¡Tu cuenta ha sido activada exitosamente! Ya puedes comprar.')
