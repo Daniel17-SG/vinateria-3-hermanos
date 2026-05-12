@@ -226,7 +226,7 @@ SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
 
 # ── Django Allauth — Correos ─────────────────────────────────────────────────────────────
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 PASSWORD_RESET_TIMEOUT = 604800  # 7 días
 # ──────────────────────────────────────────────────────────────────────────────
