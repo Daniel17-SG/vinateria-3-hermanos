@@ -77,12 +77,12 @@
   #accessibility-btn {
     left: 16px;
     bottom: 120px;
-    /* Sube un poco más para dejar espacio al read-btn */
   }
   #accessibility-read-btn {
     left: auto;
     right: 16px;
-    bottom: 32px;
+    bottom: 110px; /* Sube el botón para no encimarse con el chatbot/ayuda */
+    z-index: 10002;
   }
 }
 #accessibility-panel .section label,

@@ -804,7 +804,7 @@ footer {
         }
         @media (max-width: 600px) {
             .catalogo-main .grid-productos {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
                 gap: 18px 0;
                 padding: 0 6px;
             }
