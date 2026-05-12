@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from supabase import create_client, Client
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -114,21 +116,46 @@ def producto_detalle(request, producto_id):
 # ==================== AUTENTICACIÓN ====================
 
 # @ratelimit(key='ip', rate='10/m', method='POST', block=True)
+
+# Configuración de Supabase
+SUPABASE_URL = "https://TU_URL.supabase.co"  # Cambia por tu URL
+SUPABASE_KEY = "TU_SERVICE_ROLE_KEY"        # Cambia por tu Service Role Key
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 def registro(request):
-    """Registro de nuevos usuarios"""
+    """Registro de nuevos usuarios usando Supabase y Django"""
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            PerfilCliente.objects.create(user=user)
-            login(request, user)
-            messages.success(request, f'¡Bienvenido, {user.username}! Tu cuenta ha sido creada.')
-            return redirect('tienda:catalogo')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+
+        # Validaciones básicas
+        if password != password2:
+            messages.error(request, 'Las contraseñas no coinciden.')
+            return render(request, 'tienda/registro.html')
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'El nombre de usuario ya está en uso.')
+            return render(request, 'tienda/registro.html')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'El correo electrónico ya está en uso.')
+            return render(request, 'tienda/registro.html')
+
+        # Registro en Supabase
+        result = supabase.auth.sign_up({
+            "email": email,
+            "password": password
+        })
+        if result.get("error"):
+            messages.error(request, "Error en Supabase: " + result["error"]["message"])
+            return render(request, 'tienda/registro.html')
         else:
-            messages.error(request, 'Por favor corrige los errores a continuación.')
-    else:
-        form = UserCreationForm()
-    return render(request, 'tienda/registro.html', {'form': form})
+            # Solo creamos el usuario local si el registro en Supabase fue exitoso
+            user = User.objects.create_user(username=username, email=email, password=password)
+            PerfilCliente.objects.create(user=user)
+            messages.success(request, "Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.")
+            return redirect('tienda:login')
+    return render(request, 'tienda/registro.html')
 
 
 # @ratelimit(key='ip', rate='5/m', method='POST', block=True)
