@@ -68,6 +68,23 @@
 #accessibility-panel .section {
   padding: 1.2rem 1.5rem 0.5rem 1.5rem;
 }
+#accessibility-btn:focus {
+  outline: 3px solid #00bcd4;
+}
+
+/* --- Ajuste de botones flotantes en móvil --- */
+@media (max-width: 600px) {
+  #accessibility-btn {
+    left: 16px;
+    bottom: 120px;
+    /* Sube un poco más para dejar espacio al read-btn */
+  }
+  #accessibility-read-btn {
+    left: auto;
+    right: 16px;
+    bottom: 32px;
+  }
+}
 #accessibility-panel .section label,
 #accessibility-panel .section button {
   display: flex;

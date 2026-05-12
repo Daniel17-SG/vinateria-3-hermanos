@@ -783,11 +783,37 @@ footer {
 .carrito-item:last-child {
     border-bottom: none;
     margin-bottom: 20px; 
-}
+/* Grid de productos responsivo */
+        .catalogo-main .grid-productos {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 32px 24px;
+                margin-bottom: 40px;
+        }
 
-.carrito-item img {
-    width: 80px;
-    height: 80px;
+        @media (max-width: 1200px) {
+            .catalogo-main .grid-productos {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 900px) {
+            .catalogo-main .grid-productos {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px 16px;
+            }
+        }
+        @media (max-width: 600px) {
+            .catalogo-main .grid-productos {
+                grid-template-columns: 1fr;
+                gap: 18px 0;
+                padding: 0 6px;
+            }
+            .catalogo-main .producto {
+                max-width: 98vw;
+                min-width: 0;
+                box-sizing: border-box;
+            }
+        }
     object-fit: contain;
     margin-right: 20px;
 }
