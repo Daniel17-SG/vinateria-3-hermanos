@@ -1204,34 +1204,10 @@ def registro_email(request):
                 f'/activar/{uid}/{token}/'
             )
 
-            # Lógica de envío de correo
-            subject = 'Activa tu cuenta en Vinatería Los 3 Hermanos'
-            html_content = render_to_string('emails/verificacion_email.html', {
-                'user': user,
-                'url_activacion': activation_link,
-            })
-            text_content = strip_tags(html_content)
-
-            email_msg = EmailMultiAlternatives(
-                subject=subject,
-                body=text_content,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[user.email],
-            )
-            email_msg.attach_alternative(html_content, 'text/html')
-            try:
-                email_msg.send(fail_silently=False)
-            except Exception as e:
-                # Si el correo falla (ej. variables SMTP no configuradas), eliminamos
-                # el usuario creado y mostramos un error en lugar de tirar 500.
-                logger.error(f"Error al enviar correo de activación: {e}")
-                try:
-                    user.delete()
-                except Exception:
-                    pass
-                messages.error(request, 'No se pudo enviar el correo de activación. Por favor intenta más tarde.')
-                return render(request, 'tienda/registro_email.html', {'form': form})
-
+            # --- DESHABILITADO ENVÍO DE CORREO REAL ---
+            # Simula éxito y muestra el link de activación en consola/log
+            logger.info(f"[DEBUG] Link de activación para {user.email}: {activation_link}")
+            messages.success(request, '¡Cuenta creada! (Modo demo: revisa consola/log para el link de activación)')
             return redirect('tienda:activacion_enviada')
     else:
         form = UserRegisterForm()
