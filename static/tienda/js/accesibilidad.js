@@ -155,13 +155,48 @@
   // Navegación por teclado: foco visible ya está en CSS
 
   // Lectura en voz alta (lector simple)
+
+  // --- Lector con pausa/reanudar ---
+  let readingUtter = null;
+  let readingPaused = false;
   window.readContent = function () {
-    if ('speechSynthesis' in window) {
-      const txt = document.getElementById('main-content')?.innerText || document.body.innerText;
-      const utter = new SpeechSynthesisUtterance(txt);
-      window.speechSynthesis.speak(utter);
-    } else {
+    if (!('speechSynthesis' in window)) {
       alert('Tu navegador no soporta lectura en voz alta.');
+      return;
+    }
+    const synth = window.speechSynthesis;
+    const readBtn = document.getElementById('accessibility-read-btn');
+    if (synth.speaking || readingPaused) {
+      // Si está leyendo, pausa o reanuda
+      if (!readingPaused) {
+        synth.pause();
+        readingPaused = true;
+        if (readBtn) readBtn.innerHTML = '⏸️ Pausar lectura';
+      } else {
+        synth.resume();
+        readingPaused = false;
+        if (readBtn) readBtn.innerHTML = '🔊 Leer página';
+      }
+      return;
+    }
+    // Si no está leyendo, inicia
+    const txt = document.getElementById('main-content')?.innerText || document.body.innerText;
+    readingUtter = new SpeechSynthesisUtterance(txt);
+    readingUtter.onend = function () {
+      readingPaused = false;
+      if (readBtn) readBtn.innerHTML = '🔊 Leer página';
+    };
+    synth.speak(readingUtter);
+    if (readBtn) readBtn.innerHTML = '⏸️ Pausar lectura';
+  };
+
+  // Botón para detener completamente la lectura
+  window.stopReading = function () {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      readingPaused = false;
+      const readBtn = document.getElementById('accessibility-read-btn');
+      if (readBtn) readBtn.innerHTML = '🔊 Leer página';
     }
   };
 
@@ -177,6 +212,22 @@
   readBtn.style.fontSize = '1.1em';
   readBtn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
   readBtn.onclick = window.readContent;
+  // Botón de detener
+  const stopBtn = document.createElement('button');
+  stopBtn.innerHTML = '🛑 Detener';
+  stopBtn.id = 'accessibility-stop-read-btn';
+  stopBtn.style.background = '#fff';
+  stopBtn.style.color = '#b71c1c';
+  stopBtn.style.border = '2px solid #b71c1c';
+  stopBtn.style.borderRadius = '8px';
+  stopBtn.style.padding = '0.5em 1.2em';
+  stopBtn.style.fontSize = '1.1em';
+  stopBtn.style.marginLeft = '8px';
+  stopBtn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+  stopBtn.onclick = window.stopReading;
+  stopBtn.tabIndex = 0;
+  stopBtn.setAttribute('aria-label', 'Detener lectura');
+  document.body.appendChild(stopBtn);
   readBtn.tabIndex = 0;
   readBtn.setAttribute('aria-label', 'Leer página en voz alta');
   document.body.appendChild(readBtn);
