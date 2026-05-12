@@ -97,29 +97,70 @@
   });
 
   // Opciones y bindings
-  // --- Guía de voz: lectura de texto al hacer clic ---
-  document.addEventListener('DOMContentLoaded', function () {
-    // Evita leer botones, inputs, etc.
-    function isTextElement(el) {
-      return el && el.nodeType === 1 && !['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'SVG', 'PATH'].includes(el.tagName);
-    }
 
-    document.body.addEventListener('click', function (e) {
+  // --- Botón flotante para activar/desactivar modo voz ---
+  const voiceBtn = document.createElement('button');
+  voiceBtn.id = 'accessibility-read-btn';
+  voiceBtn.setAttribute('aria-pressed', 'false');
+  voiceBtn.setAttribute('aria-label', 'Activar modo voz');
+  voiceBtn.innerHTML = '🔊 Activar modo voz';
+  voiceBtn.style.background = '#00bcd4';
+  voiceBtn.style.color = '#fff';
+  voiceBtn.style.border = 'none';
+  voiceBtn.style.borderRadius = '50px';
+  voiceBtn.style.padding = '12px 22px';
+  voiceBtn.style.fontSize = '1rem';
+  voiceBtn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+  voiceBtn.style.cursor = 'pointer';
+  voiceBtn.style.zIndex = '10010';
+  document.body.appendChild(voiceBtn);
+
+  let voiceMode = false;
+  let voiceHandler = null;
+
+  function isTextElement(el) {
+    return el && el.nodeType === 1 && !['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'SVG', 'PATH'].includes(el.tagName);
+  }
+
+  function enableVoiceMode() {
+    if (voiceHandler) return;
+    voiceHandler = function (e) {
       let el = e.target;
-      // Busca el texto más relevante (evita leer el HTML de botones, etc.)
       if (isTextElement(el)) {
         let text = el.innerText || el.textContent;
         if (text && text.trim().length > 0) {
-          // Detiene cualquier lectura previa
           window.speechSynthesis.cancel();
-          // Crea el mensaje
           let utter = new SpeechSynthesisUtterance(text.trim());
-          utter.lang = 'es-MX'; // Cambia el idioma si lo deseas
+          utter.lang = 'es-MX';
           window.speechSynthesis.speak(utter);
         }
       }
-    });
-  });
+    };
+    document.body.addEventListener('click', voiceHandler);
+    voiceBtn.innerHTML = '🔇 Desactivar modo voz';
+    voiceBtn.setAttribute('aria-pressed', 'true');
+    voiceBtn.setAttribute('aria-label', 'Desactivar modo voz');
+    voiceMode = true;
+  }
+
+  function disableVoiceMode() {
+    if (!voiceHandler) return;
+    document.body.removeEventListener('click', voiceHandler);
+    voiceHandler = null;
+    window.speechSynthesis.cancel();
+    voiceBtn.innerHTML = '🔊 Activar modo voz';
+    voiceBtn.setAttribute('aria-pressed', 'false');
+    voiceBtn.setAttribute('aria-label', 'Activar modo voz');
+    voiceMode = false;
+  }
+
+  voiceBtn.onclick = function () {
+    if (voiceMode) {
+      disableVoiceMode();
+    } else {
+      enableVoiceMode();
+    }
+  };
 
   const options = [
     ['dark', '#acc-dark'],
