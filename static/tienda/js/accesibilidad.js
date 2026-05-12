@@ -38,7 +38,7 @@
   btn.id = 'accessibility-btn';
   btn.title = 'Opciones de accesibilidad';
   btn.setAttribute('aria-label', 'Opciones de accesibilidad');
-  btn.innerHTML = '<span aria-hidden="true">♿</span>';
+  btn.innerHTML = `<svg width="32" height="32" viewBox="0 0 512 512" fill="none" aria-hidden="true" focusable="false"><path d="M256 96a56 56 0 1 0 0-112 56 56 0 0 0 0 112zm0 32c-97.2 0-176 21.5-176 48v32c0 8.8 7.2 16 16 16h320c8.8 0 16-7.2 16-16v-32c0-26.5-78.8-48-176-48zm-80 112v176c0 13.3 10.7 24 24 24s24-10.7 24-24V272h48v144c0 13.3 10.7 24 24 24s24-10.7 24-24V240h-144zm-56 0c-13.3 0-24 10.7-24 24v176c0 13.3 10.7 24 24 24s24-10.7 24-24V264c0-13.3-10.7-24-24-24zm272 0c-13.3 0-24 10.7-24 24v176c0 13.3 10.7 24 24 24s24-10.7 24-24V264c0-13.3-10.7-24-24-24z" fill="#fff"/></svg>`;
   btn.tabIndex = 0;
   // Asegura que el botón esté al final del body para que el CSS controle la posición
   document.body.appendChild(btn);
@@ -97,6 +97,30 @@
   });
 
   // Opciones y bindings
+  // --- Guía de voz: lectura de texto al hacer clic ---
+  document.addEventListener('DOMContentLoaded', function () {
+    // Evita leer botones, inputs, etc.
+    function isTextElement(el) {
+      return el && el.nodeType === 1 && !['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'SVG', 'PATH'].includes(el.tagName);
+    }
+
+    document.body.addEventListener('click', function (e) {
+      let el = e.target;
+      // Busca el texto más relevante (evita leer el HTML de botones, etc.)
+      if (isTextElement(el)) {
+        let text = el.innerText || el.textContent;
+        if (text && text.trim().length > 0) {
+          // Detiene cualquier lectura previa
+          window.speechSynthesis.cancel();
+          // Crea el mensaje
+          let utter = new SpeechSynthesisUtterance(text.trim());
+          utter.lang = 'es-MX'; // Cambia el idioma si lo deseas
+          window.speechSynthesis.speak(utter);
+        }
+      }
+    });
+  });
+
   const options = [
     ['dark', '#acc-dark'],
     ['grayscale', '#acc-grayscale'],
