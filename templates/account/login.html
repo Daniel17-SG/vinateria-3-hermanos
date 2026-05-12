@@ -1,0 +1,47 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<main class="login-main-premium">
+    <div class="login-container-premium">
+        <div class="user-icon-circle">
+            <i class="fas fa-user"></i>
+        </div>
+        <h2>¡Bienvenido de Nuevo!</h2>
+        <p>Ingresa tus credenciales para acceder a tu cuenta.</p>
+        <form method="post" class="login-form-premium" action="">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="form-errors">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="input-group-premium">
+                <i class="fas fa-user"></i>
+                {{ form.login }}
+            </div>
+            <div class="input-group-premium">
+                <i class="fas fa-lock"></i>
+                {{ form.password }}
+            </div>
+            <div class="login-options-premium">
+                <label>{{ form.remember }}</label>
+                <a href="{% url 'account_reset_password' %}">¿Olvidaste tu contraseña?</a>
+            </div>
+            <button type="submit" class="btn-login-premium">Iniciar sesión</button>
+        </form>
+        <div class="login-register-link">
+            ¿No tienes cuenta? <a href="{% url 'account_signup' %}">Regístrate</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

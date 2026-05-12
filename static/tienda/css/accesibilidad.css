@@ -1,9 +1,9 @@
 /* --- Botón flotante de accesibilidad --- */
 #accessibility-btn {
   position: fixed;
-  bottom: 32px;
-  right: 32px;
-  z-index: 10000;
+  left: 32px;
+  bottom: 120px;
+  z-index: 10001;
   background: #222;
   color: #fff;
   border-radius: 50%;
@@ -16,6 +16,13 @@
   box-shadow: 0 2px 12px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: background 0.2s;
+}
+
+#accessibility-read-btn {
+  position: fixed;
+  left: 32px;
+  bottom: 32px;
+  z-index: 10000;
 }
 #accessibility-btn:focus {
   outline: 3px solid #00bcd4;

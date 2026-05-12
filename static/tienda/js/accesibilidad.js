@@ -40,6 +40,7 @@
   btn.setAttribute('aria-label', 'Opciones de accesibilidad');
   btn.innerHTML = '<span aria-hidden="true">♿</span>';
   btn.tabIndex = 0;
+  // Asegura que el botón esté al final del body para que el CSS controle la posición
   document.body.appendChild(btn);
 
   // Crear panel lateral
@@ -167,10 +168,7 @@
   // Agregar botón de lectura en voz alta
   const readBtn = document.createElement('button');
   readBtn.innerHTML = '🔊 Leer página';
-  readBtn.style.position = 'fixed';
-  readBtn.style.left = '32px';
-  readBtn.style.bottom = '32px';
-  readBtn.style.zIndex = '10000';
+  readBtn.id = 'accessibility-read-btn';
   readBtn.style.background = '#fff';
   readBtn.style.color = '#222';
   readBtn.style.border = '2px solid #1976d2';
